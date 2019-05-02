@@ -46,7 +46,9 @@ function err(range) {
 /* Initialize some constants for simulation. */
 var TIME_ACCELERATE = 1.0;
 
-var SONG_AMPLITUDE_MIN = 300;
+var SONG_EMPTY_MIN = 0;
+var SONG_EMPTY_MAX = 400;
+var SONG_AMPLITUDE_MIN = 200;
 var SONG_AMPLITUDE_MAX = 800;
 var DOOR_DISTANCE_CLOSED = 200.0;
 var DOOR_DISTANCE_OPEN = 120.0;
@@ -54,7 +56,7 @@ var DOOR_DISTANCE_MAX = 150.0;
 var DOOR_DISTANCE_MIN = 80.0;
 var DOOR_DISTANCE_DIFF = 6.0 * TIME_ACCELERATE;
 var DOOR_OPEN_DURATION_MIN = 0.0 / TIME_ACCELERATE;
-var DOOR_OPEN_DURATION_MAX = 5.0 / TIME_ACCELERATE;
+var DOOR_OPEN_DURATION_MAX = 5 * 1000 / TIME_ACCELERATE;
 var DOOR_DISTANCE_ERROR = 2.0;
 
 var SONG_LENGTH_MIN = 2 * 60 * 1000 / TIME_ACCELERATE;
@@ -62,25 +64,32 @@ var SONG_LENGTH_MAX = 5 * 60 * 1000 / TIME_ACCELERATE;
 var BETWEEN_SONG_INTERVAL_MIN = 3 * 1000 / TIME_ACCELERATE;
 var BETWEEN_SONG_INTERVAL_MAX = 90 * 1000 / TIME_ACCELERATE;
 
+var SERVER_DIE_DURATION_MIN = 1 * 1000;
+var SERVER_DIE_DURATION_MAX = 5 * 60 * 1000;
+
 var NUM_SONGS_MIN = 1;
 var NUM_SONGS_MAX = 20;
 
 var PROBABILITY_CUSTOMER_ARRIVE = 1.0 / (50.0 * 60);
 var PROBABILITY_CUSTOMER_OPEN_DOOR = 1.0 / (50.0 * 60);
-var PROBABILITY_CUSTOMER_REPEAT_OPEN_DOOR = 1.0 / (500.0 * 60);
-
-var SONG_SPLASH_EFFECT = 0.4;
+var PROBABILITY_CUSTOMER_NOT_MOVING = 0.03;
+var PROBABILITY_SERVER_NOT_AVAILABLE = 1.0 / (3 * 60 * 60 * 1000);
 
 /* Initialize virtual room states. */
-var state = false;           // room state.
-var isSongPlayed = false;    // Is the song currently played in this virtual room?
+var state = false;
+var isSongPlayed = false;
 var doorDistance = DOOR_DISTANCE_CLOSED + err(DOOR_DISTANCE_ERROR);
 var doorIsMoving = false;
+var soundDataQueue = [];
+var SOUND_DATA_QUEUE_SIZE = 7;
+var alive = true;
 
 var start_time = Date.now(); // zero-point for virtual timestamp.
+var timestamp;
 var pirOutput = [];          // records of virtual PIR sensor output.
 var supersonicOutput = [];   // records of virtual supersonic sensor output.
 var soundOutput = [];        // records of virtual sound sensor output.
+var RECORD_SIZE = 10;
 
 /* Define some events. */
 var songPlayEvent = function() {
@@ -91,6 +100,15 @@ var songPlayEvent = function() {
         }, randf(SONG_LENGTH_MIN, SONG_LENGTH_MAX));
     }
 };
+
+var soundMeasureCallback = function() {
+    var soundData = isSongPlayed ? 
+        randf(SONG_AMPLITUDE_MIN, SONG_AMPLITUDE_MAX) : 
+        randf(SONG_EMPTY_MIN, SONG_EMPTY_MAX);
+    soundDataQueue.push(soundData);
+    if (soundDataQueue.length > SOUND_DATA_QUEUE_SIZE)
+        soundDataQueue.shift();
+}
 
 var doorOpenEvent = function() {
     if (!doorIsMoving) {
@@ -130,14 +148,47 @@ var measureDoorDistance = function() {
     );
 }
 
-/* Retrieving virtual sensor outputs. */
+var measureSound = function() {
+    var sum = 0;
+    for (var data of soundDataQueue)
+        sum += data;
+    return Math.round(sum / soundDataQueue.length);
+}
+
+var measurePIR = function() {
+    if (!state)
+        return 0;
+    else if (randf(0, 1) < PROBABILITY_CUSTOMER_NOT_MOVING)
+        return 0;
+    return 1;
+}
+
+/* Initialize events. */
+var sensorOutputs = {};
+setInterval(soundMeasureCallback, 230);
 setInterval(function() {
 
-    var timestamp = Date.now() - start_time;
-    console.log(timestamp + ", " + measureDoorDistance() + ", " + doorIsMoving);
+    /* Dead check. */
+    if (alive) {
+        if (randf(0, 1) < PROBABILITY_SERVER_NOT_AVAILABLE) {
+            alive = false;
+            setTimeout(function() {alive = true;}, randf(SERVER_DIE_DURATION_MIN, SERVER_DIE_DURATION_MAX));
+        }
+    }
 
+    timestamp = Date.now() - start_time;
+    
+    pirOutput.push(measurePIR());
+    if (pirOutput.length > RECORD_SIZE)
+        pirOutput.shift();
+    soundOutput.push(measureSound());
+    if (soundOutput.length > RECORD_SIZE)
+        soundOutput.shift();
+    supersonicOutput.push(measureDoorDistance());
+    if (supersonicOutput.length > RECORD_SIZE)
+        supersonicOutput.shift();
 
-}, 200);
+}, 1000);
 
 /* 
  * When HTTP request arrives to the fake server, it returns:
@@ -153,5 +204,15 @@ setInterval(function() {
 
 /* Handling HTTP requests. */
 app.get('/', function(req, res) {
-    res.end('Hello, world!');
+    if (alive)
+        res.end(JSON.stringify({
+            timestamp: timestamp,
+            room_id: roomID,
+            pir: pirOutput,
+            supersonic: supersonicOutput,
+            sound: soundOutput,
+            state: state
+        }));
+    else
+        res.status(500);
 });
