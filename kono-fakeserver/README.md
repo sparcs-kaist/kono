@@ -16,7 +16,7 @@ $ npm run server -- --port=<port number>
 
 ### HTTP Request
 이 서버에 HTTP GET request를 보내면 response로 다음과 같은 응답을 얻을 수 있습니다.
-```JSON
+```
 {
  timestamp: <timestamp>             // A timestamp of the arduino board, in milliseconds scale unsigned integer.
  room_id: <room_id>                 // The room id of this fake server, as set in cmd arguments.
