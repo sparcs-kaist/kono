@@ -39,6 +39,10 @@ function randf(min, max) {
     return Math.random() * (max - min) + min;
 }
 
+function randfInverse(min, max) {
+    return 1 / randf(1 / max, 1 / min);
+}
+
 function err(range) {
     return randf(-range, range);
 }
@@ -59,21 +63,20 @@ var DOOR_OPEN_DURATION_MIN = 0.0 / TIME_ACCELERATE;
 var DOOR_OPEN_DURATION_MAX = 5 * 1000 / TIME_ACCELERATE;
 var DOOR_DISTANCE_ERROR = 2.0;
 
-var SONG_LENGTH_MIN = 2 * 60 * 1000 / TIME_ACCELERATE;
-var SONG_LENGTH_MAX = 5 * 60 * 1000 / TIME_ACCELERATE;
+var SONG_LENGTH_MIN = 20 * 1000 / TIME_ACCELERATE;
+var SONG_LENGTH_MAX = 30 * 1000 / TIME_ACCELERATE;
 var BETWEEN_SONG_INTERVAL_MIN = 3 * 1000 / TIME_ACCELERATE;
-var BETWEEN_SONG_INTERVAL_MAX = 90 * 1000 / TIME_ACCELERATE;
+var BETWEEN_SONG_INTERVAL_MAX = 10 * 1000 / TIME_ACCELERATE;
+var BETWEEN_CUSTOMER_INTERVAL_MIN = 5 * 1000 / TIME_ACCELERATE;
+var BETWEEN_CUSTOMER_INTERVAL_MAX = 2 * 60 * 1000 / TIME_ACCELERATE;
 
 var SERVER_DIE_DURATION_MIN = 1 * 1000;
 var SERVER_DIE_DURATION_MAX = 5 * 60 * 1000;
 
-var NUM_SONGS_MIN = 1;
-var NUM_SONGS_MAX = 20;
-
-var PROBABILITY_CUSTOMER_ARRIVE = 1.0 / (50.0 * 60);
-var PROBABILITY_CUSTOMER_OPEN_DOOR = 1.0 / (50.0 * 60);
-var PROBABILITY_CUSTOMER_NOT_MOVING = 0.03;
+var PROBABILITY_CUSTOMER_LEAVE = 0.4;
+var PROBABILITY_CUSTOMER_NOT_MOVING = 0.3;
 var PROBABILITY_SERVER_NOT_AVAILABLE = 1.0 / (3 * 60 * 60 * 1000);
+var PROBABILITY_DOOR_MOVE = 1 / (30 * 1000);
 
 /* Initialize virtual room states. */
 var state = false;
@@ -92,14 +95,30 @@ var soundOutput = [];        // records of virtual sound sensor output.
 var RECORD_SIZE = 10;
 
 /* Define some events. */
+var customerEnterEvent = function() {
+    state = true;
+    doorOpenEvent();
+    setTimeout(songPlayEvent, randfInverse(BETWEEN_SONG_INTERVAL_MIN, BETWEEN_SONG_INTERVAL_MAX));
+}
+
 var songPlayEvent = function() {
     if (!isSongPlayed) {
         isSongPlayed = true;
-        setTimeout(function() {
-            isSongPlayed = false;
-        }, randf(SONG_LENGTH_MIN, SONG_LENGTH_MAX));
+        setTimeout(playNextSongEvent, randf(SONG_LENGTH_MIN, SONG_LENGTH_MAX));
     }
 };
+
+var playNextSongEvent = function() {
+    isSongPlayed = false;
+    if (randf(0, 1) >= PROBABILITY_CUSTOMER_LEAVE) {
+        setTimeout(songPlayEvent, randf(BETWEEN_SONG_INTERVAL_MIN, BETWEEN_SONG_INTERVAL_MAX));
+    }
+    else {
+        state = false;
+        doorOpenEvent();
+        setTimeout(customerEnterEvent, randfInverse(BETWEEN_CUSTOMER_INTERVAL_MIN, BETWEEN_CUSTOMER_INTERVAL_MAX));
+    }
+}
 
 var soundMeasureCallback = function() {
     var soundData = isSongPlayed ? 
@@ -110,20 +129,21 @@ var soundMeasureCallback = function() {
         soundDataQueue.shift();
 }
 
+var doorClose = function() {
+    if (doorDistance > DOOR_DISTANCE_CLOSED) {
+        doorDistance = DOOR_DISTANCE_CLOSED;
+        doorIsMoving = false;
+    }
+    else {
+        doorDistance += DOOR_DISTANCE_DIFF;
+        setTimeout(doorClose, 100);
+    }
+}
+
 var doorOpenEvent = function() {
     if (!doorIsMoving) {
         doorIsMoving = true;
         var doorThreshold = randf(DOOR_DISTANCE_MIN, DOOR_DISTANCE_MAX);
-        var doorClose = function() {
-            if (doorDistance > DOOR_DISTANCE_CLOSED) {
-                doorDistance = DOOR_DISTANCE_CLOSED;
-                doorIsMoving = false;
-            }
-            else {
-                doorDistance += DOOR_DISTANCE_DIFF;
-                setTimeout(doorClose, 100);
-            }
-        }
         var doorOpen = function() {
             if (doorDistance > doorThreshold) {
                 doorDistance -= DOOR_DISTANCE_DIFF;
@@ -164,8 +184,11 @@ var measurePIR = function() {
 }
 
 /* Initialize events. */
-var sensorOutputs = {};
 setInterval(soundMeasureCallback, 230);
+setInterval(function() {
+    if (randf(0, 1) < PROBABILITY_DOOR_MOVE)
+        doorOpenEvent();
+}, 1000);
 setInterval(function() {
 
     /* Dead check. */
@@ -189,6 +212,7 @@ setInterval(function() {
         supersonicOutput.shift();
 
 }, 1000);
+setTimeout(customerEnterEvent, randfInverse(BETWEEN_CUSTOMER_INTERVAL_MIN, BETWEEN_CUSTOMER_INTERVAL_MAX))
 
 /* 
  * When HTTP request arrives to the fake server, it returns:
