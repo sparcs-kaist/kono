@@ -35,12 +35,109 @@ var server = app.listen(port, function() {
  * The sensor output values are retrieved every 1 second.
  */
 
- /* Initialize virtual room states. */
+function randf(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function err(range) {
+    return randf(-range, range);
+}
+
+/* Initialize some constants for simulation. */
+var TIME_ACCELERATE = 1.0;
+
+var SONG_AMPLITUDE_MIN = 300;
+var SONG_AMPLITUDE_MAX = 800;
+var DOOR_DISTANCE_CLOSED = 200.0;
+var DOOR_DISTANCE_OPEN = 120.0;
+var DOOR_DISTANCE_MAX = 150.0;
+var DOOR_DISTANCE_MIN = 80.0;
+var DOOR_DISTANCE_DIFF = 6.0 * TIME_ACCELERATE;
+var DOOR_OPEN_DURATION_MIN = 0.0 / TIME_ACCELERATE;
+var DOOR_OPEN_DURATION_MAX = 5.0 / TIME_ACCELERATE;
+var DOOR_DISTANCE_ERROR = 2.0;
+
+var SONG_LENGTH_MIN = 2 * 60 * 1000 / TIME_ACCELERATE;
+var SONG_LENGTH_MAX = 5 * 60 * 1000 / TIME_ACCELERATE;
+var BETWEEN_SONG_INTERVAL_MIN = 3 * 1000 / TIME_ACCELERATE;
+var BETWEEN_SONG_INTERVAL_MAX = 90 * 1000 / TIME_ACCELERATE;
+
+var NUM_SONGS_MIN = 1;
+var NUM_SONGS_MAX = 20;
+
+var PROBABILITY_CUSTOMER_ARRIVE = 1.0 / (50.0 * 60);
+var PROBABILITY_CUSTOMER_OPEN_DOOR = 1.0 / (50.0 * 60);
+var PROBABILITY_CUSTOMER_REPEAT_OPEN_DOOR = 1.0 / (500.0 * 60);
+
+var SONG_SPLASH_EFFECT = 0.4;
+
+/* Initialize virtual room states. */
 var state = false;           // room state.
+var isSongPlayed = false;    // Is the song currently played in this virtual room?
+var doorDistance = DOOR_DISTANCE_CLOSED + err(DOOR_DISTANCE_ERROR);
+var doorIsMoving = false;
+
 var start_time = Date.now(); // zero-point for virtual timestamp.
 var pirOutput = [];          // records of virtual PIR sensor output.
 var supersonicOutput = [];   // records of virtual supersonic sensor output.
 var soundOutput = [];        // records of virtual sound sensor output.
+
+/* Define some events. */
+var songPlayEvent = function() {
+    if (!isSongPlayed) {
+        isSongPlayed = true;
+        setTimeout(function() {
+            isSongPlayed = false;
+        }, randf(SONG_LENGTH_MIN, SONG_LENGTH_MAX));
+    }
+};
+
+var doorOpenEvent = function() {
+    if (!doorIsMoving) {
+        doorIsMoving = true;
+        var doorThreshold = randf(DOOR_DISTANCE_MIN, DOOR_DISTANCE_MAX);
+        var doorClose = function() {
+            if (doorDistance > DOOR_DISTANCE_CLOSED) {
+                doorDistance = DOOR_DISTANCE_CLOSED;
+                doorIsMoving = false;
+            }
+            else {
+                doorDistance += DOOR_DISTANCE_DIFF;
+                setTimeout(doorClose, 100);
+            }
+        }
+        var doorOpen = function() {
+            if (doorDistance > doorThreshold) {
+                doorDistance -= DOOR_DISTANCE_DIFF;
+                setTimeout(doorOpen, 100);
+            }
+            else {
+                setTimeout(doorClose, randf(DOOR_OPEN_DURATION_MIN, DOOR_OPEN_DURATION_MAX));
+            }
+        }
+        doorOpen();
+    }
+}
+
+/* Define measurement functions. */
+var measureDoorDistance = function() {
+    var result = doorDistance + err(DOOR_DISTANCE_ERROR);
+    if (result < DOOR_DISTANCE_OPEN)
+        result = -1;
+    return result.toLocaleString(
+        undefined,
+        { minimumFractionDigits: 3 }
+    );
+}
+
+/* Retrieving virtual sensor outputs. */
+setInterval(function() {
+
+    var timestamp = Date.now() - start_time;
+    console.log(timestamp + ", " + measureDoorDistance() + ", " + doorIsMoving);
+
+
+}, 200);
 
 /* 
  * When HTTP request arrives to the fake server, it returns:
@@ -53,14 +150,6 @@ var soundOutput = [];        // records of virtual sound sensor output.
  *     state: <0 | 1>                     // The 'correct state' of the current room, provided for debugging and polishing.
  * }
  */
-
- /* Retrieving virtual sensor outputs. */
- setInterval(function() {
-
-    var timestamp = Date.now() - start_time;
-    console.log("Current timestamp: " + timestamp);
-
- }, 1000);
 
 /* Handling HTTP requests. */
 app.get('/', function(req, res) {
