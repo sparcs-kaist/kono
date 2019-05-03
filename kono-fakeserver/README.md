@@ -11,7 +11,7 @@ $ npm install
 ```
 이후 다음 명령어로 localhost에서 원하는 포트 번호로 서버를 실행시킨다.
 ```
-$ npm run server -- --port=<port number>
+$ npm run server -- --port=<port number> --room_id=<room id>
 ```
 
 ### HTTP Request
