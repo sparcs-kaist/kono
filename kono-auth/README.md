@@ -22,5 +22,12 @@ $ npm run build
     - request
         - password: `<관리자 계정 비밀번호>`
     - response
-        - result: `"success" | "failure"`
-        - token: 로그인 성공시 발급되는 JWT Token.
+        - 로그인 성공
+            - 200 OK
+            - { "msg": "login success" }
+            - Cookie의 `access_token` 필드에 발급된 JWT를 넣어준다. (유효 시간 1시간)
+        - 로그인 실패
+            - 403 Forbidden
+            - { "msg": "wrong password" }
+        - 서버 에러
+            - 500 Internal Server Error
