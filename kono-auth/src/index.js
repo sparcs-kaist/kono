@@ -1,8 +1,8 @@
-import 'babel-polyfill';
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import api from './api';
+import db from './db'
 
 dotenv.config();
 
@@ -15,6 +15,9 @@ app.use(bodyParser.json());
 
 /* API Routes */
 app.use('/api', api);
+
+/* Connect to database */
+db.init();
 
 app.listen(DEV_PORT, () => {
     console.log(`kono-auth server listening at port ${DEV_PORT}`);
