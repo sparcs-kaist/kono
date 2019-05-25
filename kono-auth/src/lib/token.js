@@ -6,7 +6,7 @@ export const generateToken = (payload, onSuccess, onFailure) => {
     
     jwt.sign(payload, secret, {
         expiresIn: '1h',
-        issuer: 'kono.kaist.ac.kr'
+        issuer: 'login.kono.kaist.ac.kr'
     }, (error, token) => {
         if (error)
             onFailure(error);
@@ -16,9 +16,13 @@ export const generateToken = (payload, onSuccess, onFailure) => {
 }
 
 export const decodeToken = (token, onSuccess, onFailure) => {
+
+    const { JWT_KEY: secret } = process.env;
+
     jwt.verify(token, secret, (error, decoded) => {
         if (error)
             onFailure(error);
         onSuccess(decoded);
     });
+    
 }

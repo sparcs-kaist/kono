@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import api from './api';
+import routes from './routes';
 import db from './db'
+import { JWTMiddleware } from './lib/JWTMiddleware';
 
 dotenv.config();
 
@@ -12,9 +14,11 @@ const app = express();
 /* Middlewares */
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(JWTMiddleware());
 
 /* API Routes */
-app.use('/api', api);
+app.use('/', routes());
 
 /* Connect to database */
 db.init();

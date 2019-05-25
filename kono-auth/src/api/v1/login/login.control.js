@@ -4,6 +4,8 @@ import { generateToken } from '../../../lib/token';
 export const login = (req, res) => {
     
     const { password } = req.body;
+    const { DEV_HOST: devHost } = process.env;
+    const host = devHost;
 
     verify(password, () => {
         generateToken({ admin: 'true' },
@@ -11,7 +13,8 @@ export const login = (req, res) => {
                 res.status(200);
                 res.cookie('access_token', token, {
                     maxAge: 1000 * 60 * 60,
-                    httpOnly: true
+                    httpOnly: true,
+                    domain: host
                 });
                 res.send({ msg: 'login success' });
             },
@@ -30,5 +33,9 @@ export const login = (req, res) => {
 };
 
 export const check = (req, res) => {
-    res.end('check');
+    if (req.admin)
+        res.status(204);
+    else
+        res.status(403);
+    res.end();
 };

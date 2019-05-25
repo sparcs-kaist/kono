@@ -31,3 +31,9 @@ $ npm run build
             - { "msg": "wrong password" }
         - 서버 에러
             - 500 Internal Server Error
+- GET /login/check
+    - response
+        - 성공 (유효한 `access_token` cookie)
+            - 204 No Content
+        - 실패
+            - 403 Forbidden
