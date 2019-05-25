@@ -1,0 +1,24 @@
+.Header {
+
+    display: flex;
+
+    .Header__bar {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 5px;
+        background: #5F453D;
+    }
+    
+    .Header__logo {
+        margin: 16px 63px 16px 24px;
+        display: flex;
+    }
+    
+    .Header__link {
+        margin: 20px 0;
+        display: flex;
+    }
+
+}
