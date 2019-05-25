@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon -L --watch src/ --exec 'babel --presets babel-preset-env -d dev-build src/ && node dev-build'",
+    "start:dev": "nodemon -L --watch src/ --exec 'rm -rf dev-build/ && babel --presets babel-preset-env -d dev-build src/ && node dev-build'",
     "build": "webpack --config webpack.config.js",
     "serve": "node dist/bundle.js"
   },

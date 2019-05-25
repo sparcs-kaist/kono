@@ -5,8 +5,7 @@ export const JWTMiddleware = () => {
 
         const token = req.cookies['access_token'];
 
-        if (!token) {        
-            console.log('no token');
+        if (!token) {
             req.admin = null;
             next();
         }

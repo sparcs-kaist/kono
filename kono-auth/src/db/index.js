@@ -16,10 +16,7 @@ export default (() => {
             const connection = mysql.createConnection({ host, port, user, password, database });
             connection.connect();
             connection.query(fn, (err, rows, fields) => {
-                if (err)
-                    console.log(err);
-                else
-                    callback(rows, fields);
+                callback(err, rows, fields);
             });
             connection.end();
         }
