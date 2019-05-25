@@ -5,6 +5,7 @@ import LoginPage from './LoginPage';
 import LostFoundPage from './LostFoundPage';
 import NoticePage from './NoticePage';
 import Header from './Header';
+import Footer from './Footer';
 
 export default () => {
     return (
@@ -17,6 +18,7 @@ export default () => {
                 <Route path="/lostfound" component={LostFoundPage} />
                 <Route component={() => <Redirect to="/" />} />
             </Switch>
+            <Footer />
         </>
     );
 }

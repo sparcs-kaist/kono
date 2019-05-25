@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+.Footer {
+
+    display: flex;
+    flex-direction: row;
+    margin-top: auto;
+
+    .Footer__sparcs_logo {
+        margin: 0 16.1px 12px 24px;
+    }
+
+    .Footer__cross {
+        font-family: "Raleway";
+        font-weight: 900;
+        margin: 0 16px 16px 0;
+    }
+
+    .Footer__swc_logo {
+        margin: 0 26.1px 12px 0;
+    }
+
+    .Footer__credit {
+        margin: 0 23px 19px 0;
+    }
+
+    .Footer__license {
+        margin: 0 0 19px 0;
+    }
+
+    .Footer__contact {
+        margin: 0 23px 19px 0;
+        margin-left: auto;
+    }
+
+}
