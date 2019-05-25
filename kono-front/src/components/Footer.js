@@ -7,11 +7,15 @@ export default () => {
     return (
         <div className={styles.Footer}>
             <div className={styles.Footer__sparcs_logo}>
-                <SPARCSLogo />
+                <a href="https://sparcs.org">
+                    <SPARCSLogo />
+                </a>
             </div>
             <div className={styles.Footer__cross}>X</div>
             <div className={styles.Footer__swc_logo}>
-                <SWCLogo />
+                <a href="https://welfare.kaist.ac.kr/">
+                    <SWCLogo />
+                </a>
             </div>
             <div className={styles.Footer__credit}>Credit</div>
             <div className={styles.Footer__license}>License</div>

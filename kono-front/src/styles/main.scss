@@ -1,6 +1,5 @@
-html, body { 
-    height: 100%;
-    width: 100%;
+html, body {
+    min-height: 100vh;
 }
 
 body {
@@ -9,8 +8,9 @@ body {
 }
 
 #root {
-    width: inherit;
+    width: 100%;
+    min-width: 1080px;
     display: flex;
     flex-direction: column;
-    min-width: 600px;
+    justify-items: center;
 }

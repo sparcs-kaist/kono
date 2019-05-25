@@ -8,6 +8,7 @@ import Header from './Header';
 import Footer from './Footer';
 
 export default () => {
+    /*
     return (
         <>
             <Header />
@@ -21,4 +22,15 @@ export default () => {
             <Footer />
         </>
     );
+    */
+   return (
+    <>
+        <Header />
+        <Switch>
+            <Route exact path="/" component={LandingPage} />
+            <Route component={() => <Redirect to="/" />} />
+        </Switch>
+        <Footer />
+    </>
+);
 }

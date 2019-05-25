@@ -1,0 +1,23 @@
+.LandingPage {
+
+    margin: auto;
+
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+
+    .LandingPage__left {
+        display: flex;
+        flex-direction: column;
+
+        div + div {
+            margin-top: 38px;
+        }
+    }
+
+    .LandingPage__right {
+        margin-left: 50px;
+    }
+
+}

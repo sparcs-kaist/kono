@@ -1,13 +1,14 @@
 .Header {
 
     display: flex;
+    flex-direction: row;
 
     .Header__bar {
         position: absolute;
         top: 0px;
         left: 0px;
         width: 100%;
-        min-width: 600px;
+        min-width: 1080px;
         height: 5px;
         background: #5F453D;
     }
@@ -20,6 +21,19 @@
     .Header__link {
         margin: 20px 0;
         display: flex;
+    }
+
+    .Header__login {
+        margin: 20px 23px 0 0;
+        margin-left: auto;
+    }
+
+    a {
+        color: #747474;
+        &:hover {
+            color: #111111;
+        }
+        text-decoration: none;
     }
 
 }
