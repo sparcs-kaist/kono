@@ -1,4 +1,4 @@
-var path = require('path');
+var TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     mode: 'production',
@@ -21,5 +21,8 @@ module.exports = {
             }
         ]
     },
-    target: 'node'
+    target: 'node',
+    optimization: {
+        minimizer: [new TerserPlugin({ terserOptions: { mangle: false } })]
+    }
 }
