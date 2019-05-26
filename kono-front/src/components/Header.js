@@ -13,7 +13,9 @@ export default () => {
                 </Link>
             </div>
             <div className={styles.Header__link}>
-                환불신청
+                <a href="https://docs.google.com/forms/d/1Wb33uCYDl4kAyg-_5lZ6n20ByJ-NhelUDOz_8_U5Y6w/edit">
+                    환불신청
+                </a>
             </div>
             <div className={styles.Header__login}>
                 <Link to="/login">

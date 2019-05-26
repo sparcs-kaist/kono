@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '../styles/Footer.module.scss';
 import { ReactComponent as SPARCSLogo } from '../res/sparcs_logo.svg';
 import { ReactComponent as SWCLogo } from '../res/SWC_logo.svg';
+import { Link } from 'react-router-dom';
 
 export default () => {
     return (
@@ -17,8 +18,16 @@ export default () => {
                     <SWCLogo />
                 </a>
             </div>
-            <div className={styles.Footer__credit}>Credit</div>
-            <div className={styles.Footer__license}>License</div>
+            <div className={styles.Footer__credit}>
+                <Link to="/credit">
+                    Credit
+                </Link>
+            </div>
+            <div className={styles.Footer__license}>
+                <a href="https://mit-license.org">
+                    License
+                </a>
+            </div>
             <div className={styles.Footer__contact}>Contact</div>
         </div>
     )

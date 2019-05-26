@@ -1,0 +1,10 @@
+@mixin link() {
+    a {
+        color: #747474;
+        &:hover {
+            color: #111111;
+            border-bottom: 1px solid #111111;
+        }
+        text-decoration: none;
+    }
+}

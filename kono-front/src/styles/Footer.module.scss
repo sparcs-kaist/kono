@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway');
+@import 'mixins/all';
 
 .Footer {
 
@@ -24,23 +25,18 @@
 
     .Footer__credit {
         margin: 0 23px 19px 0;
+        @include link();
     }
 
     .Footer__license {
         margin: 0 0 19px 0;
+        @include link();
     }
 
     .Footer__contact {
         margin: 0 23px 19px 0;
         margin-left: auto;
-    }
-
-    a {
-        color: #747474;
-        &:hover {
-            color: #111111;
-        }
-        text-decoration: none;
+        @include link();
     }
 
 }

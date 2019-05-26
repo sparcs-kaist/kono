@@ -1,3 +1,5 @@
+@import 'mixins/all';
+
 .Header {
 
     display: flex;
@@ -21,19 +23,13 @@
     .Header__link {
         margin: 20px 0;
         display: flex;
+        @include link();
     }
 
     .Header__login {
         margin: 20px 23px 0 0;
         margin-left: auto;
-    }
-
-    a {
-        color: #747474;
-        &:hover {
-            color: #111111;
-        }
-        text-decoration: none;
+        @include link();
     }
 
 }

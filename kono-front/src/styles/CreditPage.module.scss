@@ -1,0 +1,21 @@
+.CreditPage {
+
+    margin: auto;
+
+    padding: 50px;
+    border-radius: 6px;
+    border: 0.5px solid #5F453D;
+    background-color: #E9E9E9;
+    font-family: 'Arial';
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+
+    h1, h2, h3, h4, h5, h6, p {
+        font-weight: normal;
+        text-align: center;
+    }
+
+}
