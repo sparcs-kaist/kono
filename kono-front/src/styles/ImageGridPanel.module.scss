@@ -1,0 +1,8 @@
+.ImageGridPanel {
+
+    display: grid;
+    grid-template-columns: repeat(3, 140px);
+    grid-template-rows: repeat(2, 140px);
+    grid-gap: 7px;
+
+}
