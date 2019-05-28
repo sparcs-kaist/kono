@@ -1,27 +1,7 @@
-@import 'mixins/all';
-
 .LostFoundPanel {
 
     width: 440px;
     height: 330px;
     margin-top: 38px;
-
-    .LostFoundPanel__header {
-
-        margin-bottom: 19px;
-        display: flex;
-        flex-direction: row;
-
-        .LostFoundPanel__title {
-            font-size: 18px;
-        }
-    
-        .LostFoundPanel__link {
-            margin-left: auto;
-            font-size: 13px;
-            @include link();
-        }
-
-    }
 
 }

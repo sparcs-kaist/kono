@@ -18,17 +18,19 @@ export default () => {
                     <SWCLogo />
                 </a>
             </div>
-            <div className={styles.Footer__credit}>
+            <span className={styles.Footer__credit}>
                 <Link to="/credit">
                     Credit
                 </Link>
-            </div>
-            <div className={styles.Footer__license}>
+            </span>
+            <span className={styles.Footer__license}>
                 <a href="https://mit-license.org">
                     License
                 </a>
-            </div>
-            <div className={styles.Footer__contact}>Contact</div>
+            </span>
+            <span className={styles.Footer__contact}>
+                Contact
+            </span>
         </div>
     )
 }

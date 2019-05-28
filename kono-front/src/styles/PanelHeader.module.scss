@@ -1,0 +1,19 @@
+@import 'mixins/all';
+
+.PanelHeader {
+
+    margin-bottom: 19px;
+    display: flex;
+    flex-direction: row;
+
+    .PanelHeader__title {
+        font-size: 18px;
+    }
+
+    .PanelHeader__link {
+        margin-left: auto;
+        font-size: 13px;
+        @include link();
+    }
+
+}
