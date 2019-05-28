@@ -11,6 +11,9 @@ export default () => {
             <p>황동욱</p>
             <h3>Designers</h3>
             <p>임현정</p>
+            <h2>Special Thanks To:</h2>
+            <p>이택경</p>
+            <p>임성준</p>
         </div>
     );
 }
