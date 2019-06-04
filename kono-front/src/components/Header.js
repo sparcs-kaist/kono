@@ -20,7 +20,7 @@ export default () => {
                 </span>
                 <span className={styles.Header__common_menu}>
                     <Link to="/login">
-                        로그인
+                        관리자 로그인
                     </Link>
                 </span>
             </div>
