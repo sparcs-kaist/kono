@@ -1,9 +1,84 @@
-.LandingPage {
+.LoginPage {
 
     margin: auto;
+    width: 500px;
+    height: 240px;
 
     background-color: #EFECEB;
 
-    padding: 2rem;
+    padding: 36px;
+
+    display: flex;
+    flex-direction: column;
+    
+    transition: .15s ease-in;
+
+    .LoginPage__header {
+        color: #333333;
+        font-size: 24px;
+        margin-bottom: 50px;
+    }
+
+    input.LoginPage__input {
+
+        background: transparent;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #AAAAAA;
+        color: #AAAAAA;
+        &::placeholder {
+            color: #AAAAAA;
+        }
+        &:focus {
+            color: #5F453D;
+            border-bottom: 1px solid #5F453D;
+        }
+        &:hover {
+            color: #5F453D;
+            border-bottom: 1px solid #5F453D;
+        }
+        padding: 6px 0 6px 0;
+        font-size: 18px;
+        transition: color .3s, border-color .3s;
+
+    }
+
+    .LoginPage__input_error {
+        color: #E53935;
+        font-size: .95rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .LoginPage__button {
+
+        display: inline-block;
+        transition: inherit;
+
+        text-align: center;
+        padding: 10px;
+
+        cursor: pointer;
+
+        color: #EFECEB;
+        background-color: #5F453D;
+        font-weight: 600;
+
+        margin: 20px 0;
+
+        &:hover {
+            background: #795548;
+        }
+        &:active {
+            background: #5F453D;
+        }
+
+    }
+
+    .LoginPage__footer {
+        margin-top: auto;
+        color: #747474;
+        font-size: 14px;
+    }
 
 }
