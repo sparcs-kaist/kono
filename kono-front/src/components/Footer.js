@@ -7,29 +7,33 @@ import { Link } from 'react-router-dom';
 export default () => {
     return (
         <div className={styles.Footer}>
-            <div className={styles.Footer__sparcs_logo}>
-                <a href="https://sparcs.org">
-                    <SPARCSLogo />
-                </a>
+            <div className={styles.Footer__logo}>
+                <div className={styles.Footer__sparcs_logo}>
+                    <a href="https://sparcs.org">
+                        <SPARCSLogo />
+                    </a>
+                </div>
+                <div className={styles.Footer__cross}>X</div>
+                <div className={styles.Footer__swc_logo}>
+                    <a href="https://welfare.kaist.ac.kr/">
+                        <SWCLogo />
+                    </a>
+                </div>
+                <span className={styles.Footer__menu}>
+                    <Link to="/credit">
+                        Credit
+                    </Link>
+                </span>
             </div>
-            <div className={styles.Footer__cross}>X</div>
-            <div className={styles.Footer__swc_logo}>
-                <a href="https://welfare.kaist.ac.kr/">
-                    <SWCLogo />
-                </a>
-            </div>
-            <span className={styles.Footer__credit}>
-                <Link to="/credit">
-                    Credit
-                </Link>
-            </span>
-            <span className={styles.Footer__license}>
+            <span className={styles.Footer__menu}>
                 <a href="https://mit-license.org">
                     License
                 </a>
             </span>
-            <span className={styles.Footer__contact}>
-                Contact
+            <span className={styles.Footer__common_menu}>
+                <a>
+                    Contact
+                </a>
             </span>
         </div>
     )

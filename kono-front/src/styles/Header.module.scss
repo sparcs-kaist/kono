@@ -3,33 +3,50 @@
 .Header {
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
     .Header__bar {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        min-width: 1080px;
         height: 5px;
         background: #5F453D;
     }
-    
-    .Header__logo {
-        margin: 16px 62.7px 16px 24px;
-        display: flex;
-    }
-    
-    .Header__link {
-        margin: 20px 0;
-        display: flex;
-        @include link();
-    }
 
-    .Header__login {
-        margin: 20px 23px 0 0;
-        margin-left: auto;
-        @include link();
+    .Header__content {
+
+        height: 50px;
+        display: flex;
+        flex-direction: row;
+
+        .Header__logo {
+            margin: 11px 0 12px 24px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .Header__menu {
+            margin: 17px 0 18px 24px;
+            height: 15px;
+            font-size: 15px;
+
+            display: flex;
+            align-items: center;
+            @include link();
+        }
+
+        .Header__menu + .Header__menu {
+            margin-right: 24px;
+        }
+    
+        .Header__common_menu {
+            margin: 17px 24px 17px 0;
+            margin-left: auto;
+            height: 14px;
+            font-size: 14px;
+            
+            display: flex;
+            align-items: center;
+            @include link();
+        }
+
     }
 
 }

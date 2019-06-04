@@ -1,10 +1,10 @@
 @mixin link() {
     a {
-        color: #747474;
+        color: #333333;
         &:hover {
-            color: #111111;
-            border-bottom: 1px solid #111111;
+            color: #747474;
         }
         text-decoration: none;
+        vertical-align: middle;
     }
 }
