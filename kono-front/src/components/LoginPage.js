@@ -25,9 +25,6 @@ export default () => {
                 onClick={onLogin}>
                 로그인
             </div>
-            <span className={styles.LoginPage__footer}>
-                비밀번호 분실 시 SPARCS 개발진에게 연락 바랍니다.
-            </span>
         </div>
     );
 }

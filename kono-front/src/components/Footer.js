@@ -31,9 +31,7 @@ export default () => {
                 </a>
             </span>
             <span className={styles.Footer__common_menu}>
-                <a>
-                    Contact
-                </a>
+                Contact
             </span>
         </div>
     )
