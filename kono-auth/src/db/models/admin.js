@@ -14,10 +14,15 @@ export const verify = (password, onSuccess, onFailure, onError) => {
                 onError();
         }
         else {
-            const pwd = rows[0].password;
-            if (hash(password) === pwd && onSuccess)
-                onSuccess();
-            else if (onFailure)
+            for (let { password: passwordHash } of rows) {
+                if (hash(password) === passwordHash) { // Login Success
+                    if (onSuccess)
+                        onSuccess();
+                    return;
+                }
+            }
+            // Login Failure
+            if (onFailure)
                 onFailure();
         }
     });
