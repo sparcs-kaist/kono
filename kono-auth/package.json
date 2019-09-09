@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon -L --watch src/ --exec 'rm -rf dev-build/ && babel --presets babel-preset-env -d dev-build src/ && node dev-build'",
+    "start:dev": "nodemon -L --watch src/ --exec 'rm -rf dev-build/ && babel --presets @babel/preset-env --plugins @babel/plugin-proposal-object-rest-spread -d dev-build src/ && node dev-build'",
     "build": "webpack --config webpack.config.js",
     "serve": "node dist/bundle.js"
   },
@@ -12,17 +12,17 @@
   "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.4",
-    "crypto": "^1.0.1",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.17.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/preset-env": "^7.6.0",
+    "babel-loader": "^8.0.6",
     "terser-webpack-plugin": "^1.4.1",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8"

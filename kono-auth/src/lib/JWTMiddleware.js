@@ -18,7 +18,7 @@ export const JWTMiddleware = () => {
                         req.admin = null;
                     }
                     else {
-                        if (exp - 600 < now) { // Token Expires in 10 minutes
+                        if (exp - 60 * 10 < now) { // Token Expires in 10 minutes
                             console.log('expiring!');
                         }
                         req.admin = decoded;
