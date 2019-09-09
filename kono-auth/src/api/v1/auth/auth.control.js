@@ -14,8 +14,8 @@ export const login = (req, res) => {
         return;
     }
 
-    verify(password, () => {
-        generateToken({ admin: 'true' },
+    verify(password, (admin) => {
+        generateToken(admin,
             (token) => {
                 res.status(200);
                 res.cookie('access_token', token, {
@@ -75,7 +75,7 @@ export const updatePassword = (req, res) => {
             res.send({ msg: 'invalid password' });
             return;
         }
-        update(password,
+        update(req.admin, password,
             () => {
                 res.status(204);
                 res.end();
