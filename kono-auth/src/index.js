@@ -8,7 +8,7 @@ import { JWTMiddleware } from './lib/JWTMiddleware';
 
 dotenv.config();
 
-const { DEV_PORT } = process.env;
+const { DEV_PORT, PROD_PORT, NODE_ENV } = process.env;
 const app = express();
 
 /* Middlewares */
@@ -23,6 +23,7 @@ app.use('/', routes());
 /* Connect to database */
 db.init();
 
+const port = NODE_ENV === 'development' ? DEV_PORT : PROD_PORT;
 app.listen(DEV_PORT, () => {
-    console.log(`kono-auth server listening at port ${DEV_PORT}`);
+    console.log(`Starting kono-auth ${NODE_ENV} server listening at port ${port}`);
 });

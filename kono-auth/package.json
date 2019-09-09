@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon -L --watch src/ --exec 'rm -rf dev-build/ && babel --presets @babel/preset-env --plugins @babel/plugin-proposal-object-rest-spread -d dev-build src/ && node dev-build'",
+    "start:dev": "NODE_ENV=development nodemon -L --watch src/ --exec 'rm -rf dev-build/ && babel --presets @babel/preset-env --plugins @babel/plugin-proposal-object-rest-spread -d dev-build src/ && node dev-build'",
     "build": "webpack --config webpack.config.js",
-    "serve": "node dist/bundle.js"
+    "serve": "NODE_ENV=production node dist/bundle.js"
   },
   "author": "",
   "license": "ISC",

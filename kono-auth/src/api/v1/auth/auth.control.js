@@ -4,8 +4,8 @@ import { generateToken } from '../../../lib/token';
 export const login = (req, res) => {
     
     const { password } = req.body;
-    const { DEV_HOST: devHost } = process.env;
-    const host = devHost;
+    const { DEV_HOST, PROD_HOST, NODE_ENV } = process.env;
+    const host = NODE_ENV === 'development' ? DEV_HOST : PROD_HOST;
 
     if (!password) {
         res.status(400);
