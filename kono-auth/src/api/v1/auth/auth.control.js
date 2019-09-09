@@ -4,8 +4,8 @@ import { generateToken } from '../../../lib/token';
 export const login = (req, res) => {
     
     const { password } = req.body;
-    const { DEV_HOST: devHost } = process.env;
-    const host = devHost;
+    const { DEV_HOST, PROD_HOST, NODE_ENV } = process.env;
+    const host = NODE_ENV === 'development' ? DEV_HOST : PROD_HOST;
 
     if (!password) {
         res.status(400);
@@ -14,8 +14,8 @@ export const login = (req, res) => {
         return;
     }
 
-    verify(password, () => {
-        generateToken({ admin: 'true' },
+    verify(password, (admin) => {
+        generateToken(admin,
             (token) => {
                 res.status(200);
                 res.cookie('access_token', token, {
@@ -75,7 +75,7 @@ export const updatePassword = (req, res) => {
             res.send({ msg: 'invalid password' });
             return;
         }
-        update(password,
+        update(req.admin, password,
             () => {
                 res.status(204);
                 res.end();

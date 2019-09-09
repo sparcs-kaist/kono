@@ -14,10 +14,10 @@ export const verify = (password, onSuccess, onFailure, onError) => {
                 onError();
         }
         else {
-            for (let { password: passwordHash } of rows) {
+            for (let { sid, password: passwordHash } of rows) {
                 if (hash(password) === passwordHash) { // Login Success
                     if (onSuccess)
-                        onSuccess();
+                        onSuccess({ sid });
                     return;
                 }
             }
@@ -28,14 +28,15 @@ export const verify = (password, onSuccess, onFailure, onError) => {
     });
 }
 
-export const update = (newPassword, onSuccess, onError) => {
-    db.query(`UPDATE admin SET password = "${hash(newPassword)}"`, (err) => {
+export const update = (admin, newPassword, onSuccess, onError) => {
+    const { sid } = admin;
+    db.query(`UPDATE admin SET password = "${hash(newPassword)}" WHERE sid=${sid}`, (err) => {
         if (err) {
             console.log(err);
             if (onError)
                 onError();
         }
         else if (onSuccess)
-            onSuccess();
+            onSuccess({ sid });
     });
 }
