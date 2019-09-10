@@ -23,6 +23,10 @@
     
     .PanelFooter__link {
         @include link;
+        @include flexbox(row, $center: true);
+        svg {
+            fill: $text-primary;
+        }
     }
 
 }

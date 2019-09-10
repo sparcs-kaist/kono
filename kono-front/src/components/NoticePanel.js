@@ -32,7 +32,7 @@ export default ({ notices }) => {
                     ))
                 }
             </ul>
-            <PanelFooter currentPage={1} pagination={1} lastPage={3} onClickPage={(x)=>console.log(x)}/>
+            <PanelFooter currentPage={1} pagination={5} lastPage={3} onClickPage={(x)=>console.log(x)}/>
         </div>
     );
 }

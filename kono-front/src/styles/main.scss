@@ -1,7 +1,9 @@
 @import 'lib/fonts';
+@import 'utils/colors';
 
 html, body {
     min-height: 100vh;
+    background: $background;
 }
 
 body {

@@ -19,10 +19,12 @@ export default ({
         <div className={styles.PanelFooter}>
             { 
                 startPage > 1 ? (
-                    <LeftArrowIcon
+                    <div
                         className={styles.PanelFooter__link}
                         onClick={() => onClickPage(currentPage - 1)}
-                    />
+                    >
+                        <LeftArrowIcon />
+                    </div>
                 ) : null
             }
             {
@@ -41,10 +43,12 @@ export default ({
             }
             {
                 endPage < lastPage ? (
-                    <RightArrowIcon
+                    <div
                         className={styles.PanelFooter__link}
                         onClick={() => onClickPage(currentPage + 1)}
-                    />
+                    >
+                        <RightArrowIcon />
+                    </div>
                 ) : null
             }
         </div>

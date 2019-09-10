@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 @import 'mixins/all';
+@import 'utils/colors';
 
 .Footer {
 
@@ -21,7 +22,14 @@
             font-family: "Raleway";
             font-weight: 900;
             margin-right: 16px;
+            color: $text-primary;
             @include flexbox(row, $center: true);
+        }
+
+        .Footer__swc_logo {
+            svg {
+                fill: $text-primary;
+            }
         }
 
     }

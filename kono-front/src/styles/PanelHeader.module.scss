@@ -1,8 +1,11 @@
 @import 'mixins/all';
+@import 'utils/colors';
 
 .PanelHeader {
 
     margin-bottom: 46px;
+
+    color: $text-primary;
 
     .PanelHeader__title {
         font-style: normal;
