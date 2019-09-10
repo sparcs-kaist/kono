@@ -1,4 +1,5 @@
 @import 'mixins/all';
+@import 'utils/colors';
 
 .Header {
 
@@ -7,7 +8,7 @@
 
     .Header__bar {
         height: 5px;
-        background: #5F453D;
+        background: $theme-background;
     }
 
     .Header__content {

@@ -1,7 +1,9 @@
+@import 'utils/colors';
+
 .ImageThumbnailPanel {
     
     border-radius: 2px;
 
-    background-color: #EFECEB;
+    background-color: $panel-background;
 
 }

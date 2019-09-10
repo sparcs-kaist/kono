@@ -1,9 +1,11 @@
+@import 'utils/colors';
+
 .CreditPage {
 
     margin: auto;
 
     padding: 50px;
-    background-color: #EFECEB;
+    background-color: $panel-background;
 
     display: flex;
     flex-direction: column;

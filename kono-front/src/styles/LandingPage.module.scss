@@ -3,19 +3,26 @@
     margin: auto;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-content: center;
     justify-content: center;
 
     color: #343434;
 
-    .LandingPage__left {
+    .LandingPage__post {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
     }
 
-    .LandingPage__right {
-        margin-left: 50px;
+    .LandingPage__room {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+        
+        margin: 64px auto;
     }
 
 }

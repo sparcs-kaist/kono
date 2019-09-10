@@ -7,12 +7,12 @@ import RoomPanel from './RoomPanel';
 export default () => {
     return (
         <div className={styles.LandingPage}>
-            <div className={styles.LandingPage__left}>
+            <div className={styles.LandingPage__room}>
+                <RoomPanel />
+            </div>
+            <div className={styles.LandingPage__post}>
                 <NoticePanel />
                 <LostFoundPanel />
-            </div>
-            <div className={styles.LandingPage__right}>
-                <RoomPanel />
             </div>
         </div>
     );

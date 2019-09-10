@@ -1,5 +1,7 @@
+@import 'utils/colors';
+
 .RoomPanel {
-    background: #EFECEB;
-    width: 489px;
-    height: 489px;
+    background: $panel-background;
+    width: 600px;
+    height: 541px;
 }

@@ -2,18 +2,21 @@
 
 .PanelHeader {
 
-    margin-bottom: 19px;
+    margin-bottom: 46px;
     display: flex;
     flex-direction: row;
 
     .PanelHeader__title {
-        font-size: 18px;
+        font-style: normal;
+        font-weight: 900;
+        font-size: 30px;
+        line-height: 35px;
     }
 
-    .PanelHeader__link {
-        margin-left: auto;
-        font-size: 13px;
-        @include link();
-    }
+    // .PanelHeader__link {
+    //     margin-left: auto;
+    //     font-size: 13px;
+    //     @include link();
+    // }
 
 }
