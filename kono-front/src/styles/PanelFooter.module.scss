@@ -1,0 +1,28 @@
+@import 'utils/colors';
+@import 'mixins/all';
+
+.PanelFooter {
+
+    margin-top: 46px;
+
+    @include flexbox(row, $center: true);
+
+    .PanelFooter__page {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+
+        color: $text-highlight;
+        
+        @include flexbox(row, $center: true);
+
+        padding: 0 4px;
+    }
+    
+    .PanelFooter__link {
+        @include link;
+    }
+
+}

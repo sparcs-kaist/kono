@@ -4,35 +4,33 @@
 .NoticePanel {
 
     width: 440px;
-    height: 121px;
+    margin-bottom: 64px;
 
     ul {
         margin: 0;
         padding: 0;
+        height: 287px;
         list-style-type: none;
         li {
             font-size: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
     }
 
     .NoticePanel__item {
 
-        display: flex;
-        flex-direction: row;
+        @include flexbox(row, $center: false);
 
         .NoticePanel__item_title {
             font-size: 15px;
-            @include link();
-        }
-
-        .NoticePanel__item_views {
-            font-size: 12px;
+            line-height: 18px;
+            @include link;
         }
 
         .NoticePanel__item_date {
             margin-left: auto;
             font-size: 15px;
+            line-height: 18px;
             color: $text-secondary;
         }
 

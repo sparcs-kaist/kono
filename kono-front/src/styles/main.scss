@@ -1,3 +1,5 @@
+@import 'lib/fonts';
+
 html, body {
     min-height: 100vh;
 }
@@ -5,7 +7,7 @@ html, body {
 body {
     margin: 0;
     display: flex;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 #root {

@@ -3,5 +3,5 @@
 .RoomPanel {
     background: $panel-background;
     width: 600px;
-    height: 541px;
+    height: calc(100vh - 180px);
 }

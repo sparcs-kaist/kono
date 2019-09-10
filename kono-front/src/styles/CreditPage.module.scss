@@ -1,4 +1,5 @@
 @import 'utils/colors';
+@import 'mixins/all';
 
 .CreditPage {
 
@@ -7,10 +8,7 @@
     padding: 50px;
     background-color: $panel-background;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
+    @include flexbox(column, $center: true);
 
     h1, h2, h3, h4, h5, h6, p {
         font-weight: normal;

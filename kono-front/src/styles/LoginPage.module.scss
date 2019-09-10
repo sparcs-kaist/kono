@@ -1,4 +1,5 @@
 @import 'utils/colors';
+@import 'mixins/all';
 
 .LoginPage {
 
@@ -10,8 +11,7 @@
 
     padding: 36px;
 
-    display: flex;
-    flex-direction: column;
+    @include flexbox(column, $center: false);
     
     transition: .15s ease-in;
 

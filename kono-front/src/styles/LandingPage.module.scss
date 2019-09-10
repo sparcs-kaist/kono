@@ -1,26 +1,19 @@
+@import 'mixins/all';
+
 .LandingPage {
 
     margin: auto;
 
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
+    @include flexbox(column, $center: true);
 
     color: #343434;
 
     .LandingPage__post {
-        display: flex;
-        flex-direction: row;
-        align-content: center;
-        justify-content: center;
+        @include flexbox(row, $center: true);
     }
 
     .LandingPage__room {
-        display: flex;
-        flex-direction: row;
-        align-content: center;
-        justify-content: center;
+        @include flexbox(row, $center: true);
         
         margin: 64px auto;
     }

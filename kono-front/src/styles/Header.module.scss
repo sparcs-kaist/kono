@@ -3,8 +3,7 @@
 
 .Header {
 
-    display: flex;
-    flex-direction: column;
+    @include flexbox(column, $center: false);
 
     .Header__bar {
         height: 5px;
@@ -14,13 +13,11 @@
     .Header__content {
 
         height: 50px;
-        display: flex;
-        flex-direction: row;
+        @include flexbox(row, $center: false);
 
         .Header__logo {
             margin: 11px 0 12px 24px;
-            display: flex;
-            align-items: center;
+            @include flexbox(row, $center: false);
         }
         
         .Header__menu {
@@ -28,9 +25,8 @@
             height: 15px;
             font-size: 15px;
 
-            display: flex;
-            align-items: center;
-            @include link();
+            @include flexbox(row, $center: true);
+            @include link;
         }
 
         .Header__menu + .Header__menu {
@@ -43,9 +39,8 @@
             height: 14px;
             font-size: 14px;
             
-            display: flex;
-            align-items: center;
-            @include link();
+            @include flexbox(row, $center: true);
+            @include link;
         }
 
     }

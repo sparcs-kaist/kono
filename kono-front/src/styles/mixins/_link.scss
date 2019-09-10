@@ -1,10 +1,21 @@
-@mixin link() {
+@import 'utils/colors';
+
+@mixin link {
     a {
-        color: #333333;
+        color: $text-primary;
         &:hover {
-            color: #747474;
+            color: $text-secondary;
         }
         text-decoration: none;
         vertical-align: middle;
+        cursor: pointer;
     }
+    
+    color: $text-primary;
+    &:hover {
+        color: $text-secondary;
+    }
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
 }

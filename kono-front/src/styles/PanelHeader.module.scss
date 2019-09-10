@@ -3,8 +3,6 @@
 .PanelHeader {
 
     margin-bottom: 46px;
-    display: flex;
-    flex-direction: row;
 
     .PanelHeader__title {
         font-style: normal;
@@ -12,11 +10,5 @@
         font-size: 30px;
         line-height: 35px;
     }
-
-    // .PanelHeader__link {
-    //     margin-left: auto;
-    //     font-size: 13px;
-    //     @include link();
-    // }
 
 }
