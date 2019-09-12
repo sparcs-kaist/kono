@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import routes from './routes';
 import db from './db'
 import { JWTMiddleware } from './lib/JWTMiddleware';
@@ -12,6 +13,7 @@ const { DEV_PORT, PROD_PORT, NODE_ENV } = process.env;
 const app = express();
 
 /* Middlewares */
+app.use(cors({ credentials: true, origin: [ 'http://localhost:3000' ] }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
