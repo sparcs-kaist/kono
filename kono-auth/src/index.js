@@ -13,7 +13,12 @@ const { DEV_PORT, PROD_PORT, NODE_ENV } = process.env;
 const app = express();
 
 /* Middlewares */
-app.use(cors({ credentials: true, origin: [ 'http://localhost:3000' ] }));
+app.use(cors({
+    credentials: true,
+    origin: [ 'http://localhost:3000' ],
+    methods: [ 'GET', 'PUT', 'POST', 'DELETE', 'OPTIONS' ],
+    allowedHeaders: [ 'Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'x-timebase', 'Link' ]
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
