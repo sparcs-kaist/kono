@@ -3,7 +3,7 @@ import axios from 'axios';
 const { REACT_APP_KONO_AUTH_URL: apiURL } = process.env;
 
 export const login = ({ password }) => {
-    return axios.post(apiURL + '/api/v1/auth/login', { password }, { withCredentials: true });
+    return axios.post(apiURL + '/api/v1/auth/login', { password });
 };
 
 export const check = () => {
