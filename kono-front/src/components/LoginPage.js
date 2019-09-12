@@ -30,6 +30,9 @@ export default () => {
                         case 'server error':
                             setLoginErrorMsg('서버 에러');
                             break;
+                        default:
+                            setLoginErrorMsg('서버 에러');
+                            break;
                     }
                 }
             );

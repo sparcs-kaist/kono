@@ -43,6 +43,10 @@
             @include link;
         }
 
+        .Header__common_menu + .Header__common_menu {
+            margin-left: 24px;
+        }
+
     }
 
 }
