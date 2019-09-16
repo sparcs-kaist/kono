@@ -4,23 +4,23 @@ import PanelHeader from './PanelHeader';
 import PanelFooter from './PanelFooter';
 import { Link } from 'react-router-dom';
 
-export default ({ notices }) => {
+export default ({ posts }) => {
     return (
         <div className={styles.NoticePanel}>
             <PanelHeader title="공지사항" link="/notice"/>
             <ul>
                 {
-                    notices.map(notice => (
-                        <li key={`notice-${notice.id}`}>
+                    posts.map(post => (
+                        <li key={`notice-${post.id}`}>
                             <div className={styles.NoticePanel__item}>
                                 <span className={styles.NoticePanel__item_title}>
-                                    <Link to={`/notice/${notice.id}`}>
-                                        { notice.title.length > 24 ? `${notice.title.substring(0, 24)}...` : notice.title }
+                                    <Link to={`/post/${post.id}`}>
+                                        { post.title.length > 24 ? `${post.title.substring(0, 24)}...` : post.title }
                                     </Link>
                                 </span>
                                 <span className={styles.NoticePanel__item_date}>
                                     { 
-                                        notice.date.toLocaleString('default', {
+                                        post.date.toLocaleString('default', {
                                             year:  'numeric',
                                             month: '2-digit',
                                             day:   '2-digit'
