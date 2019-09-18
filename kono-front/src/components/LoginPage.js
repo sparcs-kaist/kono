@@ -1,22 +1,34 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import queryString from 'query-string';
 import styles from '../styles/LoginPage.module.scss';
 import { login } from '../api/auth';
 import * as AuthActions from '../store/modules/auth';
 
-export default () => {
+const getInitialLoginErrorMsg = (query) => {
+    switch (query.state) {
+        case 'logout':
+            return '로그아웃 되었습니다. 다시 로그인 해주세요.';
+        default:
+            return '';
+    }
+}
+
+export default ({ location }) => {
+
+    /* Parse query string */
+    const { search } = location;
+    const query = queryString.parse(search);
 
     const dispatch = useDispatch();
-
     const [password, setPassword] = useState('');
-    const [loginErrorMsg, setLoginErrorMsg] = useState('');
+    const [loginErrorMsg, setLoginErrorMsg] = useState(getInitialLoginErrorMsg(query));
 
     const onLogin = async () => {
         await login({ password })
             .then(
                 (res) => {
                     dispatch(AuthActions.SetLogin(true));
-                    setLoginErrorMsg('');
                 },
                 (err) => {
 

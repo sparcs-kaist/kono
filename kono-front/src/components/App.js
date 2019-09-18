@@ -18,12 +18,8 @@ export default () => {
     /* Check login status when app is loaded */
     useEffect(() => {
 
-        const checkLoginStatus = async () => {
-            await check()
-                .then(
-                    () => dispatch(AuthAPI.SetLogin(true))
-                );
-        };
+        const checkLoginStatus = async () => await check()
+                .then(() => dispatch(AuthAPI.SetLogin(true)));
 
         checkLoginStatus();
 
@@ -36,7 +32,7 @@ export default () => {
             <Header />
             <Switch>
                 <Route exact path="/" component={LandingPage} />
-                <Route path="/login" component={login ? LoginPage : () => <Redirect to="/"/>} />
+                <Route path="/login" component={login ? () => <Redirect to="/"/> : LoginPage} />
                 <Route path="/notice" component={NoticePage} />
                 <Route path="/lostfound" component={LostFoundPage} />
                 <Route path="/credit" component={CreditPage} />

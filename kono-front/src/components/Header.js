@@ -1,16 +1,23 @@
 import React from 'react';
 import styles from '../styles/Header.module.scss';
 import { ReactComponent as Logo } from '../res/logo.svg';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import * as AuthActions from '../store/modules/auth';
 import { logout } from '../api/auth';
 
-export default () => {
+export default withRouter(({ history }) => {
 
+    const dispatch = useDispatch();
     const login = useSelector(state => state.auth.login, []);
 
-    const onLogout = async () => await logout().then(() => AuthActions.Logout());
+    const onLogout = async () => await logout()
+        .then(
+            () => {
+                dispatch(AuthActions.Logout());
+                history.push('/login?state=logout');
+            }
+        );
 
     return (
         <div className={styles.Header}>
@@ -42,4 +49,4 @@ export default () => {
             
         </div>
     )
-}
+})
