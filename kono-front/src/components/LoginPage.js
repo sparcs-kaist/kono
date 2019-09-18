@@ -14,11 +14,16 @@ export default () => {
     const onLogin = async () => {
         await login({ password })
             .then(
-                () => {
+                (res) => {
+                    console.log(res.headers);
                     dispatch(AuthActions.SetLogin(true));
                     setLoginErrorMsg('');
                 },
                 (err) => {
+
+                    if (!err.response || !err.response.data)
+                        return;
+
                     const { msg } = err.response.data;
                     switch (msg) {
                         case 'password field required':
@@ -34,6 +39,7 @@ export default () => {
                             setLoginErrorMsg('서버 에러');
                             break;
                     }
+                    
                 }
             );
     }
