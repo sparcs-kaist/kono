@@ -15,7 +15,6 @@ export default () => {
         await login({ password })
             .then(
                 (res) => {
-                    console.log(res.headers);
                     dispatch(AuthActions.SetLogin(true));
                     setLoginErrorMsg('');
                 },
