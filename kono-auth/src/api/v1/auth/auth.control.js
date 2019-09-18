@@ -6,7 +6,7 @@ export const login = (req, res) => {
     const { password } = req.body;
     const { DEV_HOST, PROD_HOST, NODE_ENV } = process.env;
     const host = NODE_ENV === 'development' ? DEV_HOST : PROD_HOST;
-
+    
     if (!password) {
         res.status(400);
         res.clearCookie('access_token', { domain: host });
@@ -50,6 +50,10 @@ export const check = (req, res) => {
 };
 
 export const logout = (req, res) => {
+
+    const { DEV_HOST, PROD_HOST, NODE_ENV } = process.env;
+    const host = NODE_ENV === 'development' ? DEV_HOST : PROD_HOST;
+	
     if (req.admin) {
         res.status(204);
         res.clearCookie('access_token', { domain: host });
@@ -59,6 +63,7 @@ export const logout = (req, res) => {
         res.status(403);
         res.end();
     }
+
 }
 
 export const updatePassword = (req, res) => {
