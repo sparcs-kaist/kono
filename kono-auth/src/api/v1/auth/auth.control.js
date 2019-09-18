@@ -9,7 +9,7 @@ export const login = (req, res) => {
 
     if (!password) {
         res.status(400);
-        res.clearCookie('access_token');
+        res.clearCookie('access_token', { domain: host });
         res.send({ msg: 'password field required' });
         return;
     }
@@ -20,7 +20,6 @@ export const login = (req, res) => {
                 res.status(200);
                 res.cookie('access_token', token, {
                     maxAge: 1000 * 60 * 60,
-                    httpOnly: true,
                     domain: host
                 });
                 res.send({ msg: 'login success' });
@@ -33,7 +32,7 @@ export const login = (req, res) => {
         );
     }, () => {
         res.status(403);
-        res.clearCookie('access_token');
+        res.clearCookie('access_token', { domain: host });
         res.send({ msg: 'wrong password' })
     }, () => {
         res.status(500);
@@ -53,7 +52,7 @@ export const check = (req, res) => {
 export const logout = (req, res) => {
     if (req.admin) {
         res.status(204);
-        res.clearCookie('access_token');
+        res.clearCookie('access_token', { domain: host });
         res.end();
     }
     else {

@@ -26,7 +26,6 @@ export const JWTMiddleware = () => {
                                 (token) =>{
                                     res.cookie('access_token', token, {
                                         maxAge: 1000 * 60 * 60,
-                                        httpOnly: true,
                                         domain: host
                                     });
                                     req.admin = decoded;
