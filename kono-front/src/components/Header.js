@@ -38,15 +38,6 @@ export default () => {
                         </>
                     )
                 }
-                {
-                    !login && (
-                        <span className={styles.Header__common_menu}>
-                            <Link to="/login">
-                                관리자 로그인
-                            </Link>
-                        </span>
-                    )
-                }
             </div>
             
         </div>

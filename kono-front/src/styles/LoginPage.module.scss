@@ -5,7 +5,7 @@
 
     margin: auto;
     width: 500px;
-    height: 240px;
+    height: 200px;
 
     background-color: $panel-background;
 
@@ -18,7 +18,7 @@
     .LoginPage__header {
         color: $text-primary;
         font-size: 24px;
-        margin-bottom: 50px;
+        margin-bottom: 40px;
     }
 
     input.LoginPage__input {
@@ -66,7 +66,7 @@
         background-color: $theme-background;
         font-weight: 600;
 
-        margin: 20px 0;
+        margin: auto 0 0 0;
 
         &:hover {
             background: $theme-light-background;

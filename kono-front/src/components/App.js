@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import LoginPage from './LoginPage';
@@ -7,8 +7,21 @@ import NoticePage from './NoticePage';
 import CreditPage from './CreditPage';
 import Header from './Header';
 import Footer from './Footer';
+import { check } from '../api/auth';
+
+const checkLoginStatus = async () => {
+    try {
+        const res = await check();
+        console.log(res);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 export default () => {
+
+    /* Check login status when app is loaded */
+    useEffect(() => { checkLoginStatus() }, []);
 
     return (
         <>

@@ -3,8 +3,12 @@ import styles from '../styles/Footer.module.scss';
 import { ReactComponent as SPARCSLogo } from '../res/sparcs_logo.svg';
 import { ReactComponent as SWCLogo } from '../res/SWC_logo.svg';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default () => {
+
+    const login = useSelector(state => state.auth.login, []);
+
     return (
         <div className={styles.Footer}>
             <div className={styles.Footer__logo}>
@@ -30,6 +34,15 @@ export default () => {
                     License
                 </a>
             </span>
+            {
+                    !login && (
+                        <span className={styles.Footer__common_menu}>
+                            <Link to="/login">
+                                관리자 로그인
+                            </Link>
+                        </span>
+                    )
+                }
             <span className={styles.Footer__common_menu}>
                 Contact
             </span>

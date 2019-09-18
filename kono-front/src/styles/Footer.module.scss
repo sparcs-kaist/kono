@@ -48,13 +48,16 @@
     }
 
     .Footer__common_menu {
-        margin: 17px 24px 18px 0;
-        margin-left: auto;
+        margin: 17px 24px 18px auto;
         height: 13px;
         font-size: 13px;
         
         @include flexbox(row, $center: true);
         @include link;
+    }
+
+    .Footer__common_menu + .Footer__common_menu {
+        margin-left: 24px;
     }
 
 }
