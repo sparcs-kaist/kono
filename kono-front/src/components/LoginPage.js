@@ -15,10 +15,11 @@ export default () => {
         await login({ password })
             .then(
                 (res) => {
-                    console.log(res)
                     dispatch(AuthActions.SetLogin(true));
                     setLoginErrorMsg('');
-                },
+                }
+            )
+            .catch(
                 (err) => {
                     if (err.response.data) {
                         const { msg } = err.response.data;

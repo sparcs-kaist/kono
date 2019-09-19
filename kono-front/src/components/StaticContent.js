@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default ({ url }) => {
 
     const [innerHTML, setInnerHTML] = useState('');
 
     useEffect(() => {
-        fetch(url)
-            .then(res => res.text())
-            .then(content => { setInnerHTML(content); })
+        axios.get(url)
+            .then(res => setInnerHTML(res.data))
             .catch(err => console.log(err));
     }, [url]);
 
