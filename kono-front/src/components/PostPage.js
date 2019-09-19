@@ -1,5 +1,6 @@
 import React from 'react';
 import style from '../styles/PostPage.module.scss';
+import StaticContent from './StaticContent';
 
 export default ({ match }) => {
 
@@ -15,7 +16,7 @@ export default ({ match }) => {
      *  type: string ('notice' | 'lostfound'),
      *  title: string,
      *  date: Date,
-     *  content: string // Should improve this to support document styling and images
+     *  contentURL: URL (relative path from public/ directory)
      * } 
      */
 
@@ -25,18 +26,9 @@ export default ({ match }) => {
         type: 'notice',
         title: '태풍 및 카포전으로 인한 임시 휴무 안내',
         date: new Date('2019-09-05T00:00:00'),
-        content: '안녕하세요, 카이스트 코인노래방입니다!\n'
-            + '두 번의 코인노래방 임시 휴무 소식을 들고 오게 되었습니다\n'
-            + '\n'
-            + '1. 9/6(금) 오후 4시부터 9/8(일) 오후 6시까지 태풍으로 인하여 시설 보호 및 안전 문제로 인해 임시로 문을 닫습니다.\n'
-            + '9/8 일요일 4시부터 신학기 맞이 대청소를 실시 예정이며 대청소 직후 다시 문을 열 예정입니다.\n'
-            + '\n'
-            + '2. 카이스트 노천극장에서 이루어질 카포전 일정으로 인해\n'
-            + '9/19(목) 오후 3시부터 9/21(토)에서 일요일로 넘어가는 자정까지 임시 휴무할 예정입니다!\n'
-            + '\n'
-            + '감사드리며 이용에 참고 부탁드리겠습니다.'
+        contentURL: '/posts/example.html'
     };
-    const { type, title, date, content } = __temp_post;
+    const { type, title, date, contentURL } = __temp_post;
 
     return (
         <div className={style.PostPage}>
@@ -66,9 +58,7 @@ export default ({ match }) => {
                     }
                 </span>
             </div>
-            <p>
-                { content }
-            </p>
+            <StaticContent url={contentURL} />
         </div>
     );
 
