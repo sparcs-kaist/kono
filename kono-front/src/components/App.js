@@ -21,7 +21,7 @@ export default () => {
 
         const checkLoginStatus = async () => await check()
                 .then(
-                    () => dispatch(AuthAPI.SetLogin(true)),
+                    () => { dispatch(AuthAPI.SetLogin(true)) },
                     () => {}
                 );
 
@@ -30,9 +30,10 @@ export default () => {
     }, [dispatch]);
 
     const login = useSelector(state => state.auth.login, []);
+    const theme = useSelector(state => state.config.theme, []);
 
     return (
-        <div className={`theme_dark ${styles.App}`}>
+        <div className={`${theme} ${styles.App}`}>
             <Header />
             <Switch>
                 <Route exact path="/" component={LandingPage} />
