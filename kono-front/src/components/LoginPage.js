@@ -29,7 +29,6 @@ export default ({ location }) => {
             .then(
                 (res) => {
                     dispatch(AuthActions.SetLogin(true));
-                    setLoginErrorMsg('');
                 }
             )
             .catch(

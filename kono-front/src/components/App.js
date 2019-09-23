@@ -36,7 +36,7 @@ export default () => {
             <Header />
             <Switch>
                 <Route exact path="/" component={LandingPage} />
-                <Route path="/login" component={LoginPage} />
+                <Route path="/login" component={login ? () => <Redirect to="/" /> : LoginPage} />
                 <Route path="/post/:post_id" component={PostPage} />
                 <Route path="/credit" component={CreditPage} />
                 <Route component={() => <Redirect to="/" />} />
