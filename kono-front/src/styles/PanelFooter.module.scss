@@ -1,32 +1,33 @@
-@import 'utils/colors';
 @import 'mixins/all';
 
-.PanelFooter {
+@include themed() {
+    .PanelFooter {
 
-    margin-top: 46px;
+        margin-top: 46px;
 
-    @include flexbox(row, $center: true);
-
-    .PanelFooter__page {
-        font-style: normal;
-        font-weight: normal;
-        font-size: 15px;
-        line-height: 18px;
-        text-align: center;
-
-        color: $text-highlight;
-        
         @include flexbox(row, $center: true);
 
-        padding: 0 4px;
-    }
-    
-    .PanelFooter__link {
-        @include link;
-        @include flexbox(row, $center: true);
-        svg {
-            fill: $text-primary;
+        .PanelFooter__page {
+            font-style: normal;
+            font-weight: normal;
+            font-size: 15px;
+            line-height: 18px;
+            text-align: center;
+
+            color: t(text-highlight);
+            
+            @include flexbox(row, $center: true);
+
+            padding: 0 4px;
         }
-    }
+        
+        .PanelFooter__link {
+            @include link;
+            @include flexbox(row, $center: true);
+            svg {
+                fill: t(text-primary);
+            }
+        }
 
+    }
 }

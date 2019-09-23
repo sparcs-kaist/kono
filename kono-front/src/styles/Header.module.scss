@@ -1,51 +1,52 @@
 @import 'mixins/all';
-@import 'utils/colors';
 
-.Header {
+@include themed() {
+    .Header {
 
-    @include flexbox(column, $center: false);
+        @include flexbox(column, $center: false);
 
-    .Header__bar {
-        height: 5px;
-        background: $theme-background;
-    }
+        .Header__bar {
+            height: 5px;
+            background-color: t(theme-background);
+        }
 
-    .Header__content {
+        .Header__content {
 
-        height: 50px;
-        @include flexbox(row, $center: false);
-
-        .Header__logo {
-            margin: 11px 0 12px 24px;
+            height: 50px;
             @include flexbox(row, $center: false);
-        }
-        
-        .Header__menu {
-            margin: 17px 0 18px 24px;
-            height: 15px;
-            font-size: 15px;
 
-            @include flexbox(row, $center: true);
-            @include link;
-        }
-
-        .Header__menu + .Header__menu {
-            margin-right: 24px;
-        }
-    
-        .Header__common_menu {
-            margin: 17px 24px 17px auto;
-            height: 14px;
-            font-size: 14px;
+            .Header__logo {
+                margin: 11px 0 12px 24px;
+                @include flexbox(row, $center: false);
+            }
             
-            @include flexbox(row, $center: true);
-            @include link;
-        }
+            .Header__menu {
+                margin: 17px 0 18px 24px;
+                height: 15px;
+                font-size: 15px;
 
-        .Header__common_menu + .Header__common_menu {
-            margin-left: 24px;
+                @include flexbox(row, $center: true);
+                @include link;
+            }
+
+            .Header__menu + .Header__menu {
+                margin-right: 24px;
+            }
+        
+            .Header__common_menu {
+                margin: 17px 24px 17px auto;
+                height: 14px;
+                font-size: 14px;
+                
+                @include flexbox(row, $center: true);
+                @include link;
+            }
+
+            .Header__common_menu + .Header__common_menu {
+                margin-left: 24px;
+            }
+
         }
 
     }
-
 }

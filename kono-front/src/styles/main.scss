@@ -1,9 +1,8 @@
 @import 'lib/fonts';
-@import 'utils/colors';
+@import 'mixins/all';
 
 html, body {
     min-height: 100vh;
-    background: $background;
 }
 
 body {

@@ -1,7 +1,9 @@
-@import 'utils/colors';
+@import 'mixins/all';
 
-.RoomPanel {
-    background: $panel-background;
-    width: 600px;
-    height: calc(100vh - 180px);
+@include themed() {
+    .RoomPanel {
+        background: t(panel-background);
+        width: 600px;
+        height: calc(100vh - 180px);
+    }
 }

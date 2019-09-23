@@ -1,63 +1,63 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 @import 'mixins/all';
-@import 'utils/colors';
 
-.Footer {
+@include themed() {
+    .Footer {
 
-    margin-top: auto;
+        margin-top: auto;
 
-    height: 50px;
-    @include flexbox(row, $center: false);
+        height: 50px;
+        @include flexbox(row, $center: false);
 
-    .Footer__logo {
-        
-        margin: 11px 0 12px 24px;
-        @include flexbox(row, $center: true);
-
-        .Footer__sparcs_logo {
-            margin-right: 16px;
-        }
-
-        .Footer__cross {
-            font-family: "Raleway";
-            font-weight: 900;
-            margin-right: 16px;
-            color: $text-primary;
+        .Footer__logo {
+            
+            margin: 11px 0 12px 24px;
             @include flexbox(row, $center: true);
-        }
 
-        .Footer__swc_logo {
-            svg {
-                fill: $text-primary;
+            .Footer__sparcs_logo {
+                margin-right: 16px;
+            }
+
+            .Footer__cross {
+                font-family: "Raleway";
+                font-weight: 900;
+                margin-right: 16px;
+                color: t(text-primary);
+                @include flexbox(row, $center: true);
+            }
+
+            .Footer__swc_logo {
+                svg {
+                    fill: t(text-primary);
+                }
             }
         }
-
-    }
-    
-    .Footer__menu {
-        margin: 17px 0 18px 24px;
-        height: 15px;
-        font-size: 15px;
-
-        @include flexbox(row, $center: true);
-        @include link;
-    }
-
-    .Footer__menu + .Footer__menu {
-        margin-right: 24px;
-    }
-
-    .Footer__common_menu {
-        margin: 17px 24px 18px auto;
-        height: 13px;
-        font-size: 13px;
         
-        @include flexbox(row, $center: true);
-        @include link;
-    }
+        .Footer__menu {
+            margin: 17px 0 18px 24px;
+            height: 15px;
+            font-size: 15px;
 
-    .Footer__common_menu + .Footer__common_menu {
-        margin-left: 24px;
-    }
+            @include flexbox(row, $center: true);
+            @include link;
+        }
 
+        .Footer__menu + .Footer__menu {
+            margin-right: 24px;
+        }
+
+        .Footer__common_menu {
+            margin: 17px 24px 18px auto;
+            height: 13px;
+            font-size: 13px;
+            
+            @include flexbox(row, $center: true);
+            @include link;
+        }
+
+        .Footer__common_menu + .Footer__common_menu {
+            margin-left: 24px;
+        }
+
+    }
 }

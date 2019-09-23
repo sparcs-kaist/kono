@@ -1,19 +1,22 @@
-@import 'utils/colors';
 @import 'mixins/all';
 
-.CreditPage {
+@include themed() {
+    .CreditPage {
 
-    margin: auto;
+        margin: auto;
+        width: 500px;
 
-    padding: 50px;
-    background-color: $panel-background;
-    color: $text-primary;
+        padding: 50px;
 
-    @include flexbox(column, $center: true);
+        background-color: t(panel-background);
+        color: t(text-primary);
 
-    h1, h2, h3, h4, h5, h6, p {
-        font-weight: normal;
-        text-align: center;
+        @include flexbox(column, $center: true);
+
+        h1, h2, h3, h4, h5, h6, p {
+            font-weight: normal;
+            text-align: center;
+        }
+
     }
-
 }

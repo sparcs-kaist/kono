@@ -1,17 +1,18 @@
 @import 'mixins/all';
-@import 'utils/colors';
 
-.PanelHeader {
+@include themed() {
+    .PanelHeader {
 
-    margin-bottom: 46px;
+        margin-bottom: 46px;
 
-    color: $text-primary;
+        color: t(text-primary);
 
-    .PanelHeader__title {
-        font-style: normal;
-        font-weight: 900;
-        font-size: 30px;
-        line-height: 35px;
+        .PanelHeader__title {
+            font-style: normal;
+            font-weight: 900;
+            font-size: 30px;
+            line-height: 35px;
+        }
+
     }
-
 }

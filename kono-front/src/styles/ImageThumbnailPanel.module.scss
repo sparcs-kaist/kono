@@ -1,9 +1,11 @@
-@import 'utils/colors';
+@import 'mixins/all';
 
-.ImageThumbnailPanel {
-    
-    border-radius: 2px;
+@include themed() {
+    .ImageThumbnailPanel {
+        
+        border-radius: 2px;
 
-    background-color: $panel-background;
+        background-color: t(panel-background);
 
+    }
 }

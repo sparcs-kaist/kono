@@ -1,14 +1,13 @@
 <svg id="그룹_36" data-name="그룹 36" xmlns="http://www.w3.org/2000/svg" width="89.874" height="26.995" viewBox="0 0 89.874 26.995">
   <defs>
-    <style>
+    <!-- <style>
       .cls-1 {
         fill: #040000;
       }
-
       .cls-2 {
         fill: #333;
       }
-    </style>
+    </style> -->
   </defs>
   <path id="패스_74" data-name="패스 74" class="cls-1" d="M0,42.747l4.262-8.436L0,27.5Z" transform="translate(0 -24.063)"/>
   <path id="패스_75" data-name="패스 75" class="cls-2" d="M15.5,148.011,26.061,138.3l-6.749,2.9Z" transform="translate(-13.563 -121.016)"/>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import styles from '../styles/App.module.scss';
 import LandingPage from './LandingPage';
 import LoginPage from './LoginPage';
 import LostFoundPage from './LostFoundPage';
@@ -19,7 +20,10 @@ export default () => {
     useEffect(() => {
 
         const checkLoginStatus = async () => await check()
-                .then(() => dispatch(AuthAPI.SetLogin(true)));
+                .then(
+                    () => dispatch(AuthAPI.SetLogin(true)),
+                    () => {}
+                );
 
         checkLoginStatus();
 
@@ -28,7 +32,7 @@ export default () => {
     const login = useSelector(state => state.auth.login, []);
 
     return (
-        <>
+        <div className={`theme_dark ${styles.App}`}>
             <Header />
             <Switch>
                 <Route exact path="/" component={LandingPage} />
@@ -39,7 +43,7 @@ export default () => {
                 <Route component={() => <Redirect to="/" />} />
             </Switch>
             <Footer />
-        </>
+        </div>
     );
     
 }

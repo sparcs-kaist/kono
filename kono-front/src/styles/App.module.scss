@@ -1,0 +1,7 @@
+@import 'mixins/all';
+
+@include themed() {
+    &.App {
+        background: t(background);
+    }
+}

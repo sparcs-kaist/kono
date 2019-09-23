@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="63.303" height="26.997" viewBox="0 0 63.303 26.997">
   <defs>
-    <style>
+    <!-- <style>
       .cls-1 {
         fill: #5f453d;
       }
@@ -8,7 +8,7 @@
       .cls-2 {
         fill: #412f29;
       }
-    </style>
+    </style> -->
   </defs>
   <g id="그룹_32" data-name="그룹 32" transform="translate(-61.435 -86.053)">
     <path id="패스_66" data-name="패스 66" class="cls-1" d="M856.5,45.761V32.2h3.122v6.1l5.23-6.1H868.1l-5.086,6.057,5.416,7.5h-3.308l-3.949-5.747-1.55,1.674v4.072Z" transform="translate(-777.224 60.509)"/>
