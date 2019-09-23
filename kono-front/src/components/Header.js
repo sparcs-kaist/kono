@@ -4,6 +4,7 @@ import { ReactComponent as Logo } from '../res/logo.svg';
 import { Link, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as AuthActions from '../store/modules/auth';
+import * as ConfigActions from '../store/modules/config'; // TEMPORARY
 import { logout } from '../api/auth';
 
 export default withRouter(({ history }) => {
@@ -32,6 +33,11 @@ export default withRouter(({ history }) => {
                     <a href="https://docs.google.com/forms/d/1Wb33uCYDl4kAyg-_5lZ6n20ByJ-NhelUDOz_8_U5Y6w/edit">
                         환불신청
                     </a>
+                </span>
+                <span 
+                    className={styles.Header__common_menu}
+                    onClick={() => { dispatch(ConfigActions.ToggleTheme()) }}>
+                    __TOGGLE_THEME__
                 </span>
                 {
                     login && (
