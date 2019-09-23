@@ -16,7 +16,7 @@ export default ({ match }) => {
      *  type: string ('notice' | 'lostfound'),
      *  title: string,
      *  date: Date,
-     *  contentURL: URL (relative path from public/ directory)
+     *  content_kr: URL (relative path from public/ directory)
      * } 
      */
 
@@ -26,9 +26,9 @@ export default ({ match }) => {
         type: 'notice',
         title: '태풍 및 카포전으로 인한 임시 휴무 안내',
         date: new Date('2019-09-05T00:00:00'),
-        contentURL: '/posts/example.html'
+        content_kr: '/posts/example.html'
     };
-    const { type, title, date, contentURL } = __temp_post;
+    const { type, title, date, content_kr: contentURL } = __temp_post;
 
     return (
         <div className={style.PostPage}>
