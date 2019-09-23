@@ -29,26 +29,30 @@ export default ({ location }) => {
             .then(
                 (res) => {
                     dispatch(AuthActions.SetLogin(true));
-                },
+                    setLoginErrorMsg('');
+                }
+            )
+            .catch(
                 (err) => {
-
-                    if (!err.response || !err.response.data)
-                        return;
-
-                    const { msg } = err.response.data;
-                    switch (msg) {
-                        case 'password field required':
-                            setLoginErrorMsg('비밀번호를 입력해 주세요.');
-                            break;
-                        case 'wrong password':
-                            setLoginErrorMsg('비밀번호가 올바르지 않습니다.');
-                            break;
-                        case 'server error':
-                            setLoginErrorMsg('서버 에러');
-                            break;
-                        default:
-                            setLoginErrorMsg('서버 에러');
-                            break;
+                    if (err.response.data) {
+                        const { msg } = err.response.data;
+                        switch (msg) {
+                            case 'password field required':
+                                setLoginErrorMsg('비밀번호를 입력해 주세요.');
+                                break;
+                            case 'wrong password':
+                                setLoginErrorMsg('비밀번호가 올바르지 않습니다.');
+                                break;
+                            case 'server error':
+                                setLoginErrorMsg('서버 에러');
+                                break;
+                            default:
+                                setLoginErrorMsg('서버 에러');
+                                break;
+                        }
+                    }
+                    else {
+                        setLoginErrorMsg('서버에 접속할 수 없습니다.');
                     }
                     
                 }

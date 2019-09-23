@@ -5,7 +5,7 @@ const { REACT_APP_KONO_AUTH_URL: apiURL } = process.env;
 axios.defaults.withCredentials = true;
 
 export const login = ({ password }) => {
-    return axios.post(apiURL + '/api/v1/auth/login', { password });
+    return axios.post(apiURL + '/api/v1/auth/login', { password }, { withCredentials: true });
 };
 
 export const check = () => {
