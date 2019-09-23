@@ -12,8 +12,6 @@
         padding: 36px;
 
         @include flexbox(column, $center: false);
-        
-        transition: .15s ease-in;
 
         .LoginPage__header {
             color: t(text-primary);
@@ -41,7 +39,6 @@
             }
             padding: 6px 0 6px 0;
             font-size: 18px;
-            transition: color .3s, border-color .3s;
 
         }
 
@@ -55,7 +52,6 @@
         .LoginPage__button {
 
             display: inline-block;
-            transition: inherit;
 
             text-align: center;
             padding: 10px;

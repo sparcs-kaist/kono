@@ -3,5 +3,7 @@
 @include themed() {
     &.App {
         background: t(background);
+        min-height: 100vh;
+        @include flexbox(column, $center: false);
     }
 }
