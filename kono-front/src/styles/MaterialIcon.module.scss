@@ -1,0 +1,31 @@
+@import 'mixins/all';
+
+@include themed() {
+    .MaterialIcon {
+
+        display: inline-block;
+
+        background-color: t(theme-background);
+        color: t(background);
+
+        font-family: 'Material Icons';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 20px;  /* Preferred icon size */
+
+        padding: 10px;
+        border-radius: 10px;
+
+        /* Support for all WebKit browsers. */
+        -webkit-font-smoothing: antialiased;
+        /* Support for Safari and Chrome. */
+        text-rendering: optimizeLegibility;
+      
+        /* Support for Firefox. */
+        -moz-osx-font-smoothing: grayscale;
+      
+        /* Support for IE. */
+        font-feature-settings: 'liga';
+
+    }
+}

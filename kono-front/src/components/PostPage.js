@@ -1,6 +1,8 @@
 import React from 'react';
 import style from '../styles/PostPage.module.scss';
 import StaticContent from './StaticContent';
+import MaterialIcon from './MaterialIcon';
+
 
 export default ({ match }) => {
 
@@ -15,6 +17,7 @@ export default ({ match }) => {
      *  id: number,
      *  type: string ('notice' | 'lostfound'),
      *  title: string,
+            <StaticContent url={contentURL} />
      *  date: Date,
      *  content_kr: URL (relative path from public/ directory)
      * } 
@@ -32,33 +35,40 @@ export default ({ match }) => {
 
     return (
         <div className={style.PostPage}>
-            <h1>{ title }</h1>
-            <div>
-                <span>
-                    {
-                        ((type) => {
-                            switch (type) {
-                                case 'notice':
-                                    return '공지사항';
-                                case 'lostfound':
-                                    return '분실물';
-                                default:
-                                    return '게시물';
-                            }
-                        })(type)
-                    }
-                </span>
-                <span>
-                    {
-                        date.toLocaleString('default', {
-                            year:  'numeric',
-                            month: '2-digit',
-                            day:   '2-digit'
-                        })
-                    }
-                </span>
+            <div className={style.PostPage__header}>
+                <h1>{ title }</h1>
+                <div className={style.PostPage__tags}>
+                    <span><b>
+                        {
+                            ((type) => {
+                                switch (type) {
+                                    case 'notice':
+                                        return '공지사항';
+                                    case 'lostfound':
+                                        return '분실물';
+                                    default:
+                                        return '게시물';
+                                }
+                            })(type)
+                        }
+                    </b></span>
+                    <span>
+                        {
+                            date.toLocaleString('default', {
+                                year:  'numeric',
+                                month: '2-digit',
+                                day:   '2-digit'
+                            })
+                        }
+                    </span>
+                </div>
             </div>
-            <StaticContent url={contentURL} />
+            <div className={style.PostPage__content}>
+                <StaticContent url={contentURL} />
+            </div>
+            <a href="/">
+                <MaterialIcon>arrow_back</MaterialIcon>
+            </a>
         </div>
     );
 
