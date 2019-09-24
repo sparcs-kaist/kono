@@ -2,6 +2,54 @@
 
 @include themed() {
     .NavPanel {
-        
+
+        @include flexbox(column, $center: true);
+
+        .NavPanel__wrapper {
+
+            border-bottom: 1px solid t(border-secondary);
+
+            width: 800px;
+            @include flexbox(row, $center: false);
+
+            .NavPanel__menu {
+                
+                color: t(text-primary);
+                padding: 8px 24px;
+
+                font-size: 18px;
+
+                &:hover {
+                    color: t(text-highlight);
+                }
+
+            }
+
+            .NavPanel__selected {
+
+                font-weight: bold;
+                padding: 6px 24px;
+
+                border-top: 3px solid t(theme-background);
+                
+                &:hover {
+                    color: t(text-primary);
+                }
+
+            }
+
+        }
+
+        .NavPanel__content {
+
+            background: t(panel-background);
+            
+            margin-top: 24px;
+
+            width: 800px;
+            min-height: 450px;
+    
+        }
+
     }
 }

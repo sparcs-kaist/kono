@@ -14,8 +14,20 @@ export default () => {
     return (
         <div className={styles.WritePage}>
             <NavPanel 
-                menus={[]}
-                contents={[]}
+                menus={[(
+                    <div key='write'>
+                        작성하기
+                    </div>
+                ), (
+                    <div key='preview'>
+                        미리보기
+                    </div>
+                )]}
+                contents={[(
+                    <div>Tab 1</div>
+                ), (
+                    <div>Tab 2</div>
+                )]}
             />
         </div>
     );

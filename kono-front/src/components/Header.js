@@ -34,11 +34,6 @@ export default withRouter(({ history }) => {
                         환불신청
                     </a>
                 </span>
-                <span 
-                    className={styles.Header__common_menu}
-                    onClick={() => { dispatch(ConfigActions.ToggleTheme()) }}>
-                    __TOGGLE_THEME__
-                </span>
                 {
                     login === 'logged' && (
                         <>
@@ -51,6 +46,11 @@ export default withRouter(({ history }) => {
                         </>
                     )
                 }
+                <span 
+                    className={styles.Header__common_menu}
+                    onClick={() => { dispatch(ConfigActions.ToggleTheme()) }}>
+                    __TOGGLE_THEME__
+                </span>
             </div>
             
         </div>

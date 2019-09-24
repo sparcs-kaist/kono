@@ -13,6 +13,9 @@ $themes: (
         panel-background: #EFECEB,
         theme-background: #5F453D,
         theme-light-background: #795548,
+
+        /* Line Colors */
+        border-secondary: #AAAAAA
     ),
     dark: (
         /* Text Colors */
@@ -26,6 +29,9 @@ $themes: (
         panel-background: #373751,
         theme-background: #6078F5,
         theme-light-background: #90CAF9,
+
+        /* Line Colors */
+        border-secondary: #0D47A1
     )
 );
 
