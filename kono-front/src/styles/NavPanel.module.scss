@@ -23,6 +23,8 @@
                     color: t(text-highlight);
                 }
 
+                cursor: pointer;
+
             }
 
             .NavPanel__selected {
@@ -35,6 +37,8 @@
                 &:hover {
                     color: t(text-primary);
                 }
+
+                cursor: default;
 
             }
 
