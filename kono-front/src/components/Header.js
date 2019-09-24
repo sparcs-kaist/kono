@@ -40,7 +40,7 @@ export default withRouter(({ history }) => {
                     __TOGGLE_THEME__
                 </span>
                 {
-                    login && (
+                    login === 'logged' && (
                         <>
                             <span className={styles.Header__common_menu}>
                                 관리자 서비스

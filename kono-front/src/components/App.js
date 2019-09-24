@@ -6,6 +6,7 @@ import LandingPage from './LandingPage';
 import LoginPage from './LoginPage';
 import PostPage from './PostPage';
 import CreditPage from './CreditPage';
+import WritePage from './WritePage';
 import Header from './Header';
 import Footer from './Footer';
 import { check } from '../api/auth';
@@ -20,8 +21,8 @@ export default () => {
 
         const checkLoginStatus = async () => await check()
                 .then(
-                    () => { dispatch(AuthAPI.SetLogin(true)) },
-                    () => {}
+                    () => { dispatch(AuthAPI.SetLogin('logged')) },
+                    () => { dispatch(AuthAPI.SetLogin('rejected')) }
                 );
 
         checkLoginStatus();
@@ -36,9 +37,10 @@ export default () => {
             <Header />
             <Switch>
                 <Route exact path="/" component={LandingPage} />
-                <Route path="/login" component={login ? () => <Redirect to="/" /> : LoginPage} />
+                <Route path="/login" component={login === 'logged' ? () => <Redirect to="/" /> : LoginPage} />
                 <Route path="/post/:post_id" component={PostPage} />
                 <Route path="/credit" component={CreditPage} />
+                <Route path="/write" component={WritePage} />
                 <Route component={() => <Redirect to="/" />} />
             </Switch>
             <Footer />

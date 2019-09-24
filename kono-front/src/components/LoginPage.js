@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import styles from '../styles/LoginPage.module.scss';
 import { login } from '../api/auth';
@@ -9,12 +10,14 @@ const getInitialLoginErrorMsg = (query) => {
     switch (query.state) {
         case 'logout':
             return '로그아웃 되었습니다. 다시 로그인 해주세요.';
+        case 'forbidden':
+            return '접근할 수 없는 페이지입니다. 관리자 로그인이 필요합니다.';
         default:
             return '';
     }
 }
 
-export default ({ location }) => {
+export default withRouter(({ location, history }) => {
 
     /* Parse query string */
     const { search } = location;
@@ -28,7 +31,8 @@ export default ({ location }) => {
         await login({ password })
             .then(
                 (res) => {
-                    dispatch(AuthActions.SetLogin(true));
+                    dispatch(AuthActions.SetLogin('logged'));
+                    history.push(`/${query.prev}`)
                 }
             )
             .catch(
@@ -80,4 +84,4 @@ export default ({ location }) => {
             </div>
         </div>
     );
-}
+});

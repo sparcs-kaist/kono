@@ -9,7 +9,7 @@ const LOGOUT    = 'auth/LOGOUT';
 
 /* Initial States. */
 const initialState = {
-    login: false
+    login: 'pending' // 'pending' | 'logged' | 'rejected'
 };
 
 /* Action Definitions. */
@@ -46,7 +46,7 @@ const auth = (state = initialState, action) => {
         case SET_LOGIN:
             return { ...state, login: action.login };
         case LOGOUT:
-            return initialState;
+            return { ...state, login: 'rejected' };
         default:
             return state;
     }

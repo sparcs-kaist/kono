@@ -35,7 +35,7 @@ export default () => {
                 </a>
             </span>
             {
-                    !login && (
+                    login === 'rejected' && (
                         <span className={styles.Footer__common_menu}>
                             <Link to="/login">
                                 관리자 로그인
