@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styles from '../styles/WritePage.module.scss';
 import NavPanel from './NavPanel';
+import MaterialIcon from './MaterialIcon';
 
 export default () => {
 
@@ -14,24 +15,25 @@ export default () => {
     return (
         <div className={styles.WritePage}>
             <NavPanel 
-                menus={[(
-                    <div key='write'>
-                        작성하기
-                    </div>
-                ), (
-                    <div key='preview'>
-                        미리보기
-                    </div>
-                )]}
-                contents={[(
-                    <div>Tab 1</div>
-                ), (
-                    <div>Tab 2</div>
-                )]}
+                menus={[
+                    (<div key='write'>작성하기</div>), 
+                    (<div key='preview'>미리보기</div>)
+                ]}
+                contents={[
+                    (
+                        <div></div>
+                    ),
+                    (
+                        <div></div>
+                    )
+                ]}
             />
             <div className={styles.WritePage__footer}>
                 <div className={styles.WritePage__button}>
-                    업로드
+                    <MaterialIcon large>add_photo_alternate</MaterialIcon>
+                </div>
+                <div className={styles.WritePage__button}>
+                    <MaterialIcon large>check</MaterialIcon>
                 </div>
             </div>
         </div>

@@ -20,21 +20,11 @@
 
             .WritePage__button {
 
-                background-color: t(theme-background);
-                &:hover {
-                    background-color: t(theme-light-background);
-                }
-
-                padding: 8px 16px;
-                
-                color: t(background);
-
-                font-weight: bold;
-                font-size: 16px;
-
-                border-radius: 10px;
+                @include flexbox(row, $center: true);
 
                 margin-left: auto;
+
+                cursor: pointer;
 
             }
 
