@@ -29,6 +29,11 @@ export default () => {
                     <div>Tab 2</div>
                 )]}
             />
+            <div className={styles.WritePage__footer}>
+                <div className={styles.WritePage__button}>
+                    업로드
+                </div>
+            </div>
         </div>
     );
 

@@ -5,9 +5,44 @@
 
         margin: auto 0;
 
-        padding: 50px 0;
+        padding: 40px 0;
 
-        
+        @include flexbox(column, $center: true);
+
+        .WritePage__footer {
+
+            width: 800px;
+            height: 50px;
+            margin-top: 24px;
+
+            @include flexbox(row, $center: false);
+            align-items: center;
+
+            .WritePage__button {
+
+                background-color: t(theme-background);
+                &:hover {
+                    background-color: t(theme-light-background);
+                }
+
+                padding: 8px 16px;
+                
+                color: t(background);
+
+                font-weight: bold;
+                font-size: 16px;
+
+                border-radius: 10px;
+
+                margin-left: auto;
+
+            }
+
+            .WritePage__button + .WritePage__button {
+                margin-left: 8px;
+            }
+
+        }
 
     }
 }
