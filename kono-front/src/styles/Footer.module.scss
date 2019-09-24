@@ -4,8 +4,6 @@
 @include themed() {
     .Footer {
 
-        margin-top: auto;
-
         height: 50px;
         @include flexbox(row, $center: false);
 

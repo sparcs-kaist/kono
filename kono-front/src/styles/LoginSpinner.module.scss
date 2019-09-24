@@ -1,0 +1,17 @@
+@import 'mixins/all';
+
+@include themed() {
+    .LoginSpinner {
+        
+        margin: auto;
+
+        @include flexbox(column, $center: true);
+
+        .LoginSpinner__text {
+            color: t(text-primary);
+            font-size: 24px;
+            padding: 50px;
+        }
+
+    }
+}

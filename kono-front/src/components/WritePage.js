@@ -1,6 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import styles from '../styles/WritePage.module.scss';
+import NavPanel from './NavPanel';
 
 export default () => {
 
@@ -10,8 +12,11 @@ export default () => {
         return (<Redirect to="/login?state=forbidden&prev=write" />);
 
     return (
-        <div>
-            kono-front::write_page
+        <div className={styles.WritePage}>
+            <NavPanel 
+                menus={[]}
+                contents={[]}
+            />
         </div>
     );
 
