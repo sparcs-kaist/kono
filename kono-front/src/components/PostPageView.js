@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import style from '../styles/PostPageView.module.scss';
 import StaticContent from './StaticContent';
+import Button from './Button';
 import MaterialIcon from './MaterialIcon';
 import PostHeader from './PostHeader';
 
@@ -38,6 +39,7 @@ function getDateString(date, language) {
 
 export default ({ post }) => {
 
+    const login = useSelector(state => state.auth.login, []);
     const language = useSelector(state => state.config.language, []);
 
     const header = {
@@ -54,9 +56,20 @@ export default ({ post }) => {
             <div className={style.PostPageView__content}>
                 <StaticContent url={textContentURL} />
             </div>
-            <a href="/">
-                <MaterialIcon>arrow_back</MaterialIcon>
-            </a>
+            <div className={style.PostPageView__footer}>
+                <a href="/">
+                    <Button round>
+                        <MaterialIcon>arrow_back</MaterialIcon>
+                    </Button>
+                </a>
+                {
+                    login && (
+                        <Button round>
+                            <MaterialIcon>edit</MaterialIcon>
+                        </Button>
+                    )
+                }
+            </div>
         </div>
     );
 

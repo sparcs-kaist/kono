@@ -51,25 +51,7 @@
 
         .LoginPage__button {
 
-            display: inline-block;
-
-            text-align: center;
-            padding: 10px;
-
-            cursor: pointer;
-
-            color: t(panel-background);
-            background-color: t(theme-background);
-            font-weight: 600;
-
             margin: auto 0 0 0;
-
-            &:hover {
-                background: t(theme-light-background);
-            }
-            &:active {
-                background: t(theme-background);
-            }
 
         }
 

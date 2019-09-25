@@ -1,0 +1,28 @@
+@import 'mixins/all';
+
+@include themed() {
+    .Button {
+
+        display: inline-block;
+
+        background-color: t(theme-background);
+        color: t(background);
+        &:hover {
+            background-color: t(theme-light-background);
+        }
+
+        cursor: pointer;
+
+        padding: 10px;
+
+        &.Button__round {
+            border-radius: 10px;
+        }
+
+        &.Button__fill_parent {
+            display: block;
+            text-align: center;
+        }
+
+    }
+}

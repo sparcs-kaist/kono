@@ -24,6 +24,23 @@
                 margin-top: 30px;
             }
 
+            a {
+                color: t(text-highlight);
+                &:hover {
+                    color: t(text-highlight-on);
+                }
+            }
+
+        }
+
+        .PostPageView__footer {
+
+            @include flexbox(row, $center: false);
+
+            div+div, a+div, div+a, a+a {
+                margin-left: 8px;
+            }
+
         }
 
     }

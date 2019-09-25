@@ -3,21 +3,10 @@
 @include themed() {
     .MaterialIcon {
 
-        display: inline-block;
-
-        background-color: t(theme-background);
-        color: t(background);
-        &:hover {
-            background-color: t(theme-light-background);
-        }
-
         font-family: 'Material Icons';
         font-weight: normal;
         font-style: normal;
         font-size: 20px;  /* Preferred icon size */
-
-        padding: 10px;
-        border-radius: 10px;
 
         /* Support for all WebKit browsers. */
         -webkit-font-smoothing: antialiased;

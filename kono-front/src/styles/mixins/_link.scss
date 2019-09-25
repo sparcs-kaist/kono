@@ -4,7 +4,7 @@
     a {
         color: t(text-primary);
         &:hover {
-            color: t(text-secondary);
+            color: t(text-highlight-on);
         }
         text-decoration: none;
         vertical-align: middle;
@@ -13,7 +13,7 @@
     
     color: t(text-primary);
     &:hover {
-        color: t(text-secondary);
+        color: t(text-highlight-on);
     }
     text-decoration: none;
     vertical-align: middle;
