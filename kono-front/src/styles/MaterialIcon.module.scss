@@ -7,6 +7,9 @@
 
         background-color: t(theme-background);
         color: t(background);
+        &:hover {
+            background-color: t(theme-light-background);
+        }
 
         font-family: 'Material Icons';
         font-weight: normal;
