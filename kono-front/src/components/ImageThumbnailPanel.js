@@ -1,16 +1,22 @@
 import React from 'react';
 import styles from '../styles/ImageThumbnailPanel.module.scss';
 
-export default ({ grid_index }) => {
+export default ({ gridNumRows, gridNumColumns, gridIndex, imageSize, imageURL }) => {
+
+    if (!gridNumRows || !gridNumColumns || gridIndex === undefined)
+        return null;
+
+    const style = {
+        gridRow: Math.floor(gridIndex / gridNumColumns) + 1,
+        gridColumn: gridIndex % gridNumColumns + 1,
+        width: `${imageSize}px`,
+        height: `${imageSize}px`
+    };
+
     return (
         <div 
             className={styles.ImageThumbnailPanel}
-            style={ 
-                {
-                    grid_column: grid_index % 3 + 1,
-                    grid_row   : grid_index > 2 ? 1 : 0
-                }
-            }>
+            style={style}>
         </div>
     )
 }

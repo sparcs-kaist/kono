@@ -5,6 +5,7 @@ import StaticContent from './StaticContent';
 import Button from './Button';
 import MaterialIcon from './MaterialIcon';
 import PostHeader from './PostHeader';
+import ImageGridPanel from './ImageGridPanel';
 
 function getTypeString(type, language) {
     switch (language) {
@@ -26,6 +27,8 @@ function getTypeString(type, language) {
                 default:
                     return 'Post';
             }
+        default:
+            return '';
     }
 }
 
@@ -54,7 +57,16 @@ export default ({ post }) => {
         <div className={style.PostPageView}>
             <PostHeader header={header} />
             <div className={style.PostPageView__content}>
-                <StaticContent url={textContentURL} />
+                <div className={style.PostPageView__thumbnails}>
+                    <ImageGridPanel
+                        gridNumRows={1}
+                        gridNumColumns={4}
+                        totalWidthPixels={800}
+                        imageURLs={imgContentURLs} />
+                </div>
+                <div className={style.PostPageView__text}>
+                    <StaticContent url={textContentURL} />
+                </div>
             </div>
             <div className={style.PostPageView__footer}>
                 <a href="/">

@@ -8,8 +8,16 @@ export default () => {
     return (
         <div className={styles.LostFoundPanel}>
             <PanelHeader title="분실물" link="/lostfound"/>
-            <ImageGridPanel />
-            <PanelFooter currentPage={2} pagination={5} lastPage={10} onClickPage={(x)=>console.log(x)}/>
+            <ImageGridPanel 
+                gridNumRows={2}
+                gridNumColumns={3}
+                totalWidthPixels={440}
+            />
+            <PanelFooter 
+                currentPage={2} 
+                pagination={5} 
+                lastPage={10}
+            />
         </div>
     );
 }
