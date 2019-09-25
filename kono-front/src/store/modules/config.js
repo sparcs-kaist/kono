@@ -1,3 +1,5 @@
+import storage from '../../lib/storage'
+
 /* Action Types. */
 
 const SET_THEME = 'theme/SET_THEME';
@@ -27,15 +29,24 @@ export const ToggleTheme = (theme) => {
 
 /* Reducer. */
 const config = (state = initialState, action) => {
+    const localStorageState = storage.get('__STATE__');
+    if (localStorageState) {
+        state = localStorageState;
+    }
+    let newState;
     switch (action.type) {
         case SET_THEME:
-            return { ...state, theme: action.theme };
+            newState = { ...state, theme: action.theme };
+            break;
         case TOGGLE_THEME:
             const newTheme = state.theme === 'theme_default' ? 'theme_dark' : 'theme_default';
-            return { ...state, theme: newTheme };
+            newState = { ...state, theme: newTheme };
+            break;
         default:
-            return state;
+            newState = state;
     }
+    storage.set('__STATE__', newState);
+    return newState;
 }
 
 export default config;
