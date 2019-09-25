@@ -3,9 +3,8 @@
 @include themed() {
     .ImageThumbnailPanel {
         
-        border-radius: 2px;
-
-        background-color: t(panel-background);
+        border-radius: 5px;
+        overflow: hidden;
 
     }
 }

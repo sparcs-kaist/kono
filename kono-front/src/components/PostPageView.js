@@ -53,17 +53,25 @@ export default ({ post }) => {
     const textContentURL = post[`content_${language}`];
     const imgContentURLs = post.content_img;
 
+    const showEditButton = (login === 'logged');
+    const showImageThumbnails = (imgContentURLs && imgContentURLs.length > 0);
+
     return (
         <div className={style.PostPageView}>
             <PostHeader header={header} />
             <div className={style.PostPageView__content}>
-                <div className={style.PostPageView__thumbnails}>
-                    <ImageGridPanel
-                        gridNumRows={1}
-                        gridNumColumns={4}
-                        totalWidthPixels={800}
-                        imageURLs={imgContentURLs} />
-                </div>
+                {
+                    showImageThumbnails && (
+                        <div className={style.PostPageView__thumbnails}>
+                            <ImageGridPanel
+                                gridNumRows={2}
+                                gridNumColumns={2}
+                                totalWidthPixels={800}
+                                imageURLs={imgContentURLs} 
+                                useDynamicPositioning />
+                        </div>
+                    )
+                }
                 <div className={style.PostPageView__text}>
                     <StaticContent url={textContentURL} />
                 </div>
@@ -75,7 +83,7 @@ export default ({ post }) => {
                     </Button>
                 </a>
                 {
-                    login && (
+                    showEditButton && (
                         <Button round>
                             <MaterialIcon>edit</MaterialIcon>
                         </Button>
