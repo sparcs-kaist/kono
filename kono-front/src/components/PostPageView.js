@@ -64,8 +64,8 @@ export default ({ post }) => {
                     showImageThumbnails && (
                         <div className={style.PostPageView__thumbnails}>
                             <ImageGridPanel
-                                gridNumRows={2}
-                                gridNumColumns={2}
+                                gridNumRows={1}
+                                gridNumColumns={3}
                                 totalWidthPixels={800}
                                 imageURLs={imgContentURLs} 
                                 useDynamicPositioning />

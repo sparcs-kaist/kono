@@ -5,13 +5,13 @@ export default ({
     gridRow, gridRowSize, 
     gridColumn, gridColumnSize, 
     imageWidth, imageHeight,
-    imageURL
+    imageURL,
+    useOverlapPanel, overlapText
 }) => {
 
     if (gridRow === undefined || gridColumn === undefined)
         return null;
 
-    
     const croppedImageSize = Math.max(imageWidth, imageHeight);
     const imageContainerStyle = {
         gridRow: gridRowSize ? `${gridRow} / ${gridRow + gridRowSize}` : gridRow,
@@ -33,12 +33,19 @@ export default ({
             style={imageContainerStyle}>
             {
                 imageURL ? (
-                    <img 
+                    <img
                         src={imageURL} 
                         alt={imageURL}
                         style={imageStyle}
                         width={croppedImageSize} 
                         height={croppedImageSize} />
+                ) : null
+            }
+            {
+                useOverlapPanel ? (
+                    <div className={styles.ImageThumbnailPanel__overlap}>
+                        <span>{ overlapText }</span>
+                    </div>
                 ) : null
             }
         </div>
