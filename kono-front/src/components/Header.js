@@ -19,6 +19,8 @@ export default withRouter(({ history }) => {
                 history.push('/login?state=logout');
             }
         );
+    const onClickToggleTheme = () => { dispatch(ConfigActions.ToggleTheme()); }
+    const onClickToggleLanguage = () => { dispatch(ConfigActions.ToggleLanguage()); }
 
     return (
         <div className={styles.Header}>
@@ -36,8 +38,13 @@ export default withRouter(({ history }) => {
                 </span>
                 <span 
                     className={styles.Header__common_menu}
-                    onClick={() => { dispatch(ConfigActions.ToggleTheme()) }}>
+                    onClick={onClickToggleTheme}>
                     __TOGGLE_THEME__
+                </span>
+                <span 
+                    className={styles.Header__common_menu}
+                    onClick={onClickToggleLanguage}>
+                    __TOGGLE_LAN__
                 </span>
                 {
                     login && (
