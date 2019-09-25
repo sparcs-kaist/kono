@@ -5,6 +5,8 @@ import storage from '../../lib/storage'
 const SET_THEME = 'theme/SET_THEME';
 const TOGGLE_THEME = 'theme/TOGGLE_THEME';
 
+const LOCAL_STORAGE_KEY_CONFIG = '__CONFIG__'
+
 /* Initial States. */
 const initialState = {
     theme: 'theme_default'
@@ -29,10 +31,11 @@ export const ToggleTheme = (theme) => {
 
 /* Reducer. */
 const config = (state = initialState, action) => {
-    const localStorageState = storage.get('__STATE__');
+    const localStorageState = storage.get(LOCAL_STORAGE_KEY_CONFIG);
     if (localStorageState) {
         state = localStorageState;
     }
+    
     let newState;
     switch (action.type) {
         case SET_THEME:
@@ -45,7 +48,7 @@ const config = (state = initialState, action) => {
         default:
             newState = state;
     }
-    storage.set('__STATE__', newState);
+    storage.set(LOCAL_STORAGE_KEY_CONFIG, newState);
     return newState;
 }
 
