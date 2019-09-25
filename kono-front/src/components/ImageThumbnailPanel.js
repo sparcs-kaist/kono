@@ -11,20 +11,34 @@ export default ({
     if (gridRow === undefined || gridColumn === undefined)
         return null;
 
-    const style = {
+    
+    const croppedImageSize = Math.max(imageWidth, imageHeight);
+    const imageContainerStyle = {
         gridRow: gridRowSize ? `${gridRow} / ${gridRow + gridRowSize}` : gridRow,
         gridColumn: gridColumnSize ? `${gridColumn} / ${gridColumn + gridColumnSize}` : gridColumn,
         width: `${imageWidth}px`,
         height: `${imageHeight}px`
     };
+    const imageStyle = {
+        width: `${croppedImageSize}px`,
+        height: `${croppedImageSize}px`,
+        position: 'relative',
+        top: `${.5 * (imageHeight - croppedImageSize)}px`, // Center image vertically
+        left: `${.5 * (imageWidth - croppedImageSize)}px`  // Center image horizontally
+    };
 
     return (
         <div 
             className={styles.ImageThumbnailPanel}
-            style={style}>
+            style={imageContainerStyle}>
             {
                 imageURL ? (
-                    <img src={imageURL} alt={imageURL} width={imageWidth} height={imageHeight} />
+                    <img 
+                        src={imageURL} 
+                        alt={imageURL}
+                        style={imageStyle}
+                        width={croppedImageSize} 
+                        height={croppedImageSize} />
                 ) : null
             }
         </div>
