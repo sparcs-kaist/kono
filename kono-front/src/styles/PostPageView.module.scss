@@ -1,14 +1,14 @@
 @import 'mixins/all';
 
 @include themed() {
-    .PostPage {
+    .PostPageView {
 
         width: 980px;
 
         margin: auto;
         padding: 50px;
 
-        .PostPage__content {
+        .PostPageView__content {
                 
             padding: 42px 0;
             
