@@ -4,8 +4,8 @@ import styles from '../styles/ImageThumbnailPanel.module.scss';
 import * as FullscreenActions from '../store/modules/fullscreen';
 
 export default ({
-    gridRow, gridRowSize, 
-    gridColumn, gridColumnSize, 
+    gridRow, gridRowSize=1, 
+    gridColumn, gridColumnSize=1, 
     imageIndex,
     imageWidth, imageHeight,
     imageURL,
@@ -21,8 +21,8 @@ export default ({
     const [croppedImageHeight, setCroppedImageHeight] = useState(imageHeight);
 
     const imageContainerStyle = {
-        gridRow: gridRowSize ? `${gridRow} / ${gridRow + gridRowSize}` : gridRow,
-        gridColumn: gridColumnSize ? `${gridColumn} / ${gridColumn + gridColumnSize}` : gridColumn,
+        gridRow: `${gridRow} / ${gridRow + gridRowSize}`,
+        gridColumn: `${gridColumn} / ${gridColumn + gridColumnSize}`,
         width: `${imageWidth}px`,
         height: `${imageHeight}px`
     };

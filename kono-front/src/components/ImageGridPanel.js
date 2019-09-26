@@ -63,8 +63,9 @@ function getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColu
 export default ({ 
     gridNumRows, 
     gridNumColumns, 
-    totalWidthPixels, 
-    imageURLs,
+    totalWidthPixels,
+    gridGapPixels = 7, 
+    imageURLs=[],
     useDynamicPositioning,
     useOnClick
 }) => {
@@ -72,9 +73,8 @@ export default ({
     if (!gridNumRows || !gridNumColumns || !totalWidthPixels)
         return null;
 
-
     const gridNumCells = gridNumRows * gridNumColumns;
-    const gridCellSize = (totalWidthPixels - 7 * (gridNumColumns - 1)) / gridNumColumns;
+    const gridCellSize = (totalWidthPixels - gridGapPixels * (gridNumColumns - 1)) / gridNumColumns;
         
     if (useDynamicPositioning) {
         if (!imageURLs || imageURLs.length === 0)
@@ -102,12 +102,12 @@ export default ({
                             gridColumn={gridColumns[idx]}
                             gridColumnSize={gridColumnSizes[idx]}
                             imageIndex={idx}
-                            imageWidth={gridCellSize * imageWidthCoeffs[idx] + 7 * (imageWidthCoeffs[idx] - 1)}
-                            imageHeight={gridCellSize * imageHeightCoeffs[idx] + 7 * (imageHeightCoeffs[idx] - 1)}
+                            imageWidth={gridCellSize * imageWidthCoeffs[idx] + gridGapPixels * (imageWidthCoeffs[idx] - 1)}
+                            imageHeight={gridCellSize * imageHeightCoeffs[idx] + gridGapPixels * (imageHeightCoeffs[idx] - 1)}
                             imageURL={imageURLs[idx]} 
                             showOverlapPanel={showOverlapPanel}
                             overlapText={overlapText} 
-                            useOnClick />
+                            useOnClick={useOnClick} />
                     );
                 })
             }
@@ -139,7 +139,7 @@ export default ({
                             imageHeight={gridCellSize}
                             imageURL={imageURLs ? imageURLs[idx] : null}
                             key={`thumbnail-${idx}`}
-                            useOnClick />
+                            useOnClick={useOnClick} />
                     );
                 })
             }
