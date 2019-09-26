@@ -1,16 +1,22 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styles from '../styles/ImageThumbnailPanel.module.scss';
+import * as FullscreenActions from '../store/modules/fullscreen';
 
 export default ({
     gridRow, gridRowSize, 
     gridColumn, gridColumnSize, 
+    imageIndex,
     imageWidth, imageHeight,
     imageURL,
-    useOverlapPanel, overlapText
+    useOverlapPanel, overlapText,
+    useOnClick
 }) => {
 
     if (gridRow === undefined || gridColumn === undefined)
         return null;
+
+    const dispatch = useDispatch();
 
     const croppedImageSize = Math.max(imageWidth, imageHeight);
     const imageContainerStyle = {
@@ -27,10 +33,16 @@ export default ({
         left: `${.5 * (imageWidth - croppedImageSize)}px`  // Center image horizontally
     };
 
+    const onClick = () => {
+        dispatch(FullscreenActions.SetVisible(true));
+        dispatch(FullscreenActions.SetImageIndex(imageIndex));
+    };
+
     return (
         <div 
             className={styles.ImageThumbnailPanel}
-            style={imageContainerStyle}>
+            style={imageContainerStyle}
+            onClick={useOnClick ? onClick : null}>
             {
                 imageURL ? (
                     <img

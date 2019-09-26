@@ -65,7 +65,8 @@ export default ({
     gridNumColumns, 
     totalWidthPixels, 
     imageURLs,
-    useDynamicPositioning
+    useDynamicPositioning,
+    useOnClick
 }) => {
 
     if (!gridNumRows || !gridNumColumns || !totalWidthPixels)
@@ -100,11 +101,13 @@ export default ({
                             gridRowSize={gridRowSizes[idx]}
                             gridColumn={gridColumns[idx]}
                             gridColumnSize={gridColumnSizes[idx]}
+                            imageIndex={idx}
                             imageWidth={gridCellSize * imageWidthCoeffs[idx] + 7 * (imageWidthCoeffs[idx] - 1)}
                             imageHeight={gridCellSize * imageHeightCoeffs[idx] + 7 * (imageHeightCoeffs[idx] - 1)}
                             imageURL={imageURLs[idx]} 
                             useOverlapPanel={useOverlapPanel}
-                            overlapText={overlapText} />
+                            overlapText={overlapText} 
+                            useOnClick />
                     );
                 })
             }
@@ -131,10 +134,12 @@ export default ({
                         <ImageThumbnailPanel
                             gridRow={gridRow}
                             gridColumn={gridColumn}
-                            imageSize={gridCellSize}
+                            imageIndex={idx}
+                            imageWidth={gridCellSize}
+                            imageHeight={gridCellSize}
                             imageURL={imageURLs ? imageURLs[idx] : null}
                             key={`thumbnail-${idx}`}
-                        />
+                            useOnClick />
                     );
                 })
             }

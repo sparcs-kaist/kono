@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import style from '../styles/PostPageView.module.scss';
 import StaticContent from './StaticContent';
 import Button from './Button';
@@ -7,6 +7,7 @@ import MaterialIcon from './MaterialIcon';
 import PostHeader from './PostHeader';
 import ImageGridPanel from './ImageGridPanel';
 import FullScreen from 'react-full-screen';
+import * as FullscreenActions from '../store/modules/fullscreen';
 
 function getTypeString(type, language) {
     switch (language) {
@@ -43,9 +44,16 @@ function getDateString(date, language) {
 
 export default ({ post }) => {
 
+    if (!post)
+        return null;
+
+    const dispatch = useDispatch();
+
     const login = useSelector(state => state.auth.login, []);
     const language = useSelector(state => state.config.language, []);
-    const [showFullScreen, setShowFullScreen] = useState(false);
+    const showFullScreen = useSelector(state => state.fullscreen.visible, []);
+
+    const onChangeFullScreen = (value) => { dispatch(FullscreenActions.SetVisible(value)); };
 
     const header = {
         type : getTypeString(post.type, language),
@@ -70,7 +78,8 @@ export default ({ post }) => {
                                 gridNumColumns={3}
                                 totalWidthPixels={800}
                                 imageURLs={imgContentURLs} 
-                                useDynamicPositioning />
+                                useDynamicPositioning 
+                                useOnClick />
                         </div>
                     )
                 }
@@ -94,7 +103,7 @@ export default ({ post }) => {
             </div>
             <FullScreen 
                 enabled={showFullScreen}
-                onChange={value => setShowFullScreen(value)}>
+                onChange={onChangeFullScreen}>
                 {
                     showFullScreen && (
                         <div>Content</div>
