@@ -16,9 +16,10 @@ export default () => {
 
     const dispatch = useDispatch();
 
-    /* Set theme as currently saved in browser LocalStorage. */
+    /* Set configuration as currently saved in browser LocalStorage. */
     useEffect(() => {
         dispatch(ConfigActions.SetToLocalStorageTheme());
+        dispatch(ConfigActions.SetToLocalStorageLanguage());
     }, [dispatch]);
 
     /* Check login status when app is loaded */

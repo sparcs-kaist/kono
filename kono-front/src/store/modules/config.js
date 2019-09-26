@@ -63,7 +63,7 @@ export const SetToLocalStorageTheme = () => {
 };
   
 /* SetToLocalStorageLanguage() */
-export const SettoLocalStorageLanguage = () => {
+export const SetToLocalStorageLanguage = () => {
     return {
         type: SET_TO_LOCAL_STORAGE_LANGUAGE
     };
@@ -73,31 +73,35 @@ export const ConfigMiddleWare = store => next => action => {
     const state = store.getState();
     switch (action.type) {
         case SET_THEME:
+            storage.set(STORAGE_KEY_THEME, action.theme);
             break;
         case TOGGLE_THEME:
             action.theme = state.config.theme === THEME_DARK ? THEME_DEFAULT : THEME_DARK;
+            storage.set(STORAGE_KEY_THEME, action.theme);
             break;
         case SET_TO_LOCAL_STORAGE_THEME:
             action.theme = storage.get(STORAGE_KEY_THEME);
+            if (!action.theme) {
+                action.theme = THEME_DEFAULT;
+                storage.set(STORAGE_KEY_THEME, action.theme);
+            }
             break;
         case SET_LANGUAGE:
+            storage.set(STORAGE_KEY_LANGUAGE, action.language);
             break;
         case TOGGLE_LANGUAGE:
-            action.language = state.config.language === LANGUAGE_EN ? LANGUAGE_KR : LANGAUGE_EN;
+            action.language = state.config.language === LANGUAGE_EN ? LANGUAGE_KR : LANGUAGE_EN;
+            storage.set(STORAGE_KEY_LANGUAGE, action.language);
             break;
         case SET_TO_LOCAL_STORAGE_LANGUAGE:
             action.language = storage.get(STORAGE_KEY_LANGUAGE);
+            if (!action.language) {
+                action.language = LANGUAGE_KR;
+                storage.set(STORAGE_KEY_LANGUAGE, action.language);
+            }
             break;
         default:
     }
-    
-    // In case action.theme is set to undefined or other unexpected string values.
-    action.theme = (action.theme === THEME_DEFAULT || action.theme === THEME_DARK) ? action.theme : THEME_DEFAULT;
-    // In case action.language is set to undefined or other unexpected string values.
-    action.language = (action.language === LANGUAGE_KR || action.language === LANGUAGE_EN) ? action.language : LANGUAGE_KR;
-    
-    storage.set(STORAGE_KEY_THEME, action.theme);
-    storage.set(STORAGE_KEY_LANGUAGE, action.language);
     
     next(action);
 };
