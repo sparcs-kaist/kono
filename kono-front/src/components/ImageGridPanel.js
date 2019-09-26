@@ -39,23 +39,23 @@ function getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColu
             default:
                 /* numImages >= 4 */
                 return {
-                    gridRows          : [...Array(gridNumCells).keys()].map(i => Math.floor(i / gridNumRows) + 1),
-                    gridRowSizes      : [...Array(gridNumCells)].map(_ => 1), // [1] * gridNumCells
+                    gridRows          : [...Array(gridNumCells).keys()].map(i => Math.floor(i / gridNumColumns) + 1),
+                    gridRowSizes      : Array(gridNumColumns).fill(1), // [1] * gridNumCells
                     gridColumns       : [...Array(gridNumCells).keys()].map(i => i % gridNumColumns + 1),
-                    gridColumnSizes   : [...Array(gridNumCells)].map(_ => 1), // [1] * gridNumCells
-                    imageWidthCoeffs  : [...Array(gridNumCells)].map(_ => 1), // [1] * gridNumCells
-                    imageHeightCoeffs : [...Array(gridNumCells)].map(_ => 1), // [1] * gridNumCells
+                    gridColumnSizes   : Array(gridNumColumns).fill(1), // [1] * gridNumCells
+                    imageWidthCoeffs  : Array(gridNumColumns).fill(1), // [1] * gridNumCells
+                    imageHeightCoeffs : Array(gridNumColumns).fill(1), // [1] * gridNumCells
                 };
         }
     }
 
     return {
         gridRows          : [...Array(gridNumCells).keys()].map(i => Math.floor(i / gridNumColumns) + 1),
-        gridRowSizes      : [...Array(gridNumCells)].map(_ => 1), // [1] * gridNumCells
+        gridRowSizes      : Array(gridNumColumns).fill(1), // [1] * gridNumCells
         gridColumns       : [...Array(gridNumCells).keys()].map(i => i % gridNumColumns + 1),
-        gridColumnSizes   : [...Array(gridNumCells)].map(_ => 1), // [1] * gridNumCells
-        imageWidthCoeffs  : [...Array(gridNumCells)].map(_ => 1), // [1] * gridNumCells
-        imageHeightCoeffs : [...Array(gridNumCells)].map(_ => 1), // [1] * gridNumCells
+        gridColumnSizes   : Array(gridNumColumns).fill(1), // [1] * gridNumCells
+        imageWidthCoeffs  : Array(gridNumColumns).fill(1), // [1] * gridNumCells
+        imageHeightCoeffs : Array(gridNumColumns).fill(1), // [1] * gridNumCells
     }
 
 }
