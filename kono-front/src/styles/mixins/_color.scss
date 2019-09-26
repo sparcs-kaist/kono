@@ -6,13 +6,14 @@ $themes: (
         text-primary: #000000,
         text-secondary: material-color('grey', '500'),
         text-error: #E53935,
-        text-highlight: material-color('teal', '500'),
+        text-highlight: material-color('brown', '500'),
+        text-highlight-on: material-color('brown', '300'),
 
         /* Background Colors */
         background: #FFFFFF,
         panel-background: #EFECEB,
-        theme-background: #5F453D,
-        theme-light-background: #795548,
+        theme-background: material-color('brown', '500'),
+        theme-light-background: material-color('brown', '300'),
     ),
     dark: (
         /* Text Colors */
@@ -20,6 +21,7 @@ $themes: (
         text-secondary: #575774,
         text-error: #E53935,
         text-highlight: #6078F5,
+        text-highlight-on: #90CAF9,
 
         /* Background Colors */
         background: #19192C,

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../styles/PanelFooter.module.scss';
-import { ReactComponent as LeftArrowIcon } from '../res/icons/keyboard-arrow-left.svg';
-import { ReactComponent as RightArrowIcon } from '../res/icons/keyboard-arrow-right.svg';
+import classnames from '../lib/classnames';
+import MaterialIcon from './MaterialIcon';
 
 export default ({ 
     currentPage, pagination, lastPage,
@@ -23,7 +23,7 @@ export default ({
                         className={styles.PanelFooter__link}
                         onClick={() => onClickPage(currentPage - 1)}
                     >
-                        <LeftArrowIcon />
+                        <MaterialIcon>keyboard_arrow_left</MaterialIcon>
                     </div>
                 ) : null
             }
@@ -31,9 +31,10 @@ export default ({
                 pages.map((x) => {
                     return (
                         <div
-                            className={[styles.PanelFooter__page, x !== currentPage && styles.PanelFooter__link]
-                                .filter(e => !!e)
-                                .join(' ')}
+                            className={classnames([
+                                styles.PanelFooter__page, 
+                                (x !== currentPage) && styles.PanelFooter__link
+                            ])}
                             key={`panel-footer-${x}`}
                             onClick={x === currentPage ? null : () => onClickPage(x)}>
                             { x }
@@ -47,7 +48,7 @@ export default ({
                         className={styles.PanelFooter__link}
                         onClick={() => onClickPage(currentPage + 1)}
                     >
-                        <RightArrowIcon />
+                        <MaterialIcon>keyboard_arrow_right</MaterialIcon>
                     </div>
                 ) : null
             }

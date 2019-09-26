@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import queryString from 'query-string';
 import styles from '../styles/LoginPage.module.scss';
+import Button from './Button';
 import { login } from '../api/auth';
 import * as AuthActions from '../store/modules/auth';
 
@@ -72,11 +73,8 @@ export default ({ location }) => {
             <span className={styles.LoginPage__input_error}>
                 { loginErrorMsg }
             </span>
-            <div
-                className={styles.LoginPage__button}
-                onClick={onLogin}
-            >
-                로그인
+            <div className={styles.LoginPage__button}>
+                <Button onClick={onLogin} fillParent>로그인</Button>
             </div>
         </div>
     );
