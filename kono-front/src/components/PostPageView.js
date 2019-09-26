@@ -6,6 +6,7 @@ import Button from './Button';
 import MaterialIcon from './MaterialIcon';
 import PostHeader from './PostHeader';
 import ImageGridPanel from './ImageGridPanel';
+import FullScreenPanel from './FullScreenPanel';
 import FullScreen from 'react-full-screen';
 import * as FullscreenActions from '../store/modules/fullscreen';
 
@@ -106,7 +107,7 @@ export default ({ post }) => {
                 onChange={onChangeFullScreen}>
                 {
                     showFullScreen && (
-                        <div>Content</div>
+                        <FullScreenPanel />
                     )
                 }
             </FullScreen>

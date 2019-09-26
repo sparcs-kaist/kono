@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styles from '../styles/ImageThumbnailPanel.module.scss';
 import * as FullscreenActions from '../store/modules/fullscreen';
@@ -17,8 +17,9 @@ export default ({
         return null;
 
     const dispatch = useDispatch();
+    const [croppedImageWidth, setCroppedImageWidth] = useState(imageWidth);
+    const [croppedImageHeight, setCroppedImageHeight] = useState(imageHeight);
 
-    const croppedImageSize = Math.max(imageWidth, imageHeight);
     const imageContainerStyle = {
         gridRow: gridRowSize ? `${gridRow} / ${gridRow + gridRowSize}` : gridRow,
         gridColumn: gridColumnSize ? `${gridColumn} / ${gridColumn + gridColumnSize}` : gridColumn,
@@ -26,11 +27,20 @@ export default ({
         height: `${imageHeight}px`
     };
     const imageStyle = {
-        width: `${croppedImageSize}px`,
-        height: `${croppedImageSize}px`,
+        width: `${croppedImageWidth}px`,
+        height: `${croppedImageHeight}px`,
         position: 'relative',
-        top: `${.5 * (imageHeight - croppedImageSize)}px`, // Center image vertically
-        left: `${.5 * (imageWidth - croppedImageSize)}px`  // Center image horizontally
+        top: `${.5 * (imageHeight - croppedImageHeight)}px`, // Center image vertically
+        left: `${.5 * (imageWidth - croppedImageWidth)}px`  // Center image horizontally
+    };
+
+    const onLoad = ({ target: img }) => {
+        /* Dynamically set crop size. */
+        if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+            const scale = Math.max(imageWidth / img.naturalWidth, imageHeight / img.naturalHeight);
+            setCroppedImageWidth(img.naturalWidth * scale);
+            setCroppedImageHeight(img.naturalHeight * scale);
+        }
     };
 
     const onClick = () => {
@@ -49,8 +59,7 @@ export default ({
                         src={imageURL} 
                         alt={imageURL}
                         style={imageStyle}
-                        width={croppedImageSize} 
-                        height={croppedImageSize} />
+                        onLoad={onLoad} />
                 ) : null
             }
             {

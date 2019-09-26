@@ -1,0 +1,21 @@
+@import 'mixins/all';
+
+@include themed() {
+    .FullScreenPanel {
+
+        @include flexbox(column, $center: true);
+
+        color: white;
+
+        .FullScreenPanel__content {
+            
+            @include flexbox(row, $center: true);
+
+            .FullScreenPanel__image_container {
+                
+            }
+            
+        }
+
+    }
+}

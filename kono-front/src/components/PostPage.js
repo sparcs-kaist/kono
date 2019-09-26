@@ -12,6 +12,8 @@ const __temp_post = {
     content_kr: '/posts/example_kr.html',
     content_en: '/posts/example_en.html',
     content_img: [
+        'https://scontent.ficn2-1.fna.fbcdn.net/v/t1.0-9/41532073_966012523587111_3484571078221627392_n.jpg?_nc_cat=103&_nc_oc=AQnVReAHhbyplakbhHMzSFOBd0QcW32j5q8DWtpcS7hDNzVj2pJVEK7OKH8FkJUoX4A&_nc_ht=scontent.ficn2-1.fna&oh=95b589e5988b59f2b01ee236ec14ed57&oe=5DF6789A',
+        'https://avatars3.githubusercontent.com/u/5449435?s=200&v=4',
         'https://scontent.ficn2-1.fna.fbcdn.net/v/t1.0-9/52608632_1061359487385747_1269556598569697280_n.jpg?_nc_cat=111&_nc_oc=AQkNS_wHKOCgTiD0clqwzOKsVY9O4Coi9DefIatBQHOsW5q4fMl-JC_RrWldiwAkTfg&_nc_ht=scontent.ficn2-1.fna&oh=b50a9b427cd2e7b258eade8f8f7d6756&oe=5E30540A',
         'https://scontent.ficn2-1.fna.fbcdn.net/v/t1.0-9/53160271_1061359500719079_4915475416120033280_n.jpg?_nc_cat=107&_nc_oc=AQlr5rMKm5c6936ImejpCpYJ-5-i9699gnBjMcbLCtlJQTpcl-DbhiX0kDlkHjS_iKs&_nc_ht=scontent.ficn2-1.fna&oh=7c01b7e755c4e45d247ee216a94b6168&oe=5DF0C673',
         'https://scontent.ficn2-1.fna.fbcdn.net/v/t1.0-9/52396209_1061359504052412_862880658005950464_n.jpg?_nc_cat=111&_nc_oc=AQk0DLugtk-BOIvyWE0xzx0Oygq5QLaKcBLvp2biuE3DDLESW_61DzDORqhkpVrsN1I&_nc_ht=scontent.ficn2-1.fna&oh=995ba7f3a6e31a24151f81a22d3bc1ff&oe=5E3AC96A',
