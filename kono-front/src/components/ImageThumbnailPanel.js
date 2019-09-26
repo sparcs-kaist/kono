@@ -9,7 +9,7 @@ export default ({
     imageIndex,
     imageWidth, imageHeight,
     imageURL,
-    useOverlapPanel, overlapText,
+    showOverlapPanel, overlapText,
     useOnClick
 }) => {
 
@@ -64,7 +64,7 @@ export default ({
                 ) : null
             }
             {
-                useOverlapPanel ? (
+                showOverlapPanel ? (
                     <div className={styles.ImageThumbnailPanel__overlap}>
                         <span>{ overlapText }</span>
                     </div>

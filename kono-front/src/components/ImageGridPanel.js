@@ -91,8 +91,8 @@ export default ({
 
                     const isLastGrid = idx === gridNumCells - 1;
                     const numMoreImages = numImages - gridNumCells;
-                    const useOverlapPanel = isLastGrid && (numMoreImages > 0);
-                    const overlapText = useOverlapPanel && `+ ${numMoreImages}`;
+                    const showOverlapPanel = isLastGrid && (numMoreImages > 0);
+                    const overlapText = showOverlapPanel && `+ ${numMoreImages}`;
 
                     return (
                         <ImageThumbnailPanel
@@ -105,7 +105,7 @@ export default ({
                             imageWidth={gridCellSize * imageWidthCoeffs[idx] + 7 * (imageWidthCoeffs[idx] - 1)}
                             imageHeight={gridCellSize * imageHeightCoeffs[idx] + 7 * (imageHeightCoeffs[idx] - 1)}
                             imageURL={imageURLs[idx]} 
-                            useOverlapPanel={useOverlapPanel}
+                            showOverlapPanel={showOverlapPanel}
                             overlapText={overlapText} 
                             useOnClick />
                     );
