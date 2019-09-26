@@ -10,12 +10,12 @@ export default () => {
     const [windowDimension, setWindowDimension] = useState(getWindowDimension());
 
     useEffect(() => {
-            const handleResize = () => setWindowDimension(getWindowDimension());
-            window.addEventListener('resize', handleResize);
+        const handleResize = () => setWindowDimension(getWindowDimension());
+        window.addEventListener('resize', handleResize);
 
-            /* Add cleanup effect */
-            return () => window.removeEventListener('resize', handleResize);
-        }, []);
+        /* Add cleanup effect */
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     return windowDimension;
 

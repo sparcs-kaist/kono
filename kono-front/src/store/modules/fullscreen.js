@@ -63,9 +63,15 @@ const fullscreen = (state = initialState, action) => {
         case SET_IMAGE_INDEX:
             return { ...state, imageIndex: action.imageIndex };
         case INCREMENT_IMAGE_INDEX:
-            return { ...state, imageIndex: (state.imageIndex + 1) % state.imageURLs.length };
+        {
+            const newImageIndex = state.imageURLs.length === 0 ? 0 : (state.imageIndex + 1) % state.imageURLs.length;
+            return { ...state, imageIndex: newImageIndex };
+        }
         case DECREMENT_IMAGE_INDEX:
-            return { ...state, imageIndex: (state.imageIndex + state.imageURLs.length - 1) % state.imageURLs.length };
+        {
+            const newImageIndex = state.imageURLs.length === 0 ? 0 : (state.imageIndex + state.imageURLs.length - 1) % state.imageURLs.length;
+            return { ...state, imageIndex: newImageIndex };
+        }
         default:
             return state;
     }
