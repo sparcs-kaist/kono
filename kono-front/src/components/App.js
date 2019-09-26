@@ -16,9 +16,13 @@ export default () => {
 
     const dispatch = useDispatch();
 
-    /* Check login status when app is loaded */
+    /* Set theme as currently saved in browser LocalStorage. */
     useEffect(() => {
         dispatch(ConfigActions.SetToLocalStorageTheme());
+    }, [dispatch]);
+
+    /* Check login status when app is loaded */
+    useEffect(() => {
         const checkLoginStatus = async () => await check()
                 .then(
                     () => { dispatch(AuthAPI.SetLogin(true)) },

@@ -21,7 +21,7 @@ const initialState = {
 export const SetTheme = (theme) => {
     return {
         type: SET_THEME,
-        theme: theme
+        theme
     };
 };
 
