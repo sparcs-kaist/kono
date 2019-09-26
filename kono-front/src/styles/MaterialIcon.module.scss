@@ -8,6 +8,10 @@
         font-style: normal;
         font-size: 20px;  /* Preferred icon size */
 
+        &.MaterialIcon__large {
+            font-size: 48px;
+        }
+
         /* Support for all WebKit browsers. */
         -webkit-font-smoothing: antialiased;
         /* Support for Safari and Chrome. */

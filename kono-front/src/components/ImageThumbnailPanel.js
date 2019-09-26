@@ -36,10 +36,11 @@ export default ({
 
     const onLoad = ({ target: img }) => {
         /* Dynamically set crop size. */
-        if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-            const scale = Math.max(imageWidth / img.naturalWidth, imageHeight / img.naturalHeight);
-            setCroppedImageWidth(img.naturalWidth * scale);
-            setCroppedImageHeight(img.naturalHeight * scale);
+        const { naturalWidth, naturalHeight } = img;
+        if (naturalWidth > 0 && naturalHeight > 0) {
+            const scale = Math.max(imageWidth / naturalWidth, imageHeight / naturalHeight);
+            setCroppedImageWidth(naturalWidth * scale);
+            setCroppedImageHeight(naturalHeight * scale);
         }
     };
 
