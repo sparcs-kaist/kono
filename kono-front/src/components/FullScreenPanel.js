@@ -84,7 +84,7 @@ export default () => {
                 <div 
                     className={styles.FullScreenPanel__arrow}
                     onClick={onClickPrev}>
-                    <MaterialIcon large>chevron_left</MaterialIcon>
+                    <MaterialIcon md48>chevron_left</MaterialIcon>
                 </div>
                 <img 
                     src={imageURL} 
@@ -94,7 +94,7 @@ export default () => {
                 <div 
                     className={styles.FullScreenPanel__arrow}
                     onClick={onClickNext}>
-                    <MaterialIcon large>chevron_right</MaterialIcon>
+                    <MaterialIcon md48>chevron_right</MaterialIcon>
                 </div>
             </div>
             <div className={styles.FullScreenPanel__footer}>

@@ -8,7 +8,19 @@
         font-style: normal;
         font-size: 20px;  /* Preferred icon size */
 
-        &.MaterialIcon__large {
+        &.MaterialIcon__md10 {
+            font-size: 10px;
+        }
+
+        &.MaterialIcon__md15 {
+            font-size: 15px;
+        }
+
+        &.MaterialIcon__md36 {
+            font-size: 36px;
+        }
+
+        &.MaterialIcon__md48 {
             font-size: 48px;
         }
 
