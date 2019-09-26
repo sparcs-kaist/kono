@@ -1,15 +1,18 @@
-import storage from '../../lib/storage'
+import storage from '../../lib/storage';
 
 /* Action Types. */
-
 const SET_THEME = 'theme/SET_THEME';
 const TOGGLE_THEME = 'theme/TOGGLE_THEME';
+const SET_TO_LOCAL_STORAGE_THEME = 'theme/SET_TO_LOCAL_STORAGE_THEME';
 
-const LOCAL_STORAGE_KEY_CONFIG = '__CONFIG__'
+/* String Constants. */
+const THEME_DEFAULT = 'theme_default';
+const THEME_DARK = 'theme_dark';
+const STORAGE_KEY_THEME = '__THEME__';
 
 /* Initial States. */
 const initialState = {
-    theme: 'theme_default'
+    theme: THEME_DEFAULT
 };
 
 /* Action Definitions. */
@@ -18,38 +21,53 @@ const initialState = {
 export const SetTheme = (theme) => {
     return {
         type: SET_THEME,
-        theme
+        theme: theme
     };
 };
 
 /* ToggleTheme() */
-export const ToggleTheme = (theme) => {
+export const ToggleTheme = () => {
     return {
         type: TOGGLE_THEME
     };
 };
 
-/* Reducer. */
-const config = (state = initialState, action) => {
-    const localStorageState = storage.get(LOCAL_STORAGE_KEY_CONFIG);
-    if (localStorageState) {
-        state = localStorageState;
-    }
-    
-    let newState;
+/* SetToLocalStorageTheme() */
+export const SetToLocalStorageTheme = () => {
+    return {
+        type: SET_TO_LOCAL_STORAGE_THEME
+    };
+};
+
+export const ConfigMiddleWare = store => next => action => {
+    const state = store.getState();
     switch (action.type) {
         case SET_THEME:
-            newState = { ...state, theme: action.theme };
             break;
         case TOGGLE_THEME:
-            const newTheme = state.theme === 'theme_default' ? 'theme_dark' : 'theme_default';
-            newState = { ...state, theme: newTheme };
+            action.theme = state.config.theme === THEME_DARK ? THEME_DEFAULT : THEME_DARK;
+            break;
+        case SET_TO_LOCAL_STORAGE_THEME:
+            action.theme = storage.get(STORAGE_KEY_THEME);
             break;
         default:
-            newState = state;
     }
-    storage.set(LOCAL_STORAGE_KEY_CONFIG, newState);
-    return newState;
+    // In case action.theme is set to undefined or other unexpected string values.
+    action.theme = (action.theme === THEME_DEFAULT || action.theme === THEME_DARK) ? action.theme : THEME_DEFAULT;
+    storage.set(STORAGE_KEY_THEME, action.theme);
+    next(action);
+};
+
+/* Reducer. */
+const config = (state = initialState, action) => {
+    switch (action.type) {
+        case SET_THEME:
+        case TOGGLE_THEME:
+        case SET_TO_LOCAL_STORAGE_THEME:
+            return { ...state, theme: action.theme };
+        default:
+            return state;
+    }
 }
 
 export default config;

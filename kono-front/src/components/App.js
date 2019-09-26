@@ -10,6 +10,7 @@ import Header from './Header';
 import Footer from './Footer';
 import { check } from '../api/auth';
 import * as AuthAPI from '../store/modules/auth';
+import * as ConfigActions from '../store/modules/config';
 
 export default () => {
 
@@ -17,7 +18,7 @@ export default () => {
 
     /* Check login status when app is loaded */
     useEffect(() => {
-
+        dispatch(ConfigActions.SetToLocalStorageTheme());
         const checkLoginStatus = async () => await check()
                 .then(
                     () => { dispatch(AuthAPI.SetLogin(true)) },
