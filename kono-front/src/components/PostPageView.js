@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import style from '../styles/PostPageView.module.scss';
 import StaticContent from './StaticContent';
@@ -6,6 +6,7 @@ import Button from './Button';
 import MaterialIcon from './MaterialIcon';
 import PostHeader from './PostHeader';
 import ImageGridPanel from './ImageGridPanel';
+import FullScreen from 'react-full-screen';
 
 function getTypeString(type, language) {
     switch (language) {
@@ -44,6 +45,7 @@ export default ({ post }) => {
 
     const login = useSelector(state => state.auth.login, []);
     const language = useSelector(state => state.config.language, []);
+    const [showFullScreen, setShowFullScreen] = useState(false);
 
     const header = {
         type : getTypeString(post.type, language),
@@ -90,6 +92,15 @@ export default ({ post }) => {
                     )
                 }
             </div>
+            <FullScreen 
+                enabled={showFullScreen}
+                onChange={value => setShowFullScreen(value)}>
+                {
+                    showFullScreen && (
+                        <div>Content</div>
+                    )
+                }
+            </FullScreen>
         </div>
     );
 
