@@ -6,6 +6,33 @@ import useWindowDimension from '../lib/hooks/useWindowDimension';
 import MaterialIcon from './MaterialIcon';
 import * as FullscreenActions from '../store/modules/fullscreen';
 
+function getResizedImageDimension(windowWidth, windowHeight, naturalImageWidth, naturalImageHeight) {
+
+    if (naturalImageWidth === 0 || naturalImageHeight === 0)
+        return {
+            width: 0,
+            height: 0
+        };
+
+    const ARROWS_WIDTH_PIXELS = 88 * 2;
+    const WINDOW_HEIGHT_RATIO = 0.8;
+    const FOOTER_HEIGHT_PIXELS = 34;
+
+    const maxImageWidth = windowWidth - ARROWS_WIDTH_PIXELS;
+    const maxImageHeight = (windowHeight - FOOTER_HEIGHT_PIXELS) * WINDOW_HEIGHT_RATIO;
+
+    const desiredWidth = Math.min(maxImageWidth, naturalImageWidth);
+    const desiredHeight = Math.min(maxImageHeight, naturalImageHeight);
+
+    const scale = Math.min(desiredWidth / naturalImageWidth, desiredHeight / naturalImageHeight);
+
+    return {
+        width: scale * naturalImageWidth,
+        height: scale * naturalImageHeight
+    };
+
+}
+
 export default () => {
 
     const dispatch = useDispatch();
@@ -15,12 +42,11 @@ export default () => {
     const imageURL = imageURLs[imageIndex];
     const numImages = imageURLs.length;
 
-    const [resizedImageWidth, setResizedImageWidth] = useState(0);
-    const [resizedImageHeight, setResizedImageHeight] = useState(0);
+    const [naturalImageWidth, setNaturalImageWidth] = useState(0);
+    const [naturalImageHeight, setNaturalImageHeight] = useState(0);
 
     const { width: windowWidth, height: windowHeight } = useWindowDimension();
-    const maxImageWidth = windowWidth;
-    const maxImageHeight = .8 * windowHeight;
+    const { width: resizedImageWidth, height: resizedImageHeight } = getResizedImageDimension(windowWidth, windowHeight, naturalImageWidth, naturalImageHeight);
 
     const imageStyle = {
         width: `${resizedImageWidth}px`,
@@ -29,13 +55,8 @@ export default () => {
 
     const onLoad = ({ target: img }) => {
         const { naturalWidth, naturalHeight } = img;
-        if (naturalWidth > 0 && naturalHeight > 0) {
-            const desiredWidth = Math.min(maxImageWidth, naturalWidth);
-            const desiredHeight = Math.min(maxImageHeight, naturalHeight);
-            const scale = Math.min(desiredWidth / naturalWidth, desiredHeight / naturalHeight);
-            setResizedImageWidth(scale * naturalWidth);
-            setResizedImageHeight(scale * naturalHeight);
-        }
+        setNaturalImageWidth(naturalWidth);
+        setNaturalImageHeight(naturalHeight);
     };
 
     const onClickBackground = (e) => {
