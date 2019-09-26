@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from '../styles/FullScreenPanel.module.scss';
 import useWindowDimension from '../lib/hooks/useWindowDimension';
 import MaterialIcon from './MaterialIcon';
+import * as FullscreenActions from '../store/modules/fullscreen';
 
 export default () => {
+
+    const dispatch = useDispatch();
 
     const imageURLs = useSelector(state => state.fullscreen.imageURLs, []);
     const imageIndex = useSelector(state => state.fullscreen.imageIndex, []);
@@ -16,7 +19,7 @@ export default () => {
 
     const { width: windowWidth, height: windowHeight } = useWindowDimension();
     const maxImageWidth = windowWidth;
-    const maxImageHeight = windowHeight;
+    const maxImageHeight = .8 * windowHeight;
 
     const imageStyle = {
         width: `${resizedImageWidth}px`,
@@ -34,10 +37,24 @@ export default () => {
         }
     };
 
+    const onClickDot = (index) => () => {
+        dispatch(FullscreenActions.SetImageIndex(index));
+    };
+
+    const onClickNext = () => {
+        dispatch(FullscreenActions.IncrementImageIndex());
+    };
+
+    const onClickPrev = () => {
+        dispatch(FullscreenActions.DecrementImageIndex());
+    };
+
     return (
         <div className={styles.FullScreenPanel}>
             <div className={styles.FullScreenPanel__content}>
-                <div className={styles.FullScreenPanel__arrow}>
+                <div 
+                    className={styles.FullScreenPanel__arrow}
+                    onClick={onClickPrev}>
                     <MaterialIcon large>chevron_left</MaterialIcon>
                 </div>
                 <img 
@@ -45,7 +62,9 @@ export default () => {
                     alt="" 
                     style={imageStyle}
                     onLoad={onLoad} />
-                <div className={styles.FullScreenPanel__arrow}>
+                <div 
+                    className={styles.FullScreenPanel__arrow}
+                    onClick={onClickNext}>
                     <MaterialIcon large>chevron_right</MaterialIcon>
                 </div>
             </div>
@@ -54,15 +73,19 @@ export default () => {
                     [...Array(numImages).keys()].map(idx => {
                         return (
                             <div
-                                className={
-                                    [
-                                        styles.FullScreenPanel__dot, 
-                                        idx === imageIndex && styles.FullScreenPanel__dot_highlight
-                                    ]
-                                    .filter(e => !!e)
-                                    .join(' ')
-                                }
-                                key={`fullscreen-dot-${idx}`}>
+                                className={styles.FullScreenPanel__dot_wrapper}
+                                onClick={onClickDot(idx)}
+                                key={`fullscreen-dot-${idx}`} >
+                                <div
+                                    className={
+                                        [
+                                            styles.FullScreenPanel__dot, 
+                                            idx === imageIndex && styles.FullScreenPanel__dot_highlight
+                                        ]
+                                        .filter(e => !!e)
+                                        .join(' ')
+                                    } >
+                                </div>
                             </div>
                         )
                     })
