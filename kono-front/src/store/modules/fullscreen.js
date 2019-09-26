@@ -3,7 +3,7 @@
 const SET_VISIBLE = 'fullscreen/SET_VISIBLE';
 const SET_IMAGE_URLS = 'fullscreen/SET_IMAGE_URLS';
 const SET_IMAGE_INDEX = 'fullscreen/SET_IMAGE_INDEX';
-const INCREMENT_IMAGE_INDEX = 'fullscreen/INCREMENT_IMGAE_INDEX';
+const INCREMENT_IMAGE_INDEX = 'fullscreen/INCREMENT_IMAGE_INDEX';
 const DECREMENT_IMAGE_INDEX = 'fullscreen/DECREMENT_IMAGE_INDEX';
 
 /* Initial States. */
