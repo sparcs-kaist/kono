@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../styles/FullScreenPanel.module.scss';
+import classnames from '../lib/classnames';
 import useWindowDimension from '../lib/hooks/useWindowDimension';
 import MaterialIcon from './MaterialIcon';
 import * as FullscreenActions from '../store/modules/fullscreen';
@@ -77,14 +78,10 @@ export default () => {
                                 onClick={onClickDot(idx)}
                                 key={`fullscreen-dot-${idx}`} >
                                 <div
-                                    className={
-                                        [
-                                            styles.FullScreenPanel__dot, 
-                                            idx === imageIndex && styles.FullScreenPanel__dot_highlight
-                                        ]
-                                        .filter(e => !!e)
-                                        .join(' ')
-                                    } >
+                                    className={classnames([
+                                        styles.FullScreenPanel__dot, 
+                                        idx === imageIndex && styles.FullScreenPanel__dot_highlight
+                                    ])} >
                                 </div>
                             </div>
                         )
