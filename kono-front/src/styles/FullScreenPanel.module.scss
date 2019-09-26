@@ -8,8 +8,6 @@
 
         @include flexbox(column, $center: true);
 
-        color: white;
-
         .FullScreenPanel__content {
 
             width: 100%;
@@ -17,6 +15,7 @@
 
             .FullScreenPanel__arrow {
                 margin: 0 20px;
+                color: white;
                 cursor: pointer;
             }
             
@@ -24,7 +23,7 @@
             
             img {
                 margin: 0 auto;
-                padding: 0 5vw;
+                padding: 20px 5vw;
             }
 
         }

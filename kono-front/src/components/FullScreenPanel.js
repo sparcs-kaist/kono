@@ -38,6 +38,11 @@ export default () => {
         }
     };
 
+    const onClickBackground = (e) => {
+        if (e.target === e.currentTarget)
+            dispatch(FullscreenActions.SetVisible(false));
+    };
+
     const onClickDot = (index) => () => {
         dispatch(FullscreenActions.SetImageIndex(index));
     };
@@ -51,7 +56,9 @@ export default () => {
     };
 
     return (
-        <div className={styles.FullScreenPanel}>
+        <div 
+            className={styles.FullScreenPanel}
+            onClick={onClickBackground}>
             <div className={styles.FullScreenPanel__content}>
                 <div 
                     className={styles.FullScreenPanel__arrow}
