@@ -1,2 +1,4 @@
-node_modlues/
+node_modules/
+dev-build/
+dist/
 .env
