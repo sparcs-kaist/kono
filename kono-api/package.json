@@ -1,0 +1,11 @@
+{
+  "name": "kono-api",
+  "version": "1.0.0",
+  "description": "API Server providing apis for the front-end web service. - Express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
