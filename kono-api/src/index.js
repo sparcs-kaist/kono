@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes';
+import db from './db';
 
 dotenv.config();
 const { NODE_ENV, DEV_PORT, PROD_PORT } = process.env;
@@ -12,6 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/', routes);
+
+db.init();
 
 const port = NODE_ENV === 'production' ? PROD_PORT : DEV_PORT;
 app.listen(port, () => {

@@ -4,7 +4,7 @@
   "description": "API Server providing apis for the front-end web service. - Express.js",
   "main": "index.js",
   "scripts": {
-    "start:dev": "NODE_ENV=development nodemon -L --watch src/ --exec 'rm -rf dev-build/ && babel --presets @babel/preset-env --plugins @babel/plugin-proposal-object-rest-spread -d dev-build src/ && node dev-build'",
+    "start:dev": "NODE_ENV=development nodemon --delay 1500ms -L --watch src/ --exec babel-node --plugins @babel/plugin-proposal-object-rest-spread --presets @babel/preset-env src/",
     "build": "webpack --config webpack.config.js",
     "serve": "NODE_ENV=production node dist/bundle.js"
   },
@@ -20,6 +20,7 @@
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
+    "@babel/node": "^7.6.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
     "babel-loader": "^8.0.6",
