@@ -10,6 +10,7 @@ export const list = async (req, res) => {
     
     /* Query validity check. */
     if (filter !== undefined && filter !== 'notice' && filter !== 'lostfound') {
+        res.status(400);
         res.send({ msg: 'invalid filter' });
         return;
     }
@@ -19,17 +20,20 @@ export const list = async (req, res) => {
     }
     else {
         if (isNaN(parseInt(startIndex)) || startIndex < 0) {
+            res.status(400);
             res.send({ msg: 'invalid start_index' });
             return;
         }
     }
 
     if (maxSize === undefined) {
+        res.status(400);
         res.send({ msg: 'max_size required' });
         return;
     }
     else {
         if (isNaN(parseInt(maxSize)) || maxSize < 1 || maxSize > 64) {
+            res.status(400);
             res.send({ msg: 'invalid max_size' });
             return;
         }
@@ -37,9 +41,27 @@ export const list = async (req, res) => {
 
     /* Fire database query. */
     try {
-        const size = await count();
+
+        const size = await count({
+            filter: { type: filter }
+        });
+
+        const posts = await retrieve({
+            filter: { type: filter },
+            select: [ 
+                'sid', 
+                'type', 
+                'title_kr', 
+                'title_en',
+                'created_time'
+            ],
+            startIndex: parseInt(startIndex),
+            maxSize: parseInt(maxSize)
+        });
+
         res.status(200);
-        res.send({ size });
+        res.send({ size, posts });
+
     } catch (e) {
         console.log(e);
         res.status(500);
