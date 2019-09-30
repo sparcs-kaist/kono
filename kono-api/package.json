@@ -1,0 +1,31 @@
+{
+  "name": "kono-api",
+  "version": "1.0.0",
+  "description": "API Server providing apis for the front-end web service. - Express.js",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "NODE_ENV=development nodemon --delay 1500ms -L --watch src/ --exec babel-node --plugins @babel/plugin-proposal-object-rest-spread --presets @babel/preset-env src/",
+    "build": "webpack --config webpack.config.js",
+    "serve": "NODE_ENV=production node dist/bundle.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/node": "^7.6.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "babel-loader": "^8.0.6",
+    "terser-webpack-plugin": "^2.1.0",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9"
+  }
+}
