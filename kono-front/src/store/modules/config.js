@@ -1,4 +1,5 @@
-import storage from '../../lib/storage';
+import storage from '../../lib/browser/storage';
+import { userLanguage } from '../../lib/browser/navigator';
 
 /* Action Types. */
 const SET_THEME = 'theme/SET_THEME';
@@ -94,9 +95,9 @@ export const ConfigMiddleWare = store => next => action => {
             storage.set(STORAGE_KEY_LANGUAGE, action.language);
             break;
         case SET_TO_LOCAL_STORAGE_LANGUAGE:
-            action.language = storage.get(STORAGE_KEY_LANGUAGE);
+            action.language = storage.get(STORAGE_KEY_LANGUAGE); // Attempt to retrieve from storage
             if (!action.language) {
-                action.language = LANGUAGE_KR;
+                action.language = userLanguage || LANGUAGE_KR;   // Attempt to retrieve from browser configuration
                 storage.set(STORAGE_KEY_LANGUAGE, action.language);
             }
             break;
