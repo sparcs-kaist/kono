@@ -2,4 +2,4 @@
 
 An authentication server for kono
 
-[Documentation](https://app.gitbook.com/@cytops1217/s/sparcs-kono/kono-auth)
+[Documentation](https://app.gitbook.com/@sparcs-kono/s/sparcs-kono/kono-auth)
