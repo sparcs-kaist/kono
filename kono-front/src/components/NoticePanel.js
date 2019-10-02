@@ -17,20 +17,23 @@ export default () => {
 
     const numPages = Math.max(1, Math.ceil(numNotices / NOTICE_PAGINATION));
 
-    const fetchPage = async (page) => await PostAPI.list({
-            params: {
-                filter_type: 'notice',
-                start_index: (page - 1) * NOTICE_PAGINATION,
-                max_size: NOTICE_PAGINATION
-            }
-        })
-        .then(({ data }) => {
-            setNumNotices(data.size);
-            setNotices(data.posts);
-        })
-        .catch(({ response }) => {
-            console.log(response);
-        });
+    const fetchPage = async (page) => {
+        await PostAPI.list({
+                params: {
+                    filter_type: 'notice',
+                    start_index: (page - 1) * NOTICE_PAGINATION,
+                    max_size: NOTICE_PAGINATION
+                }
+            })
+            .then(({ data }) => {
+                setNumNotices(data.size);
+                setNotices(data.posts);
+            })
+            .catch(({ response }) => {
+                console.log(response);
+                return;
+            });
+    };
 
     /* Fetch page when currentPage updates */
     useEffect(() => {
@@ -43,7 +46,7 @@ export default () => {
             <ul>
                 {
                     notices.map(({
-                        sid, type, title_kr, title_en, created_time
+                        sid, title_kr, title_en, created_time
                     }) => {
                         
                         /* TODO: change this using useLanguages hook (issue #14) */
@@ -58,7 +61,7 @@ export default () => {
                                             {
                                                 title 
                                                 ? (title.length > 24 ? `${title.substring(0, 24)}...` : title)
-                                                : '[제목 없음]' // TODO: change null title using useLanguages hook (issue #14)
+                                                : '(제목 없음)' // TODO: change null title using useLanguages hook (issue #14)
                                             }
                                         </Link>
                                     </span>
