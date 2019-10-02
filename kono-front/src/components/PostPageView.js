@@ -11,32 +11,7 @@ import FullScreen from 'react-full-screen';
 import * as FullscreenActions from '../store/modules/fullscreen';
 import useLanguages from '../lib/hooks/useLanguages';
 
-function getTypeString(type, language) {
-    switch (language) {
-        case 'kr':
-            switch (type) {
-                case 'notice':
-                    return '공지사항';
-                case 'lostfound':
-                    return '분실물';
-                default:
-                    return '게시물';
-            }
-        case 'en':
-            switch (type) {
-                case 'notice':
-                    return 'Notice';
-                case 'lostfound':
-                    return 'Lost & Found';
-                default:
-                    return 'Post';
-            }
-        default:
-            return '';
-    }
-}
-
-function getDateString(date, language) {
+function getDateString(date) {
     return date.toLocaleString('default', {
         year: 'numeric',
         month: '2-digit',
@@ -52,18 +27,17 @@ export default ({ post }) => {
     const dispatch = useDispatch();
 
     const login = useSelector(state => state.auth.login, []);
-    const language = useSelector(state => state.config.language, []);
     const showFullScreen = useSelector(state => state.fullscreen.visible, []);
 
     const onChangeFullScreen = (value) => { dispatch(FullscreenActions.SetVisible(value)); };
 
     const header = {
-        type : getTypeString(post.type, language),
-        // title: {
-        //     kr: post['title_kr'],
-        //     en: post['title_en']
-        // },
-        date : getDateString(post.date, language)
+        type : post.type,
+        title: {
+            kr: post['title_kr'],
+            en: post['title_en']
+        },
+        date : getDateString(post.date)
     };
     const textContentURL = {
         kr: post['content_kr'],
@@ -92,7 +66,7 @@ export default ({ post }) => {
                     )
                 }
                 <div className={style.PostPageView__text}>
-                    <StaticContent url={textContentURL} />
+                    <StaticContent url={useLanguages(textContentURL)} />
                 </div>
             </div>
             <div className={style.PostPageView__footer}>

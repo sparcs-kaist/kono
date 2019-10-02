@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import queryString from 'query-string';
 import styles from '../styles/LoginPage.module.scss';
