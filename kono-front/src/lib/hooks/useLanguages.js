@@ -1,17 +1,11 @@
 import { useSelector } from 'react-redux';
 
-export default (rawText) => {
+const process = (obj, language) => (
+    obj[language] 
+    || Object.keys(obj).reduce((prev, key) => ({
+        ...prev, 
+        [key]: process(obj[key], language)
+    }), {})
+);
 
-    const language = useSelector(state => state.config.language, []);
-
-    const transcriptedText = {};
-
-    Object.keys(rawText).forEach(
-        (key) => {
-            transcriptedText[key] = rawText[key][language];
-        }
-    );
-
-    return transcriptedText;
-
-};
+export default (text) => process(text, useSelector(state => state.config.language, []));

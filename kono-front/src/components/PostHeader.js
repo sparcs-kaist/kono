@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from '../styles/PostHeader.module.scss';
+import useLanguages from '../lib/hooks/useLanguages';
 
 export default ({ header }) => {
 

@@ -9,6 +9,7 @@ import ImageGridPanel from './ImageGridPanel';
 import FullScreenPanel from './FullScreenPanel';
 import FullScreen from 'react-full-screen';
 import * as FullscreenActions from '../store/modules/fullscreen';
+import useLanguages from '../lib/hooks/useLanguages';
 
 function getTypeString(type, language) {
     switch (language) {
@@ -58,10 +59,16 @@ export default ({ post }) => {
 
     const header = {
         type : getTypeString(post.type, language),
-        title: post[`title_${language}`],
+        // title: {
+        //     kr: post['title_kr'],
+        //     en: post['title_en']
+        // },
         date : getDateString(post.date, language)
     };
-    const textContentURL = post[`content_${language}`];
+    const textContentURL = {
+        kr: post['content_kr'],
+        en: post['content_en']
+    }
     const imgContentURLs = post.content_img;
 
     const showEditButton = (login === 'logged');

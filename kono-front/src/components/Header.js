@@ -53,10 +53,10 @@ export default withRouter(({ history }) => {
                     login && (
                         <>
                             <span className={styles.Header__common_menu}>
-                                관리자 서비스
+                                { text.admin_menu }
                             </span>
                             <span className={styles.Header__common_menu} onClick={onLogout}>
-                                로그아웃
+                                { text.admin_logout }
                             </span>
                         </>
                     )
