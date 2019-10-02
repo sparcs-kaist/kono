@@ -16,10 +16,7 @@ export const list = async (req, res) => {
         return;
     }
 
-    if (startIndex === undefined) {
-        startIndex = 0;
-    }
-    else {
+    if (startIndex !== undefined) {
         if (isNaN(parseInt(startIndex)) || startIndex < 0) {
             res.status(400);
             res.send({ msg: 'invalid start_index' });
@@ -62,7 +59,7 @@ export const list = async (req, res) => {
                 'title_en',
                 'created_time'
             ],
-            startIndex: parseInt(startIndex),
+            startIndex: startIndex ? parseInt(startIndex) : 0,
             maxSize: parseInt(maxSize)
         });
 
