@@ -59,6 +59,7 @@ export default () => {
         fetchPage(currentPage);
     }, [currentPage])
 
+    /* TODO: Add links to image grids (to post page) */
     return (
         <div className={styles.LostFoundPanel}>
             <PanelHeader title="분실물" link="/lostfound"/>
