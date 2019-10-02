@@ -1,13 +1,18 @@
 import React from 'react';
 import styles from '../styles/NoticePanel.module.scss';
+import { Link } from 'react-router-dom';
 import PanelHeader from './PanelHeader';
 import PanelFooter from './PanelFooter';
-import { Link } from 'react-router-dom';
+import Text from '../res/texts/NoticePanel.text.json';
+import useLanguages from '../lib/hooks/useLanguages';
 
 export default ({ posts }) => {
+
+    const text = useLanguages(Text);
+
     return (
         <div className={styles.NoticePanel}>
-            <PanelHeader title="공지사항" link="/notice"/>
+            <PanelHeader title={text.title} link="/notice"/>
             <ul>
                 {
                     posts.map(post => (

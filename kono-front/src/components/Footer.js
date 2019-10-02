@@ -1,13 +1,16 @@
 import React from 'react';
 import styles from '../styles/Footer.module.scss';
-import { ReactComponent as SPARCSLogo } from '../res/sparcs_logo.svg';
-import { ReactComponent as SWCLogo } from '../res/SWC_logo.svg';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ReactComponent as SPARCSLogo } from '../res/icons/sparcs_logo.svg';
+import { ReactComponent as SWCLogo } from '../res/icons/SWC_logo.svg';
+import Text from '../res/texts/Footer.text.json';
+import useLanguages from '../lib/hooks/useLanguages';
 
 export default () => {
 
     const login = useSelector(state => state.auth.login, []);
+    const text = useLanguages(Text);
 
     return (
         <div className={styles.Footer}>
@@ -25,26 +28,26 @@ export default () => {
                 </div>
                 <span className={styles.Footer__menu}>
                     <Link to="/credit">
-                        Credit
+                        { text.credit }
                     </Link>
                 </span>
             </div>
             <span className={styles.Footer__menu}>
                 <a href="https://mit-license.org">
-                    License
+                    { text.license }
                 </a>
             </span>
             {
                     !login && (
                         <span className={styles.Footer__common_menu}>
                             <Link to="/login">
-                                관리자 로그인
+                                { text.admin_login }
                             </Link>
                         </span>
                     )
                 }
             <span className={styles.Footer__common_menu}>
-                Contact
+                { text.contact }
             </span>
         </div>
     )
