@@ -5,11 +5,13 @@ import styles from '../styles/LoginPage.module.scss';
 import Button from './Button';
 import { login } from '../api/auth';
 import * as AuthActions from '../store/modules/auth';
+import Text from '../res/texts/LoginPage.text.json';
+import useLanguages from '../lib/hooks/useLanguages';
 
 const getInitialLoginErrorMsg = (query) => {
     switch (query.state) {
         case 'logout':
-            return '로그아웃 되었습니다. 다시 로그인 해주세요.';
+            return 'errormsg_logout';
         default:
             return '';
     }
@@ -24,6 +26,7 @@ export default ({ location }) => {
     const dispatch = useDispatch();
     const [password, setPassword] = useState('');
     const [loginErrorMsg, setLoginErrorMsg] = useState(getInitialLoginErrorMsg(query));
+    const text = useLanguages(Text);
 
     const onLogin = async () => {
         await login({ password })
@@ -38,21 +41,21 @@ export default ({ location }) => {
                         const { msg } = err.response.data;
                         switch (msg) {
                             case 'password field required':
-                                setLoginErrorMsg('비밀번호를 입력해 주세요.');
+                                setLoginErrorMsg('errormsg_emptypwd');
                                 break;
                             case 'wrong password':
-                                setLoginErrorMsg('비밀번호가 올바르지 않습니다.');
+                                setLoginErrorMsg('errormsg_wrongpwd');
                                 break;
                             case 'server error':
-                                setLoginErrorMsg('서버 에러');
+                                setLoginErrorMsg('errormsg_servererr');
                                 break;
                             default:
-                                setLoginErrorMsg('서버 에러');
+                                setLoginErrorMsg('errormsg_servererr');
                                 break;
                         }
                     }
                     else {
-                        setLoginErrorMsg('서버에 접속할 수 없습니다.');
+                        setLoginErrorMsg('errormsg_connecterr');
                     }
                     
                 }
@@ -62,19 +65,19 @@ export default ({ location }) => {
     return (
         <div className={styles.LoginPage}>
             <div className={styles.LoginPage__header}> 
-                학생복지위원회 관리자용 로그인
+                { text.header }
             </div>
             <input className={styles.LoginPage__input}
                 type="password"
-                placeholder="비밀번호"
+                placeholder={text.input_placeholder}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => { e.keyCode === 13 && onLogin(); }}
             />
             <span className={styles.LoginPage__input_error}>
-                { loginErrorMsg }
+                { text[loginErrorMsg] }
             </span>
             <div className={styles.LoginPage__button}>
-                <Button onClick={onLogin} fillParent>로그인</Button>
+                <Button onClick={onLogin} fillParent>{ text.button }</Button>
             </div>
         </div>
     );

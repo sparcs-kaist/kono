@@ -9,33 +9,9 @@ import ImageGridPanel from './ImageGridPanel';
 import FullScreenPanel from './FullScreenPanel';
 import FullScreen from 'react-full-screen';
 import * as FullscreenActions from '../store/modules/fullscreen';
+import useLanguages from '../lib/hooks/useLanguages';
 
-function getTypeString(type, language) {
-    switch (language) {
-        case 'kr':
-            switch (type) {
-                case 'notice':
-                    return '공지사항';
-                case 'lostfound':
-                    return '분실물';
-                default:
-                    return '게시물';
-            }
-        case 'en':
-            switch (type) {
-                case 'notice':
-                    return 'Notice';
-                case 'lostfound':
-                    return 'Lost & Found';
-                default:
-                    return 'Post';
-            }
-        default:
-            return '';
-    }
-}
-
-function getDateString(date, language) {
+function getDateString(date) {
     return date.toLocaleString('default', {
         year: 'numeric',
         month: '2-digit',
@@ -53,17 +29,22 @@ export default ({ post }) => {
     const dispatch = useDispatch();
 
     const login = useSelector(state => state.auth.login, []);
-    const language = useSelector(state => state.config.language, []);
     const showFullScreen = useSelector(state => state.fullscreen.visible, []);
 
     const onChangeFullScreen = (value) => { dispatch(FullscreenActions.SetVisible(value)); };
 
     const header = {
-        type : getTypeString(type, language),
-        title: language === 'kr' ? title_kr : title_en,
-        date : getDateString(new Date(created_time), language)
+        type,
+        title: {
+            kr: title_kr,
+            en: title_en
+        },
+        date : getDateString(post.date)
     };
-    const textContentURL = language === 'kr' ? content_kr : content_en;
+    const textContentURL = {
+        kr: content_kr,
+        en: content_en
+    }
     const imgContentURLs = content_img;
 
     const showEditButton = (login === 'logged');
@@ -87,7 +68,7 @@ export default ({ post }) => {
                     )
                 }
                 <div className={style.PostPageView__text}>
-                    <StaticContent url={textContentURL} />
+                    <StaticContent url={useLanguages(textContentURL)} />
                 </div>
             </div>
             <div className={style.PostPageView__footer}>

@@ -1,0 +1,34 @@
+{
+    "header": {
+        "kr": "학생복지위원회 관리자용 로그인",
+        "en": "Adminstrator Login"
+    },
+    "input_placeholder": {
+        "kr": "비밀번호",
+        "en": "Enter password"
+    },
+    "button": {
+        "kr": "로그인",
+        "en": "Login"
+    },
+    "errormsg_logout": {
+        "kr": "로그아웃 되었습니다. 다시 로그인 해주세요.",
+        "en": "Succesfully logged out. Please login again."
+    },
+    "errormsg_emptypwd": {
+        "kr": "비밀번호를 입력해 주세요.",
+        "en": "Password is blank."
+    },
+    "errormsg_wrongpwd": {
+        "kr": "비밀번호가 올바르지 않습니다.",
+        "en": "Wrong password."
+    },
+    "errormsg_servererr": {
+        "kr": "서버 에러",
+        "en": "Perhaps something was wrong at the server."
+    },
+    "errormsg_connecterr": {
+        "kr": "서버에 접속할 수 없습니다.",
+        "en": "Cannot connect to the server."
+    }
+}

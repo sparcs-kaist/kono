@@ -4,6 +4,8 @@ import PanelHeader from './PanelHeader';
 import PanelFooter from './PanelFooter';
 import ImageGridPanel from './ImageGridPanel';
 import * as PostAPI from '../api/post';
+import Text from '../res/texts/LostFoundPanel.text.json';
+import useLanguages from '../lib/hooks/useLanguages';
 
 const GRID_ROWS = 2;
 const GRID_COLUMNS = 3;
@@ -59,10 +61,12 @@ export default () => {
         fetchPage(currentPage);
     }, [currentPage])
 
+    const text = useLanguages(Text);
+
     /* TODO: Add links to image grids (to post page) */
     return (
         <div className={styles.LostFoundPanel}>
-            <PanelHeader title="분실물" link="/lostfound"/>
+            <PanelHeader title={text.title} link="/lostfound"/>
             <ImageGridPanel 
                 gridNumRows={GRID_ROWS}
                 gridNumColumns={GRID_COLUMNS}

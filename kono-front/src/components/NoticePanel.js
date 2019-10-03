@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import styles from '../styles/NoticePanel.module.scss';
 import PanelHeader from './PanelHeader';
 import PanelFooter from './PanelFooter';
-import { Link } from 'react-router-dom';
 import * as PostAPI from '../api/post';
+import Text from '../res/texts/NoticePanel.text.json';
+import useLanguages from '../lib/hooks/useLanguages';
 
 const NOTICE_PAGINATION = 8;
 
@@ -14,6 +16,7 @@ export default () => {
     const [numNotices, setNumNotices] = useState(0);
     const [notices, setNotices] = useState([]);
     const language = useSelector(state => state.config.language, []);
+    const text = useLanguages(Text);
 
     const numPages = Math.max(1, Math.ceil(numNotices / NOTICE_PAGINATION));
 
@@ -42,7 +45,7 @@ export default () => {
 
     return (
         <div className={styles.NoticePanel}>
-            <PanelHeader title="공지사항" link="/notice"/>
+            <PanelHeader title={text.title} link="/notice"/>
             <ul>
                 {
                     notices.map(({
