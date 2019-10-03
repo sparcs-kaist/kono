@@ -3,8 +3,8 @@ extern "C" {
   #include "wpa2_enterprise.h"
 }
 static const char *ssid     = "Welcome_KAIST";
-static const char *username = "maxkim139";
-static const char *password = "Rlaxodnjs1013!";
+static const char *username = "";
+static const char *password = "";
 void setup() {
   pinMode(D8, OUTPUT);
   Serial.begin(115200);
