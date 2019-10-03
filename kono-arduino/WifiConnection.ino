@@ -63,9 +63,9 @@ void loop() {
   Serial.print("Wi-Fi Status: ");
   Serial.println(WiFi.status());
   if(WiFi.status()==3){
-    digitalWrite(D8, HIGH);
+    digitalWrite(D8, HIGH);//Increase brightness when connected
   }else{
-    digitalWrite(D8,LOW);
+    digitalWrite(D8,LOW);//Decrease brightness when not connected
   }
   delay(5000);
   
