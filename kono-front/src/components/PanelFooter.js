@@ -3,16 +3,19 @@ import styles from '../styles/PanelFooter.module.scss';
 import classnames from '../lib/classnames';
 import MaterialIcon from './MaterialIcon';
 
+const MAX_PAGES_SHOW = 5;
+
 export default ({ 
-    currentPage, pagination, lastPage,
+    currentPage, 
+    numPages,
     onClickPage
 }) => {
 
-    if (!currentPage || !pagination || !lastPage)
+    if (!currentPage || !numPages)
         return null;
 
-    const startPage = Math.max(1, currentPage - Math.floor(.5 * pagination));
-    const endPage   = Math.min(lastPage, startPage + pagination - 1);
+    const startPage = Math.max(1, currentPage - Math.floor(.5 * MAX_PAGES_SHOW));
+    const endPage   = Math.min(numPages, startPage + MAX_PAGES_SHOW - 1);
     const pages     = [...Array(endPage - startPage + 1).keys()].map(x => x + startPage);
 
     return (
@@ -43,7 +46,7 @@ export default ({
                 })
             }
             {
-                endPage < lastPage ? (
+                endPage < numPages ? (
                     <div
                         className={styles.PanelFooter__link}
                         onClick={() => onClickPage(currentPage + 1)}

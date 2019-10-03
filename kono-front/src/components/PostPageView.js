@@ -21,7 +21,9 @@ function getDateString(date) {
 
 export default ({ post }) => {
 
-    if (!post)
+    const { sid, type, title_kr, title_en, created_time, content_kr, content_en, content_img } = post;
+
+    if (!sid)
         return null;
 
     const dispatch = useDispatch();
@@ -32,18 +34,18 @@ export default ({ post }) => {
     const onChangeFullScreen = (value) => { dispatch(FullscreenActions.SetVisible(value)); };
 
     const header = {
-        type : post.type,
+        type,
         title: {
-            kr: post['title_kr'],
-            en: post['title_en']
+            kr: title_kr,
+            en: title_en
         },
         date : getDateString(post.date)
     };
     const textContentURL = {
-        kr: post['content_kr'],
-        en: post['content_en']
+        kr: content_kr,
+        en: content_en
     }
-    const imgContentURLs = post.content_img;
+    const imgContentURLs = content_img;
 
     const showEditButton = (login === 'logged');
     const showImageThumbnails = (imgContentURLs && imgContentURLs.length > 0);
