@@ -14,9 +14,25 @@ const getTypeSelector = (type) => {
     }
 }
 
-export default ({ header }) => {
+function getDateString(date) {
+    return date.toLocaleString('default', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+}
 
-    const { type, title, date } = header;
+export default (
+    {
+        type = 'post',
+        title = {
+            kr: '(제목 없음)',
+            en: '(No Title)'
+        },
+        date = new Date()
+    }
+) => {
+
     const titleTranscripted = useLanguages(title);
     const text = useLanguages(Text);
 
@@ -25,7 +41,7 @@ export default ({ header }) => {
             <h1>{ titleTranscripted }</h1>
             <div className={styles.PostHeader__tags}>
                 <span><b>{ text[getTypeSelector(type)] }</b></span>
-                <span>{ date }</span>
+                <span>{ getDateString(date) }</span>
             </div>
         </div>
     )

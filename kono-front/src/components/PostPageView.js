@@ -11,14 +11,6 @@ import FullScreen from 'react-full-screen';
 import * as FullscreenActions from '../store/modules/fullscreen';
 import useLanguages from '../lib/hooks/useLanguages';
 
-function getDateString(date) {
-    return date.toLocaleString('default', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    });
-}
-
 export default ({ post }) => {
 
     const { sid, type, title_kr, title_en, created_time, content_kr, content_en, content_img } = post;
@@ -33,26 +25,16 @@ export default ({ post }) => {
 
     const onChangeFullScreen = (value) => { dispatch(FullscreenActions.SetVisible(value)); };
 
-    const header = {
-        type,
-        title: {
-            kr: title_kr,
-            en: title_en
-        },
-        date : getDateString(post.date)
-    };
-    const textContentURL = {
-        kr: content_kr,
-        en: content_en
-    }
-    const imgContentURLs = content_img;
-
     const showEditButton = (login === 'logged');
-    const showImageThumbnails = (imgContentURLs && imgContentURLs.length > 0);
+    const showImageThumbnails = (content_img && content_img.length > 0);
 
     return (
         <div className={style.PostPageView}>
-            <PostHeader header={header} />
+            <PostHeader
+                type={type}
+                title={{ kr: title_kr, en: title_en }}
+                date={new Date(created_time)}
+            />
             <div className={style.PostPageView__content}>
                 {
                     showImageThumbnails && (
@@ -61,14 +43,14 @@ export default ({ post }) => {
                                 gridNumRows={1}
                                 gridNumColumns={3}
                                 totalWidthPixels={800}
-                                imageURLs={imgContentURLs} 
+                                imageURLs={content_img} 
                                 useDynamicPositioning 
                                 useOnClick />
                         </div>
                     )
                 }
                 <div className={style.PostPageView__text}>
-                    <StaticContent url={useLanguages(textContentURL)} />
+                    <StaticContent url={useLanguages({ kr: content_kr, en: content_en })} />
                 </div>
             </div>
             <div className={style.PostPageView__footer}>
