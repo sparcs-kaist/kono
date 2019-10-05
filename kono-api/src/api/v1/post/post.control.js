@@ -1,5 +1,5 @@
 import * as Post from '../../../db/models/post';
-import { retrieve as imageRetrieve } from '../../../db/models/image';
+import * as Image from '../../../db/models/image';
 
 export const list = async (req, res) => {
 
@@ -84,15 +84,12 @@ export const single = async (req, res) => {
             return;
         }
 
-        const { deleted, ...data } = post;
-
-        const contentImages = await imageRetrieve({
-            filter: { post_sid: post.sid },
-            select: [
-                'url'
-            ],
-            maxSize: 64
+        const contentImages = await Image.select({
+            filter: { post_sid: SID },
+            select: [ 'url' ]
         }).then(rows => rows.map(row => row.url));
+
+        const { deleted, ...data } = post;
 
         res.status(200);
         res.send({ 
