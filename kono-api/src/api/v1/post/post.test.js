@@ -201,7 +201,6 @@ describe('Testing GET /api/v1/post/:sid ...', () => {
     });
 
     describe('Error handling.', () => {
-        it('Invalid sid (3.6)', testInvalidSID(3.6));
         it('Invalid sid (-5)', testInvalidSID(-5));
     });
 
