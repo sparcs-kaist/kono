@@ -1,5 +1,3 @@
-var TerserPlugin = require('terser-webpack-plugin');
-
 module.exports = {
     mode: 'production',
     entry: './src/index.js',
@@ -11,15 +9,9 @@ module.exports = {
         rules: [
             {
                 test: /.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader'
-                }
+                exclude: /node_modules/
             }
         ]
     },
-    target: 'node',
-    optimization: {
-        minimizer: [new TerserPlugin({ terserOptions: { mangle: false } })]
-    }
+    target: 'node'
 }
