@@ -6,14 +6,18 @@ export const count = async (req, res) => {
     /* Fire database query. */
     try {
 
-        const count = await Post.select({
-            filter: { deleted: false },
-            select: [ Post.count('sid'), 'type' ],
-            group: 'type'
-        });
+        const data = {};
+        await Post.select({
+                filter: { deleted: false },
+                select: [ Post.count('sid'), 'type' ],
+                group: 'type'
+            })
+            .then(result => {
+                result.forEach(({ [Post.count('sid')]: count, type }) => data[type] = count);
+            });
 
         res.status(200);
-        res.send(count);
+        res.send(data);
 
     } catch (e) {
         console.log(e);
@@ -58,10 +62,6 @@ export const list = async (req, res) => {
     /* Fire database query. */
     try {
 
-        const size = await Post.select({
-            filter: { deleted: false, type: FILTER_TYPE },
-            select: ['COUNT(*)']
-        }).then(row => row[0]['COUNT(*)']);
         const posts = await Post.select({
             limit: { min: START_INDEX, length: MAX_SIZE },
             filter: { deleted: false, type: FILTER_TYPE },
@@ -70,7 +70,7 @@ export const list = async (req, res) => {
         });
 
         res.status(200);
-        res.send({ size, posts });
+        res.send(posts);
 
     } catch (e) {
         console.log(e);

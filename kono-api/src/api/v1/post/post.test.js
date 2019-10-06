@@ -210,6 +210,7 @@ describe('Testing GET /api/v1/post/count ...', () => {
                 expect(res.body.notice).to.be.at.least(0);
                 expect(res.body.lostfound).to.be.a('number');
                 expect(res.body.lostfound).to.be.at.least(0);
+                done();
             })
             .catch(err => {
                 done(err);
