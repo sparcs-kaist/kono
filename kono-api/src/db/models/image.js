@@ -15,8 +15,11 @@ const imageModel = createModel('image', [
         key: 'post_sid',
         type: 'integer',
         nullable: false,
-        verifier(post_sid) { return post_sid >= 0; }
+        verifier(post_sid) { return post_sid >= 0; },
+        fk: 'post.sid'
     }
 ]);
 
-export const select = (query) => imageModel.select(query);
+Object.keys(imageModel).forEach(key => {
+    module.exports[key] = (...args) => imageModel[key](...args);
+});

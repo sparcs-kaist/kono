@@ -41,5 +41,6 @@ const postModel = createModel('post', [
     }
 ]);
 
-export const count = (column) => postModel.count(column);
-export const select = (query) => postModel.select(query);
+Object.keys(postModel).forEach(key => {
+    module.exports[key] = (...args) => postModel[key](...args);
+});

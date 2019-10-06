@@ -3,7 +3,7 @@ import db from '..';
 /**
  * Creates a model representing a table.
  * @param {string} name
- * @param {{key: string, type: string, nullable: boolean, verifier: function}[]} columns
+ * @param {{key: string, type: string, nullable: boolean, verifier: function, fk: string}[]} columns
  */
 export const createModel = (name, columns) => {
 
@@ -13,7 +13,8 @@ export const createModel = (name, columns) => {
         key: column.key,
         type: column.type,
         nullable: column.nullable !== undefined ? column.nullable : true,
-        verifier: column.verifier || (x => true)
+        verifier: column.verifier || (x => true),
+        fk: column.fk
     }));
 
     _columns.forEach(column => {
@@ -70,18 +71,18 @@ export const createModel = (name, columns) => {
                 .filter(el => filter[el] !== undefined)
                 .map(el => {
                     if (filter[el] === null)
-                        return `${_name}.${el} IS NULL`;
+                        return `${this.column(el)} IS NULL`;
                     switch (_model[el].type) {
                         case 'number':
-                            return `${_name}.${el} = ${filter[el]}`;
+                            return `${this.column(el)} = ${filter[el]}`;
                         case 'string':
-                            return `${_name}.${el} = \"${filter[el]}\"`;
+                            return `${this.column(el)} = \"${filter[el]}\"`;
                         case 'boolean':
-                            return `${_name}.${el} = ${filter[el] ? 1 : 0}`;
+                            return `${this.column(el)} = ${filter[el] ? 1 : 0}`;
                         case 'object':
                             switch (_model[el]._detailedType) {
                                 case 'Date':
-                                    return `${_name}.${el} = ${filter[el].getTime()}`
+                                    return `${this.column(el)} = ${filter[el].getTime()}`
                                 default:
                                     return '';
                             }
@@ -130,7 +131,7 @@ export const createModel = (name, columns) => {
             this.verifySort(sort);
             if (sort === undefined)
                 return '';
-            return ` ORDER BY ${_name}.${sort.by} ${sort.order || ''} `
+            return ` ORDER BY ${this.column(sort.by)} ${sort.order || ''} `
         },
         verifySelect(select) {
             if (select === undefined)
@@ -140,6 +141,8 @@ export const createModel = (name, columns) => {
                     return;
                 if (el.match(/COUNT\((.+)\)$/))
                     return;
+                if (el === this.allColumns())
+                    return;
 
                 throw new Error(`invalid value for select: got ${el}`);
             });
@@ -147,13 +150,13 @@ export const createModel = (name, columns) => {
         selectString(select) {
             this.verifySelect(select);
             if (select === undefined)
-                return ` SELECT * `
+                return ` SELECT ${_name}.* `
             return ` SELECT ${
                 select
                     .map(el => {
                         if (el.match(/COUNT\((.+)\)$/))
                             return `${el}`;
-                        return `${_name}.${el}`
+                        return `${this.column(el)}`
                     })
                     .join(', ')
             } `;
@@ -170,17 +173,19 @@ export const createModel = (name, columns) => {
             this.verifyGroup(group);
             if (group === undefined)
                 return '';
-            return ` GROUP BY ${_name}.${group} `;  
+            return ` GROUP BY ${this.column(group)} `;  
         },
-        count(column) {
-            if (!_model[column])
-                throw new Error(`invalid value for column: got ${column}`);
-            return `COUNT(${_name}.${column})`;
+        count(el) {
+            if (!_model[el])
+                throw new Error(`invalid column name: got ${el}`);
+            return `COUNT(${this.column(el)})`;
         },
         select(query) {
-            const { filter, select, limit, sort, group } = query || {};
+            const { filter, select, limit, sort, group, join } = query || {};
             const fn = this.selectString(select)
+                + (join ? ', ' + join.map(e => e.selectString).join(' ') : '')
                 + ` FROM ${_name} `
+                + (join ? join.map(e => e.joinString).join(' ') : '')
                 + this.filterString(filter)
                 + this.groupString(group)
                 + this.sortString(sort)
@@ -188,6 +193,21 @@ export const createModel = (name, columns) => {
                 + ';';
             console.log(`${_name}.select: ` + fn);
             return db.query(fn);
+        },
+        innerJoin({ on, select }) {
+            if (!_model[on])
+                throw new Error(`invalid column name: got ${on}`);
+            if (!_model[on].fk)
+                throw new Error(`column ${on} does not have a foriegn key`);
+            return {
+                joinString: ` INNER JOIN ${_name} ON ${this.column(on)} = ${_model[on].fk} `,
+                selectString: select.map(el => this.column(el)).join(' ')
+            };
+        },
+        column(el) {
+            if (!_model[el])
+                throw new Error(`invalid column name: got ${el}`);
+            return `${_name}.${el}`;
         }
     };
 };

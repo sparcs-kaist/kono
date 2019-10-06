@@ -95,30 +95,30 @@ export const single = async (req, res) => {
     /* Fire database query. */
     try {
 
-        const [post] = await Post.select({
-            filter: { sid: SID },
-            limit: { length: 1 }
-        });
+        const post = await Post.select({
+                filter: { sid: SID },
+                join: [ Image.innerJoin({ on: 'post_sid', select: [ 'url' ] }) ]
+            })
+            .then(result => {
+                if (result.length === 0)
+                    return null;
+                const { url, deleted, ...row } = result[0];
+                if (deleted === 1)
+                    return null;
+                return {
+                    ...row,
+                    content_img: result.map(row => row.url)
+                };
+            });
 
-        if (!post || post.deleted === 1) {
+        if (post) {
+            res.status(200);
+            res.send(post);
+        }
+        else {
             res.status(404);
             res.send({ msg: 'post does not exist' });
-            return;
         }
-
-        const contentImages = await Image.select({
-            filter: { post_sid: SID },
-            select: [ 'url' ]
-        }).then(rows => rows.map(row => row.url));
-
-        const { deleted, ...data } = post;
-
-        res.status(200);
-        res.send({ 
-            ...data, 
-            'content_img': contentImages
-        });
-
     } catch (e) {
         console.log(e);
         res.status(500);
