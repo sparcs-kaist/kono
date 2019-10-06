@@ -10,13 +10,9 @@ describe('Testing GET /api/v1/post ...', () => {
             .query(query)
             .then(res => {
                 expect(res).status(200);
-                expect(res.body).to.have.keys(['size', 'posts']);
-                const { size, posts } = res.body;
-                expect(size).to.be.a('number');
-                expect(size).to.be.least(0);
-                expect(posts).to.be.a('array');
-                expect(posts).to.have.lengthOf.most(max_size);
-                posts.forEach(post => {
+                expect(res.body).to.be.a('array');
+                expect(res.body).to.have.lengthOf.most(max_size);
+                res.body.forEach(post => {
                     expect(post).to.have.keys(['sid', 'title_kr', 'title_en', 'created_time', 'type']);
                     const { sid, type, title_kr, title_en, created_time } = post;
                     expect(sid).to.be.a('number');
@@ -40,13 +36,9 @@ describe('Testing GET /api/v1/post ...', () => {
             .query(query)
             .then(res => {
                 expect(res).status(200);
-                expect(res.body).to.have.keys(['size', 'posts']);
-                const { size, posts } = res.body;
-                expect(size).to.be.a('number');
-                expect(size).to.be.least(0);
-                expect(posts).to.be.a('array');
-                expect(posts).to.have.lengthOf.most(max_size);
-                posts.forEach(post => {
+                expect(res.body).to.be.a('array');
+                expect(res.body).to.have.lengthOf.most(max_size);
+                res.body.forEach(post => {
                     expect(post).to.have.keys(['sid', 'title_kr', 'title_en', 'created_time', 'type']);
                     const { sid, type, title_kr, title_en, created_time } = post;
                     expect(sid).to.be.a('number');
@@ -202,6 +194,30 @@ describe('Testing GET /api/v1/post/:sid ...', () => {
 
     describe('Error handling.', () => {
         it('Invalid sid (-5)', testInvalidSID(-5));
+    });
+
+});
+
+describe('Testing GET /api/v1/post/count ...', () => {
+
+    const testGeneralCase = () => (done) => {
+        request(apiURL)
+            .get('/api/v1/post/count')
+            .then(res => {
+                expect(res).to.have.status(200);
+                expect(res.body).to.have.keys(['notice', 'lostfound']);
+                expect(res.body.notice).to.be.a('number');
+                expect(res.body.notice).to.be.at.least(0);
+                expect(res.body.lostfound).to.be.a('number');
+                expect(res.body.lostfound).to.be.at.least(0);
+            })
+            .catch(err => {
+                done(err);
+            });
+    };
+
+    describe('General case.', () => {
+        it('Test case 1', testGeneralCase());
     });
 
 });

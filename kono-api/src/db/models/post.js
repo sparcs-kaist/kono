@@ -41,8 +41,5 @@ const postModel = createModel('post', [
     }
 ]);
 
-/**
-  * 
-  * @param {{filter: object, select: [string], limit: {min: number, length: number}[], sort: {by: string, order: string}}} query 
-  */
+export const count = (column) => postModel.count(column);
 export const select = (query) => postModel.select(query);

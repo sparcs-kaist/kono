@@ -138,7 +138,7 @@ export const createModel = (name, columns) => {
             select.forEach(el => {
                 if (_model[el])
                     return;
-                if (el === 'COUNT(*)')
+                if (el.match(/COUNT\((.+)\)$/))
                     return;
 
                 throw new Error(`invalid value for select: got ${el}`);
@@ -164,11 +164,17 @@ export const createModel = (name, columns) => {
                 return '';
             return ` GROUP BY ${group} `;  
         },
+        count(column) {
+            if (!_model[column])
+                throw new Error(`invalid value for column: got ${column}`);
+            return `COUNT(${column})`;
+        },
         select(query) {
-            const { filter, select, limit, sort } = query || {};
+            const { filter, select, limit, sort, group } = query || {};
             const fn = this.selectString(select)
                 + ` FROM ${_name} `
                 + this.filterString(filter)
+                + this.groupString(group)
                 + this.sortString(sort)
                 + this.limitString(limit)
                 + ';';

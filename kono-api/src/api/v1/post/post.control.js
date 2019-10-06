@@ -1,6 +1,28 @@
 import * as Post from '../../../db/models/post';
 import * as Image from '../../../db/models/image';
 
+export const count = async (req, res) => {
+
+    /* Fire database query. */
+    try {
+
+        const count = await Post.select({
+            filter: { deleted: false },
+            select: [ Post.count('sid'), 'type' ],
+            group: 'type'
+        });
+
+        res.status(200);
+        res.send(count);
+
+    } catch (e) {
+        console.log(e);
+        res.status(500);
+        res.send({ msg: 'server error' });
+    }
+
+}
+
 export const list = async (req, res) => {
 
     const { filter_type = undefined, start_index = 0, max_size } = req.query;

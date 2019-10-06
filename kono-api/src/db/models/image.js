@@ -19,8 +19,4 @@ const imageModel = createModel('image', [
     }
 ]);
 
-/**
-  * 
-  * @param {{filter: object, select: [string], limit: {min: number, length: number}[], sort: {by: string, order: string}}} query 
-  */
 export const select = (query) => imageModel.select(query);
