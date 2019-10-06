@@ -122,9 +122,9 @@ export const createModel = (name, columns) => {
             if (!sort.by)
                 throw new Error(`by is required for sort`);
             if (!_model[sort.by])
-                throw new Error(`invalid column for sort: ${sort.by}`);
+                throw new Error(`invalid column for sort: got ${sort.by}`);
             if (sort.order && (sort.order !== 'ASC' && sort.order !== 'DESC'))
-                throw new Error(`invalid value for order: ${sort.order}`);
+                throw new Error(`invalid value for order: got ${sort.order}`);
         },
         sortString(sort) {
             this.verifySort(sort);
@@ -141,7 +141,7 @@ export const createModel = (name, columns) => {
                 if (el === 'COUNT(*)')
                     return;
 
-                throw new Error(`invalid element for select: ${el}`);
+                throw new Error(`invalid value for select: got ${el}`);
             });
         },
         selectString(select) {
@@ -149,6 +149,20 @@ export const createModel = (name, columns) => {
             if (select === undefined)
                 return ` SELECT * `
             return ` SELECT ${select.join(', ')} `;
+        },
+        verifyGroup(group) {
+            if (group === undefined)
+                return;
+            if (typeof group !== 'string')
+                throw new Error(`invalid type for group: should be string`);
+            if (!_model[group])
+                throw new Error(`invalid value for group: got ${group}`);
+        },
+        groupString(group) {
+            this.verifyGroup(group);
+            if (group === undefined)
+                return '';
+            return ` GROUP BY ${group} `;  
         },
         select(query) {
             const { filter, select, limit, sort } = query || {};
