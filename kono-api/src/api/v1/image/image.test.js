@@ -201,4 +201,25 @@ describe('Testing GET /api/v1/image ...', () => {
 
 describe('Testing GET /api/v1/image/count ...', () => {
 
+    const testGeneralCase = () => (done) => {
+        request(apiURL)
+            .get('/api/v1/image/count')
+            .then(res => {
+                expect(res).to.have.status(200);
+                expect(res.body).to.have.keys(['notice', 'lostfound']);
+                expect(res.body.notice).to.be.a('number');
+                expect(res.body.notice).to.be.at.least(0);
+                expect(res.body.lostfound).to.be.a('number');
+                expect(res.body.lostfound).to.be.at.least(0);
+                done();
+            })
+            .catch(err => {
+                done(err);
+            });
+    };
+
+    describe('General case.', () => {
+        it('Test case 1', testGeneralCase());
+    });
+
 });
