@@ -25,5 +25,6 @@ describe(`Running tests for kono-api ${NODE_ENV} server.`, () => {
 
     importTest('../routes.test');
     importTest('../api/v1/post/post.test');
+    importTest('../api/v1/image/image.test');
 
 });
