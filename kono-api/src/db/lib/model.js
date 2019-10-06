@@ -70,18 +70,18 @@ export const createModel = (name, columns) => {
                 .filter(el => filter[el] !== undefined)
                 .map(el => {
                     if (filter[el] === null)
-                        return `${el} IS NULL`;
+                        return `${_name}.${el} IS NULL`;
                     switch (_model[el].type) {
                         case 'number':
-                            return `${el} = ${filter[el]}`;
+                            return `${_name}.${el} = ${filter[el]}`;
                         case 'string':
-                            return `${el} = \"${filter[el]}\"`;
+                            return `${_name}.${el} = \"${filter[el]}\"`;
                         case 'boolean':
-                            return `${el} = ${filter[el] ? 1 : 0}`;
+                            return `${_name}.${el} = ${filter[el] ? 1 : 0}`;
                         case 'object':
                             switch (_model[el]._detailedType) {
                                 case 'Date':
-                                    return `${el} = ${filter[el].getTime()}`
+                                    return `${_name}.${el} = ${filter[el].getTime()}`
                                 default:
                                     return '';
                             }
@@ -130,7 +130,7 @@ export const createModel = (name, columns) => {
             this.verifySort(sort);
             if (sort === undefined)
                 return '';
-            return ` ORDER BY ${sort.by} ${sort.order || ''} `
+            return ` ORDER BY ${_name}.${sort.by} ${sort.order || ''} `
         },
         verifySelect(select) {
             if (select === undefined)
@@ -148,7 +148,15 @@ export const createModel = (name, columns) => {
             this.verifySelect(select);
             if (select === undefined)
                 return ` SELECT * `
-            return ` SELECT ${select.join(', ')} `;
+            return ` SELECT ${
+                select
+                    .map(el => {
+                        if (el.match(/COUNT\((.+)\)$/))
+                            return `${el}`;
+                        return `${_name}.${el}`
+                    })
+                    .join(', ')
+            } `;
         },
         verifyGroup(group) {
             if (group === undefined)
@@ -162,12 +170,12 @@ export const createModel = (name, columns) => {
             this.verifyGroup(group);
             if (group === undefined)
                 return '';
-            return ` GROUP BY ${group} `;  
+            return ` GROUP BY ${_name}.${group} `;  
         },
         count(column) {
             if (!_model[column])
                 throw new Error(`invalid value for column: got ${column}`);
-            return `COUNT(${column})`;
+            return `COUNT(${_name}.${column})`;
         },
         select(query) {
             const { filter, select, limit, sort, group } = query || {};
