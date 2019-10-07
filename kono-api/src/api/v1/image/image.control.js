@@ -66,7 +66,32 @@ export const list = async (req, res) => {
 
 export const count = async (req, res) => {
 
-    res.status(200);
-    res.send({ msg: 'GET /api/v1/image/count' });
+    try {
+
+        const data = {};
+        await Post.select({
+                select: [ Post.column('type') ],
+                where: [ Post.where(Post.column('deleted'), false) ],
+                group: Post.column('type'),
+                join: [ Image.innerJoin({
+                    on: Image.column('post_sid'),
+                    select: [ Image.count(Image.column('sid')) ]
+                }) ]
+            })
+            .then(result => {
+                result.forEach(({ 
+                    [Image.count(Image.column('sid')).selectorString]: count, 
+                    type 
+                }) => { data[type] = count; });
+            });
+
+        res.status(200);
+        res.send(data);
+
+    } catch(e) {
+        console.log(e);
+        res.status(500);
+        res.send({ msg: 'server error' });
+    }
 
 }
