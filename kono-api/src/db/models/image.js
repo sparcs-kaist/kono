@@ -1,6 +1,6 @@
 import { createModel } from '../lib/model';
 
-const imageModel = createModel('image', [
+export default createModel('image', [
     {
         key: 'sid',
         type: 'integer',
@@ -19,7 +19,3 @@ const imageModel = createModel('image', [
         fk: 'post.sid'
     }
 ]);
-
-Object.keys(imageModel).forEach(key => {
-    module.exports[key] = (...args) => imageModel[key](...args);
-});

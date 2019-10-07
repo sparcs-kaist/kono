@@ -1,6 +1,6 @@
 import { createModel } from '../lib/model';
 
-const postModel = createModel('post', [
+export default createModel('post', [
     {
         key: 'sid',
         type: 'integer',
@@ -40,7 +40,3 @@ const postModel = createModel('post', [
         nullable: false
     }
 ]);
-
-Object.keys(postModel).forEach(key => {
-    module.exports[key] = (...args) => postModel[key](...args);
-});

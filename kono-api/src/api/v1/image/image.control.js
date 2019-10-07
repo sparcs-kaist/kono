@@ -1,5 +1,5 @@
-import * as Post from '../../../db/models/post';
-import * as Image from '../../../db/models/image';
+import Post from '../../../db/models/post';
+import Image from '../../../db/models/image';
 
 export const list = async (req, res) => {
 
