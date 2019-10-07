@@ -3,7 +3,7 @@ import db from '..';
 /**
  * Creates a model representing a table.
  * @param {string} name
- * @param {{key: string, type: string, nullable: boolean, verifier: function}[]} columns
+ * @param {{key: string, type: string, nullable: boolean, verifier: function, fk: string}[]} columns
  */
 export const createModel = (name, columns) => {
 
@@ -13,7 +13,9 @@ export const createModel = (name, columns) => {
         key: column.key,
         type: column.type,
         nullable: column.nullable !== undefined ? column.nullable : true,
-        verifier: column.verifier || (x => true)
+        verifier: column.verifier || (x => true),
+        fk: column.fk,
+        selectorString: `${_name}.${column.key}`
     }));
 
     _columns.forEach(column => {
@@ -35,61 +37,55 @@ export const createModel = (name, columns) => {
 
     const _model = {};
     _columns.forEach(column => {
-        const { key, ...props } = column;
-        _model[key] = props;
+        _model[column.key] = column;
     });
 
     return {
-        verifyFilter(filter) {
-            if (filter === undefined)
-                return;
-            Object.keys(filter).forEach(el => {
+        where(column, value) {
+            const { key, type, nullable, verifier, _detailedType, _detailedTypeVerifier, selectorString } = column;
+            if (!_model[key])
+                throw new Error(`invalid column name: ${key}`);
 
-                if (!_model[el])
-                    throw new Error(`invalid column name: ${el}`);
-
-                if (filter[el] === undefined)
-                    return;
-
-                const { type, nullable, verifier, _detailedType, _detailedTypeVerifier } = _model[el];
+            if (value === undefined)
+                return { filterString: null };
+            
+            if (typeof value !== type && (!nullable || value !== null))
+                throw new Error(`invalid type for ${key}: should be ${type}`);
+            if (_detailedTypeVerifier && !_detailedTypeVerifier(value))
+                throw new Error(`invalid type for ${key}: should be ${_detailedType}`)
+            if (!verifier(value))
+                throw new Error(`invalid value for ${key}: got ${value}`);
                 
-                if (typeof filter[el] !== type && (!nullable || filter[el] !== null))
-                    throw new Error(`invalid type for ${el}: should be ${type}`);
-                if (_detailedTypeVerifier && !_detailedTypeVerifier(filter[el]))
-                    throw new Error(`invalid type for ${el}: should be ${_detailedType}`)
-                if (!verifier(filter[el]))
-                    throw new Error(`invalid value for ${el}: got ${filter[el]}`);
-
-            });
-        },
-        filterString(filter) {
-            this.verifyFilter(filter);
-            if (filter === undefined)
-                return '';
-            return ' WHERE ' + Object.keys(filter)
-                .filter(el => filter[el] !== undefined)
-                .map(el => {
-                    if (filter[el] === null)
-                        return `${el} IS NULL`;
-                    switch (_model[el].type) {
+            return {
+                filterString: `${selectorString} = ${(() => {
+                    switch (type) {
                         case 'number':
-                            return `${el} = ${filter[el]}`;
+                            return `${value}`;
                         case 'string':
-                            return `${el} = \"${filter[el]}\"`;
+                            return `\"${value}\"`;
                         case 'boolean':
-                            return `${el} = ${filter[el] ? 1 : 0}`;
+                            return `${value ? 1 : 0}`;
                         case 'object':
-                            switch (_model[el]._detailedType) {
+                            switch (_detailedType) {
                                 case 'Date':
-                                    return `${el} = ${filter[el].getTime()}`
+                                    return `${value.getTime()}`
                                 default:
-                                    return '';
+                                    throw new Error(`Not supported type: ${type}`);
                             }
                         default:
-                            return '';
+                            throw new Error(`Not supported type: ${type}`);
                     }
-                })
-                .join(' AND ');
+                })()}`
+            };
+        },
+        whereString(wheres) {
+            if (wheres === undefined)
+                return '';
+            return ' WHERE '
+                + wheres
+                    .filter(where => !!where.filterString)
+                    .map(where => where.filterString)
+                    .join(' AND ');
         },
         verifyLimit(limit) {
             if (limit === undefined)
@@ -116,50 +112,71 @@ export const createModel = (name, columns) => {
                 return ` LIMIT 64 `;
             return ` LIMIT ${limit.min || 0}, ${limit.length} `;
         },
-        verifySort(sort) {
-            if (sort === undefined)
-                return;
-            if (!sort.by)
-                throw new Error(`by is required for sort`);
-            if (!_model[sort.by])
-                throw new Error(`invalid column for sort: ${sort.by}`);
-            if (sort.order && (sort.order !== 'ASC' && sort.order !== 'DESC'))
-                throw new Error(`invalid value for order: ${sort.order}`);
-        },
         sortString(sort) {
-            this.verifySort(sort);
             if (sort === undefined)
                 return '';
-            return ` ORDER BY ${sort.by} ${sort.order || ''} `
+            if (!sort.by)
+                throw new Error(`by is required for sort`);
+            if (!sort.by.selectorString)
+                throw new Error(`use column() method to define columns`);
+            if (sort.order && (sort.order !== 'ASC' && sort.order !== 'DESC'))
+                throw new Error(`invalid value for order: got ${sort.order}`);
+            return ` ORDER BY ${sort.by.selectorString} ${sort.order || ''} `
         },
-        verifySelect(select) {
-            if (select === undefined)
-                return;
-            select.forEach(el => {
-                if (_model[el])
-                    return;
-                if (el === 'COUNT(*)')
-                    return;
-
-                throw new Error(`invalid element for select: ${el}`);
-            });
+        selectString(selects) {
+            if (selects === undefined)
+                return ` SELECT ${_name}.* `
+            return ` SELECT ${
+                selects
+                    .map(select => {
+                        if (!select.selectorString)
+                            throw new Error(`use column() method to define columns`);
+                        return select.selectorString;
+                    })
+                    .join(', ')
+            } `;
         },
-        selectString(select) {
-            this.verifySelect(select);
-            if (select === undefined)
-                return ` SELECT * `
-            return ` SELECT ${select.join(', ')} `;
+        groupString(group) {
+            if (group === undefined)
+                return '';
+            if (!group.selectorString)
+                throw new Error(`use column() method to define columns`);
+            return ` GROUP BY ${group.selectorString} `;  
+        },
+        count(column) {
+            return {
+                selectorString: `COUNT(${column.selectorString})`
+            }
         },
         select(query) {
-            const { filter, select, limit, sort } = query || {};
+            const { where, select, limit, sort, group, join } = query || {};
             const fn = this.selectString(select)
+                + (join ? (select.length > 0 ? ', ' : '') + join.map(e => e.selectString).join(' ') : '')
                 + ` FROM ${_name} `
-                + this.filterString(filter)
+                + (join ? join.map(e => e.joinString).join(' ') : '')
+                + this.whereString(where)
+                + this.groupString(group)
                 + this.sortString(sort)
                 + this.limitString(limit)
                 + ';';
             console.log(`${_name}.select: ` + fn);
             return db.query(fn);
+        },
+        innerJoin({ on, select }) {
+            if (!on.fk)
+                throw new Error(`column ${on.key} does not have a foriegn key`);
+            return {
+                joinString: ` INNER JOIN ${_name} ON ${on.selectorString} = ${on.fk} `,
+                selectString: select.map(el => el.selectorString).join(', ')
+            };
+        },
+        column(el) {
+            if (!_model[el])
+                throw new Error(`invalid column name: got ${el}`);
+            return _model[el];
+        },
+        allColumns() {
+            return _columns;
         }
     };
 };

@@ -5,6 +5,9 @@ export default (() => {
 
     const image = Router();
 
-    image.get('/'
+    image.get('/', imageControl.list);
+    image.get('/count', imageControl.count);
+
+    return image;
 
 })();

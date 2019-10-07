@@ -41,8 +41,6 @@ const postModel = createModel('post', [
     }
 ]);
 
-/**
-  * 
-  * @param {{filter: object, select: [string], limit: {min: number, length: number}[], sort: {by: string, order: string}}} query 
-  */
-export const select = (query) => postModel.select(query);
+Object.keys(postModel).forEach(key => {
+    module.exports[key] = (...args) => postModel[key](...args);
+});
