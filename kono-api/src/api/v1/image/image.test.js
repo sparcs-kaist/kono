@@ -99,7 +99,7 @@ describe('Testing GET /api/v1/image ...', () => {
             .get('/api/v1/image')
             .query(query)
             .then(res => {
-                expect(res).to.have.status($00);
+                expect(res).to.have.status(400);
                 expect(res.body).to.have.key('msg');
                 expect(res.body.msg).to.equal(`invalid ${invalidQuery}`);
                 done();

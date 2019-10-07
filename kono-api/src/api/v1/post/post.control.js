@@ -8,12 +8,12 @@ export const count = async (req, res) => {
 
         const data = {};
         await Post.select({
-                filter: { deleted: false },
-                select: [ Post.count('sid'), 'type' ],
-                group: 'type'
+                where: [ Post.where(Post.column('deleted'), false) ],
+                select: [ Post.count(Post.column('sid')), Post.column('type') ],
+                group: Post.column('type')
             })
             .then(result => {
-                result.forEach(({ [Post.count('sid')]: count, type }) => data[type] = count);
+                result.forEach(({ [Post.count(Post.column('sid')).selectorString]: count, type }) => data[type] = count);
             });
 
         res.status(200);
@@ -64,9 +64,18 @@ export const list = async (req, res) => {
 
         const posts = await Post.select({
             limit: { min: START_INDEX, length: MAX_SIZE },
-            filter: { deleted: false, type: FILTER_TYPE },
-            select: ['sid', 'type', 'title_kr', 'title_en', 'created_time'],
-            sort: { by: 'created_time', order: 'DESC' }
+            where: [
+                Post.where(Post.column('deleted'), false), 
+                Post.where(Post.column('type'), FILTER_TYPE)
+            ],
+            select: [
+                Post.column('sid'),
+                Post.column('type'),
+                Post.column('title_kr'),
+                Post.column('title_en'),
+                Post.column('created_time')
+            ],
+            sort: { by: Post.column('created_time'), order: 'DESC' }
         });
 
         res.status(200);
@@ -96,8 +105,13 @@ export const single = async (req, res) => {
     try {
 
         const post = await Post.select({
-                filter: { sid: SID },
-                join: [ Image.innerJoin({ on: 'post_sid', select: [ 'url' ] }) ]
+                where: [ Post.where(Post.column('sid'), SID) ],
+                join: [
+                    Image.innerJoin({ 
+                        on: Image.column('post_sid'), 
+                        select: [ Image.column('url') ] 
+                    })
+                ]
             })
             .then(result => {
                 if (result.length === 0)
