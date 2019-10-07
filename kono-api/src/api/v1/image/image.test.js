@@ -10,8 +10,8 @@ describe('Testing GET /api/v1/image ...', () => {
             .query(query)
             .then(res => {
                 expect(res).to.have.status(200);
-                expect(res).to.be.a('array');
-                expect(res).to.have.lengthOf.most(max_size);
+                expect(res.body).to.be.a('array');
+                expect(res.body).to.have.lengthOf.most(max_size);
                 res.body.forEach(image => {
                     expect(image).to.have.keys(['sid', 'url', 'post_sid']);
                     const { sid, url, post_sid } = image;
@@ -34,12 +34,14 @@ describe('Testing GET /api/v1/image ...', () => {
             .query(query)
             .then(res => {
                 expect(res).to.have.status(200);
-                expect(res).to.be.a('array');
+                expect(res.body).to.be.a('array');
                 Promise.all(
                     res.body.map(image => request(apiURL)
                         .get(`/api/v1/post/${image.post_sid}`)
                         .then(_res => { expect(_res, 'post attached to the image should exist').to.have.status(200); }))
-                ).then(() => { done(); })
+                )
+                .then(() => { done(); })
+                .catch(() => { done(err); });
             })
             .catch(err => {
                 done(err);
@@ -52,7 +54,7 @@ describe('Testing GET /api/v1/image ...', () => {
             .query(query)
             .then(res => {
                 expect(res).to.have.status(200);
-                expect(res).to.be.a('array');
+                expect(res.body).to.be.a('array');
                Promise.all(
                     res.body.map(image => request(apiURL)
                         .get(`/api/v1/post/${image.post_sid}`)
@@ -60,8 +62,11 @@ describe('Testing GET /api/v1/image ...', () => {
                 )
                 .then(created_times => {
                     expect(created_times, 'created_time should be in descending order')
-                        .to.satisfy(arr => arr.slice(1).every((item, idx) => arr[idx] <= item));
+                        .to.satisfy(arr => arr.slice(1).every((item, idx) => arr[idx] >= item));
                     done();
+                })
+                .catch(err => {
+                    done(err);
                 });
             })
             .catch(err => {
@@ -79,7 +84,7 @@ describe('Testing GET /api/v1/image ...', () => {
                 expect(res.body).to.be.a('array');
                 Promise.all(
                     res.body.map(image => request(apiURL)
-                        .get(`/api/v1/post/${image.post_url}`)
+                        .get(`/api/v1/post/${image.post_sid}`)
                         .then(_res => _res.body.type))
                 )
                 .then(types => {
@@ -88,6 +93,7 @@ describe('Testing GET /api/v1/image ...', () => {
                     })
                     done();
                 })
+                .catch(err => { done(err); });
             })
             .catch(err => {
                 done(err);

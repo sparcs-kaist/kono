@@ -36,21 +36,25 @@ export const list = async (req, res) => {
     /* Fire database query. */
     try {
 
-        await Post.select({
+        const images = await Post.select({
                 select: [],
-                filter: { deleted: false, type: FILTER_TYPE },
+                where: [ 
+                    Post.where(Post.column('deleted'), false), 
+                    Post.where(Post.column('type'), FILTER_TYPE)
+                ],
                 limit: { min: START_INDEX, length: MAX_SIZE },
-                sort: { by: 'created_time', order: 'DESC' },
+                sort: { by: Post.column('created_time'), order: 'DESC' },
                 join: [ Image.innerJoin({
-                    on: 'post_sid',
-                    select: [ 'sid', 'url', 'post_sid' ]
+                    on: Image.column('post_sid'),
+                    select: [ 
+                        Image.column('sid'),
+                        Image.column('url'),
+                        Image.column('post_sid')
+                    ]
                 }) ]
-            })
-            .then(res => {
-                console.log(res);
             });
         res.status(200);
-        res.send({});
+        res.send(images);
 
     } catch(e) {
         console.log(e);

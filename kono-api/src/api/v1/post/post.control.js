@@ -106,6 +106,7 @@ export const single = async (req, res) => {
 
         const post = await Post.select({
                 where: [ Post.where(Post.column('sid'), SID) ],
+                select: Post.allColumns(),
                 join: [
                     Image.innerJoin({ 
                         on: Image.column('post_sid'), 

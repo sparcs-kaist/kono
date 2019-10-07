@@ -151,7 +151,7 @@ export const createModel = (name, columns) => {
         select(query) {
             const { where, select, limit, sort, group, join } = query || {};
             const fn = this.selectString(select)
-                + (join ? ', ' + join.map(e => e.selectString).join(' ') : '')
+                + (join ? (select.length > 0 ? ', ' : '') + join.map(e => e.selectString).join(' ') : '')
                 + ` FROM ${_name} `
                 + (join ? join.map(e => e.joinString).join(' ') : '')
                 + this.whereString(where)
@@ -174,6 +174,9 @@ export const createModel = (name, columns) => {
             if (!_model[el])
                 throw new Error(`invalid column name: got ${el}`);
             return _model[el];
+        },
+        allColumns() {
+            return _columns;
         }
     };
 };
