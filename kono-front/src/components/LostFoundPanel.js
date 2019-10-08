@@ -3,7 +3,7 @@ import styles from '../styles/LostFoundPanel.module.scss';
 import PanelHeader from './PanelHeader';
 import PanelFooter from './PanelFooter';
 import ImageGridPanel from './ImageGridPanel';
-import * as PostAPI from '../api/post';
+import * as ImageAPI from '../api/image';
 import Text from '../res/texts/LostFoundPanel.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
 
@@ -21,8 +21,18 @@ export default () => {
 
     const numPages = Math.max(1, Math.ceil(numLostFounds / GRID_SIZE));
 
+    const fetchCount = async () => {
+        await ImageAPI.count()
+            .then(({ data }) => {
+                setNumLostFounds(data['lostfound']);
+            })
+            .catch(({ response }) => {
+                console.log(response);
+            })
+    }
+
     const fetchPage = async (page) => {
-        const lostFounds = await PostAPI.list({
+        await ImageAPI.list({
                 params: {
                     filter_type: 'lostfound',
                     start_index: (page - 1) * GRID_SIZE,
@@ -30,31 +40,16 @@ export default () => {
                 }
             })
             .then(({ data }) => {
-                setNumLostFounds(data.size);
-                return data.posts;
+                setImageURLs(data.map(image => image.url));
             })
             .catch(({ response }) => {
                 console.log(response);
-                return;
             });
-
-        /* TODO: This does not handle if a lost found post has more than one image.
-         * Should fix kono-api first then handle this by calling a new API. */
-        setImageURLs(
-            await Promise.all(
-                lostFounds.map(async ({ sid }) => {
-                    try {
-                        const { data } = await PostAPI.single(sid);
-                        const { content_img } = data;
-                        return content_img[0];
-                    } catch (e) {
-                        console.log(e);
-                        return null;
-                    }
-                })
-            )
-        );
     };
+
+    useEffect(() => {
+        fetchCount();
+    }, [])
 
     /* Fetch page when currentPage updates */
     useEffect(() => {

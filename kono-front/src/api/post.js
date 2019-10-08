@@ -9,3 +9,7 @@ export const list = ({ params }) => {
 export const single = (postSID) => {
     return axios.get(apiURL + `/api/v1/post/${postSID}`);
 }
+
+export const count = () => {
+    return axios.get(apiURL + `/api/v1/post/count`);
+}

@@ -9,16 +9,30 @@ import Text from '../res/texts/NoticePanel.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
 
 const NOTICE_PAGINATION = 8;
+const NOTICE_TITLE_MAX_LENGTH = {
+    kr: 24,
+    en: 42
+};
 
 export default () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [numNotices, setNumNotices] = useState(0);
     const [notices, setNotices] = useState([]);
-    const language = useSelector(state => state.config.language, []);
     const text = useLanguages(Text);
+    const language = useSelector(state => state.config.language, []);
 
     const numPages = Math.max(1, Math.ceil(numNotices / NOTICE_PAGINATION));
+
+    const fetchCount = async () => {
+        await PostAPI.count()
+            .then(({ data }) => {
+                setNumNotices(data['notice']);
+            })
+            .catch(({ response }) => {
+                console.log(response);
+            })
+    }
 
     const fetchPage = async (page) => {
         await PostAPI.list({
@@ -29,19 +43,30 @@ export default () => {
                 }
             })
             .then(({ data }) => {
-                setNumNotices(data.size);
-                setNotices(data.posts);
+                setNotices(data);
             })
-            .catch(({ response }) => {
-                console.log(response);
-                return;
+            .catch((err) => {
+                console.log(err);
             });
     };
+
+    useEffect(() => {
+        fetchCount();
+    }, []);
 
     /* Fetch page when currentPage updates */
     useEffect(() => {
         fetchPage(currentPage);
-    }, [currentPage])
+    }, [currentPage]);
+
+
+    const titleMaxLength = useLanguages(NOTICE_TITLE_MAX_LENGTH);
+    const nullTitleString = useLanguages({ kr: '(제목 없음)', en: '(No title)' });
+    const toTitleString = (title) => (
+        title
+            ? (title.length > titleMaxLength ? `${title.substring(0, titleMaxLength)}...` : title)
+            : nullTitleString
+    );
 
     return (
         <div className={styles.NoticePanel}>
@@ -52,8 +77,7 @@ export default () => {
                         sid, title_kr, title_en, created_time
                     }) => {
                         
-                        /* TODO: change this using useLanguages hook (issue #14) */
-                        const title = language === 'kr' ? title_kr : title_en;
+                        const title = language === 'kr' ? title_kr : title_en; // cannot use useLangauge Hook: overlapping hooks
                         const date = new Date(created_time);
 
                         return (
@@ -61,11 +85,7 @@ export default () => {
                                 <div className={styles.NoticePanel__item}>
                                     <span className={styles.NoticePanel__item_title}>
                                         <Link to={`/post/${sid}`}>
-                                            {
-                                                title 
-                                                ? (title.length > 24 ? `${title.substring(0, 24)}...` : title)
-                                                : '(제목 없음)' // TODO: change null title using useLanguages hook (issue #14)
-                                            }
+                                            { toTitleString(title) }
                                         </Link>
                                     </span>
                                     <span className={styles.NoticePanel__item_date}>
