@@ -6,6 +6,7 @@ import ImageGridPanel from './ImageGridPanel';
 import * as ImageAPI from '../api/image';
 import Text from '../res/texts/LostFoundPanel.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
+import useFetch from '../lib/hooks/useFetch';
 
 const GRID_ROWS = 2;
 const GRID_COLUMNS = 3;
@@ -16,44 +17,50 @@ const PANEL_WIDTH = 440;
 export default () => {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [numLostFounds, setNumLostFounds] = useState(0);
-    const [imageURLs, setImageURLs] = useState([]);
 
-    const numPages = Math.max(1, Math.ceil(numLostFounds / GRID_SIZE));
+    const [
+        numImages,
+        fetchImages,
+        NumImagesErrorHandler,
+        showNumImagesErrorHandler
+    ] = useFetch(
+        0, // initialValue
+        { // api
+            fn: ImageAPI.count,
+            args: []
+        },
+        data => data.lostfound // dataProcessor
+    );
 
-    const fetchCount = async () => {
-        await ImageAPI.count()
-            .then(({ data }) => {
-                setNumLostFounds(data['lostfound']);
-            })
-            .catch(({ response }) => {
-                console.log(response);
-            })
-    }
-
-    const fetchPage = async (page) => {
-        await ImageAPI.list({
+    const [
+        imageURLs,
+        fetchImageURLs,
+        ImageURLsErrorHandler,
+        showImageURLsErrorHandler
+    ] = useFetch(
+        [], // initialValue
+        { // api
+            fn: ImageAPI.list,
+            args: [{
                 params: {
                     filter_type: 'lostfound',
-                    start_index: (page - 1) * GRID_SIZE,
+                    start_index: (currentPage - 1) * GRID_SIZE,
                     max_size: GRID_SIZE
                 }
-            })
-            .then(({ data }) => {
-                setImageURLs(data.map(image => image.url));
-            })
-            .catch(({ response }) => {
-                console.log(response);
-            });
-    };
+            }]
+        },
+        data => data.map(image => image.url) // dataProcessor
+    );
+
+    const numPages = Math.max(1, Math.ceil(numImages / GRID_SIZE));
 
     useEffect(() => {
-        fetchCount();
+        fetchImages();
     }, [])
 
-    /* Fetch page when currentPage updates */
+    /* Fetch new page when currentPage updates */
     useEffect(() => {
-        fetchPage(currentPage);
+        fetchImageURLs();
     }, [currentPage])
 
     const text = useLanguages(Text);
@@ -62,17 +69,32 @@ export default () => {
     return (
         <div className={styles.LostFoundPanel}>
             <PanelHeader title={text.title} link="/lostfound"/>
-            <ImageGridPanel 
-                gridNumRows={GRID_ROWS}
-                gridNumColumns={GRID_COLUMNS}
-                totalWidthPixels={PANEL_WIDTH}
-                imageURLs={imageURLs}
-            />
-            <PanelFooter 
-                currentPage={currentPage}
-                numPages={numPages}
-                onClickPage={page => setCurrentPage(page)}
-            />
+            {
+                <ImageURLsErrorHandler height={291} showErrorText showSpinner />
+            }
+            {
+                !showImageURLsErrorHandler && (
+                    <ImageGridPanel 
+                        gridNumRows={GRID_ROWS}
+                        gridNumColumns={GRID_COLUMNS}
+                        totalWidthPixels={PANEL_WIDTH}
+                        imageURLs={imageURLs}
+                    />
+                )
+            }
+            {
+                <NumImagesErrorHandler height={64} />
+            }
+            {
+                !showNumImagesErrorHandler && (
+                    <PanelFooter 
+                        currentPage={currentPage}
+                        numPages={numPages}
+                        onClickPage={page => setCurrentPage(page)}
+                    />
+                )
+            }
+            
         </div>
     );
 

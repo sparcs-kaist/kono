@@ -77,7 +77,7 @@ export default () => {
         <div className={styles.NoticePanel}>
             <PanelHeader title={text.title} link="/notice"/>
             {
-                <NoticesErrorHandler height={287} showErrorText showSpinner/>
+                <NoticesErrorHandler height={291} showErrorText showSpinner/>
             }
             {
                 !showNoticesErrorHandler && (
