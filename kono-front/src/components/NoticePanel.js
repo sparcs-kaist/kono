@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import styles from '../styles/NoticePanel.module.scss';
 import PanelHeader from './PanelHeader';
 import PanelFooter from './PanelFooter';
-import ErrorHandlingPanel, * as errorCodes from './ErrorHandlingPanel';
 import * as PostAPI from '../api/post';
 import Text from '../res/texts/NoticePanel.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
+import useFetch from '../lib/hooks/useFetch';
 
 const NOTICE_PAGINATION = 8;
 const NOTICE_TITLE_MAX_LENGTH = {
@@ -18,109 +18,67 @@ const NOTICE_TITLE_MAX_LENGTH = {
 export default () => {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [numNotices, setNumNotices] = useState(0);
-    const [notices, setNotices] = useState([]);
-    const [isLoadingCount, setLoadingCount] = useState(false);
-    const [isLoadingPage, setLoadingPage] = useState(false);
-    const [errorCode, setErrorCode] = useState(errorCodes.ERROR_NONE);
+
+    const [
+        numNotices, 
+        fetchNumNotices, 
+        NumNoticesErrorHandler,
+        showNumNoticesErrorHandler
+    ] = useFetch(
+        0,                      // initialValue
+        PostAPI.count,          // api
+        [],                     // args
+        data => data.notice,    // dataProcessor
+        64                      // divHeight
+    );
+
+    const [
+        notices,
+        fetchNotices,
+        NoticesErrorHandler,
+        showNoticesErrorHandler
+    ] = useFetch(
+        [],                     // initialValue
+        PostAPI.list,           // api
+        [{                      // args
+            params: {
+                filter_type: 'notice',
+                start_index: (currentPage - 1) * NOTICE_PAGINATION,
+                max_size: NOTICE_PAGINATION
+            }
+        }],
+        data => data,           // dataProcessor
+        287                     // divHeight
+    );
+
     const text = useLanguages(Text);
     const language = useSelector(state => state.config.language, []);
-
     const numPages = Math.max(1, Math.ceil(numNotices / NOTICE_PAGINATION));
 
-    const isLoading = isLoadingCount || isLoadingPage;
-    const showNoticeList = !isLoading && (errorCode === errorCodes.ERROR_NONE);
-
     useEffect(() => {
-        setLoadingCount(true);
-        const fetchCount = async () => {
-            await PostAPI.count()
-                .then(({ data }) => {
-                    setLoadingCount(false);
-                    setNumNotices(data['notice']);
-                })
-                .catch(({ response }) => {
-                    setLoadingCount(false);
-                    if (!response) {
-                        setErrorCode(errorCodes.ERROR_CONN);
-                        return;
-                    }
-                    const { status } = response;
-                    switch (status) {
-                        case 400:
-                            setErrorCode(errorCodes.ERROR_400);
-                            break;
-                        case 500:
-                            setErrorCode(errorCodes.ERROR_500);
-                            break;
-                        default:
-                            setErrorCode(errorCodes.ERROR_DEFAULT);
-                    }
-                });
-        }
-        fetchCount();
+        fetchNumNotices();
     }, []);
 
-    /* Fetch page when currentPage updates */
+    /* Fetch new page when currentPage updates */
     useEffect(() => {
-        const fetchPage = async (page) => {
-            setLoadingPage(true);
-            await PostAPI.list({
-                    params: {
-                        filter_type: 'notice',
-                        start_index: (page - 1) * NOTICE_PAGINATION,
-                        max_size: NOTICE_PAGINATION
-                    }
-                })
-                .then(({ data }) => {
-                    setLoadingPage(false);
-                    setNotices(data);
-                })
-                .catch(({ response }) => {
-                    setLoadingPage(false);
-                    if (!response) {
-                        setErrorCode(errorCodes.ERROR_CONN);
-                        return;
-                    }
-                    const { status } = response;
-                    switch (status) {
-                        case 400:
-                            setErrorCode(errorCodes.ERROR_400);
-                            break;
-                        case 500:
-                            setErrorCode(errorCodes.ERROR_500);
-                            break;
-                        default:
-                            setErrorCode(errorCodes.ERROR_DEFAULT);
-                    }
-                });
-        };
-        fetchPage(currentPage);
+        fetchNotices();
     }, [currentPage]);
 
-
     const titleMaxLength = useLanguages(NOTICE_TITLE_MAX_LENGTH);
-    const nullTitleString = useLanguages({ kr: '(제목 없음)', en: '(No title)' });
     const toTitleString = (title) => (
         title
             ? (title.length > titleMaxLength ? `${title.substring(0, titleMaxLength)}...` : title)
-            : nullTitleString
+            : text.null_title
     );
 
     return (
         <div className={styles.NoticePanel}>
             <PanelHeader title={text.title} link="/notice"/>
             {
-                !showNoticeList && (
-                    <ErrorHandlingPanel
-                        isLoading={isLoading}
-                        errorCode={errorCode}
-                        height={287}
-                    />
-                )
+                <NoticesErrorHandler />
             }
             {
-                showNoticeList && (
+                !showNoticesErrorHandler && (
                     <ul>
                         {
                             notices.map(({
@@ -155,11 +113,18 @@ export default () => {
                     </ul>
                 )
             }
-            <PanelFooter 
-                currentPage={currentPage} 
-                numPages={numPages}
-                onClickPage={page => setCurrentPage(page)}
-            />
+            {
+               <NumNoticesErrorHandler />
+            }
+            {
+                !showNumNoticesErrorHandler && (
+                    <PanelFooter 
+                        currentPage={currentPage} 
+                        numPages={numPages}
+                        onClickPage={page => setCurrentPage(page)}
+                    />
+                )
+            }
         </div>
     );
 }

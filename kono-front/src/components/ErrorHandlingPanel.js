@@ -4,20 +4,15 @@ import MaterialIcon from './MaterialIcon';
 import Spinner from './Spinner';
 import classnames from '../lib/classnames';
 import useLanguages from '../lib/hooks/useLanguages';
+import * as errorCodes from '../lib/hooks/useFetch';
 import Text from '../res/texts/ErrorHandlingPanel.text.json';
 
-export const ERROR_NONE = 'none';
-export const ERROR_CONN = 'connection_error';
-export const ERROR_400 = 'bad_request_error';
-export const ERROR_500 = 'internal_server_error';
-export const ERROR_DEFAULT = 'default_error';
-
-export default ({ isLoading, errorCode, height }) => {
+export default ({ isLoading, errorCode, height, showSpinner }) => {
     
     const text = useLanguages(Text);
 
-    const showError = !isLoading && (errorCode !== ERROR_NONE);
-    const showIcon = (errorCode !== ERROR_CONN);
+    const showError = !isLoading && (errorCode !== errorCodes.ERROR_NONE);
+    const showIcon = (errorCode !== errorCodes.ERROR_CONN);
 
     return (
         <div 
@@ -31,7 +26,7 @@ export default ({ isLoading, errorCode, height }) => {
         >
             {
                 isLoading && (
-                    <Spinner />
+                    showSpinner && <Spinner />
                 )
             }
             {
