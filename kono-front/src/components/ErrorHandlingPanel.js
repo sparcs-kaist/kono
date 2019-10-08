@@ -16,6 +16,7 @@ export default ({ isLoading, errorCode, height }) => {
     const text = useLanguages(Text);
 
     const showError = !isLoading && (errorCode !== ERROR_NONE);
+    const showIcon = (errorCode !== ERROR_CONN);
 
     return (
         <div 
@@ -37,7 +38,7 @@ export default ({ isLoading, errorCode, height }) => {
             {
                 showError && (
                     <>
-                        <MaterialIcon md48>error_outline</MaterialIcon>
+                        <MaterialIcon md48>{ showIcon && 'error_outline' }</MaterialIcon>
                         <div>
                             { text[errorCode] }
                         </div>

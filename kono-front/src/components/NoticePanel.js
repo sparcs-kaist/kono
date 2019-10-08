@@ -40,9 +40,11 @@ export default () => {
                     setNumNotices(data['notice']);
                 })
                 .catch(({ response }) => {
-                    if (!response)
-                        setErrorCode(errorCodes.ERROR_CONN);
                     setLoadingCount(false);
+                    if (!response) {
+                        setErrorCode(errorCodes.ERROR_CONN);
+                        return;
+                    }
                     const { status } = response;
                     switch (status) {
                         case 400:
@@ -65,7 +67,7 @@ export default () => {
             setLoadingPage(true);
             await PostAPI.list({
                     params: {
-                        filter_type: '?',
+                        filter_type: 'notice',
                         start_index: (page - 1) * NOTICE_PAGINATION,
                         max_size: NOTICE_PAGINATION
                     }
@@ -75,9 +77,11 @@ export default () => {
                     setNotices(data);
                 })
                 .catch(({ response }) => {
-                    if (!response)
-                        setErrorCode(errorCodes.ERROR_CONN);
                     setLoadingPage(false);
+                    if (!response) {
+                        setErrorCode(errorCodes.ERROR_CONN);
+                        return;
+                    }
                     const { status } = response;
                     switch (status) {
                         case 400:
