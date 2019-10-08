@@ -1,6 +1,6 @@
-import Room from '../../../db/models/room';
+import db from '../../../db';
 
-export const recent = async (req, res) => {
+export const recentSingle = async (req, res) => {
     const { room_number } = req.params;
 
     /* Query validity check. */
@@ -14,19 +14,15 @@ export const recent = async (req, res) => {
     /* Fire database query. */
     try {
 
-        const room = await Room.select({
-                limit: { length: 1 },
-                where: [ Room.where(Room.column('room_number'), ROOM_NUMBER) ],
-                select: [
-                    Room.column('state'),
-                    Room.column('timestamp'),
-                ],
-                sort: { by: Room.column('timestamp'), order: 'DESC' }
-            })
+        const room = await db.instance
+            .select('state', 'timestamp')
+            .from('room')
+            .where({ room_number: ROOM_NUMBER })
+            .orderBy('timestamp', 'desc')
+            .limit(1)
             .then(result => {
-                if (result.length == 0) {
+                if (result.length === 0)
                     return null;
-                }
                 return result[0];
             });
 

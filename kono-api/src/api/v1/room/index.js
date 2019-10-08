@@ -4,7 +4,7 @@ import * as roomControl from './room.control';
 export default (() => {
 
     const room = Router();
-    room.get('/recent/:room_number', roomControl.recent);
+    room.get('/recent/:room_number', roomControl.recentSingle);
 
     return room;
 
