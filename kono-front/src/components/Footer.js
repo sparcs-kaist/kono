@@ -47,7 +47,9 @@ export default () => {
                     )
                 }
             <span className={styles.Footer__common_menu}>
-                { text.contact }
+                <a href="https://forms.gle/daJLFiyjygWuqM5j9">
+                    { text.contact }
+                </a>
             </span>
         </div>
     )
