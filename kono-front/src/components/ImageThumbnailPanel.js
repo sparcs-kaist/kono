@@ -32,9 +32,7 @@ export default ({
         display: isLoading ? 'none' : 'block', // do not show blank div if not loaded
         width: `${croppedImageWidth}px`,
         height: `${croppedImageHeight}px`,
-        position: 'relative',
-        top: `${.5 * (imageHeight - croppedImageHeight)}px`, // Center image vertically
-        left: `${.5 * (imageWidth - croppedImageWidth)}px`  // Center image horizontally
+        position: 'relative'
     };
 
     const onLoad = ({ target: img }) => {
