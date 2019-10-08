@@ -1,6 +1,7 @@
 import React from 'react';
 import style from '../styles/ErrorHandlingPanel.module.scss';
 import MaterialIcon from './MaterialIcon';
+import Spinner from './Spinner';
 import classnames from '../lib/classnames';
 import useLanguages from '../lib/hooks/useLanguages';
 import Text from '../res/texts/ErrorHandlingPanel.text.json';
@@ -30,9 +31,7 @@ export default ({ isLoading, errorCode, height }) => {
         >
             {
                 isLoading && (
-                    <div>
-                        Spinner
-                    </div>
+                    <Spinner />
                 )
             }
             {
