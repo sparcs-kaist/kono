@@ -7,14 +7,21 @@ export const ERROR_400 = 'bad_request_error';
 export const ERROR_500 = 'internal_server_error';
 export const ERROR_DEFAULT = 'default_error';
 
-export default (
+/**
+ * 
+ * @param {any} initialValue 
+ * @param {{fn: Function, args: [any]}} api 
+ * @param {Function} dataProcessor 
+ * @param {{divHeight: number, showErrorText: boolean, showSpinner: boolean}} handlerComponentConfig 
+ */
+const useFetch = (
     initialValue,
     api,
-    args,
-    dataProcessor,
-    divHeight
+    dataProcessor
 ) => {
 
+    const { fn, args } = api;
+    
     const [data, setData] = useState(initialValue);
     const [isLoading, setLoading] = useState(false);
     const [errorCode, setErrorCode] = useState(ERROR_NONE);
@@ -22,7 +29,7 @@ export default (
 
     const fetchData = async () => {
         setLoading(true);
-        await api(...args)
+        await fn(...args)
             .then(({ data }) => {
                 setLoading(false);
                 if (dataProcessor)
@@ -51,12 +58,18 @@ export default (
             });
     }
 
-    const ErrorHandlerComponent = () => (
+    const ErrorHandlerComponent = ({
+        height,
+        showErrorText,
+        showSpinner
+    }) => (
         showErrorHandlerComponent && (
             <ErrorHandlingPanel
                 isLoading={isLoading}
                 errorCode={errorCode}
-                height={divHeight}
+                height={height}
+                showErrorText={showErrorText}
+                showSpinner={showSpinner}
             />
         )
     )
@@ -69,3 +82,5 @@ export default (
     ];
 
 }
+
+export default useFetch;

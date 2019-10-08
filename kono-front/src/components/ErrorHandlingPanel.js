@@ -7,19 +7,21 @@ import useLanguages from '../lib/hooks/useLanguages';
 import * as errorCodes from '../lib/hooks/useFetch';
 import Text from '../res/texts/ErrorHandlingPanel.text.json';
 
-export default ({ isLoading, errorCode, height, showSpinner }) => {
+export default ({ isLoading, errorCode, height, showErrorText, showSpinner }) => {
     
     const text = useLanguages(Text);
 
     const showError = !isLoading && (errorCode !== errorCodes.ERROR_NONE);
     const showIcon = (errorCode !== errorCodes.ERROR_CONN);
 
+    const useBackground = !isLoading && (showErrorText || showSpinner);
+
     return (
         <div 
             className={
                 classnames([
                     style.ErrorHandlingPanel,
-                    !isLoading && style.ErrorHandlingPanel__use_background
+                    useBackground && style.ErrorHandlingPanel__use_background
                 ])
             }
             style={{ height }}
@@ -33,9 +35,7 @@ export default ({ isLoading, errorCode, height, showSpinner }) => {
                 showError && (
                     <>
                         <MaterialIcon md48>{ showIcon && 'error_outline' }</MaterialIcon>
-                        <div>
-                            { text[errorCode] }
-                        </div>
+                        <div>{ showErrorText && text[errorCode] }</div>
                     </>
                 )
             }

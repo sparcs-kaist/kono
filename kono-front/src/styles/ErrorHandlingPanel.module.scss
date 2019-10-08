@@ -12,7 +12,7 @@
 
         margin: auto;
 
-        color: t(text-secondary);
+        color: t(text-primary);
 
         @include flexbox(column, $center: true);
 

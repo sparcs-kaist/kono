@@ -26,10 +26,11 @@ export default () => {
         showNumNoticesErrorHandler
     ] = useFetch(
         0,                      // initialValue
-        PostAPI.count,          // api
-        [],                     // args
+        {                       // api
+            fn: PostAPI.count,
+            args: []
+        },
         data => data.notice,    // dataProcessor
-        64                      // divHeight
     );
 
     const [
@@ -39,21 +40,29 @@ export default () => {
         showNoticesErrorHandler
     ] = useFetch(
         [],                     // initialValue
-        PostAPI.list,           // api
-        [{                      // args
-            params: {
-                filter_type: 'notice',
-                start_index: (currentPage - 1) * NOTICE_PAGINATION,
-                max_size: NOTICE_PAGINATION
-            }
-        }],
+        {                       // api
+            fn: PostAPI.list,
+            args: [{
+                params: {
+                    filter_type: 'notice',
+                    start_index: (currentPage - 1) * NOTICE_PAGINATION,
+                    max_size: NOTICE_PAGINATION
+                }
+            }]
+        },
         data => data,           // dataProcessor
-        287                     // divHeight
     );
 
     const text = useLanguages(Text);
     const language = useSelector(state => state.config.language, []);
     const numPages = Math.max(1, Math.ceil(numNotices / NOTICE_PAGINATION));
+
+    const titleMaxLength = useLanguages(NOTICE_TITLE_MAX_LENGTH);
+    const toTitleString = (title) => (
+        title
+            ? (title.length > titleMaxLength ? `${title.substring(0, titleMaxLength)}...` : title)
+            : text.null_title
+    );
 
     useEffect(() => {
         fetchNumNotices();
@@ -64,18 +73,11 @@ export default () => {
         fetchNotices();
     }, [currentPage]);
 
-    const titleMaxLength = useLanguages(NOTICE_TITLE_MAX_LENGTH);
-    const toTitleString = (title) => (
-        title
-            ? (title.length > titleMaxLength ? `${title.substring(0, titleMaxLength)}...` : title)
-            : text.null_title
-    );
-
     return (
         <div className={styles.NoticePanel}>
             <PanelHeader title={text.title} link="/notice"/>
             {
-                <NoticesErrorHandler />
+                <NoticesErrorHandler height={287} showErrorText showSpinner/>
             }
             {
                 !showNoticesErrorHandler && (
@@ -114,7 +116,7 @@ export default () => {
                 )
             }
             {
-               <NumNoticesErrorHandler />
+               <NumNoticesErrorHandler height={64}/>
             }
             {
                 !showNumNoticesErrorHandler && (
