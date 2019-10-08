@@ -1,9 +1,10 @@
-import Post from '../../../db/models/post';
-import Image from '../../../db/models/image';
+// import Post from '../../../db/models/post';
+// import Image from '../../../db/models/image';
+import db from '../../../db';
 
 export const list = async (req, res) => {
 
-    const { filter_type = undefined, start_index = 0, max_size } = req.query;
+    const { filter_type = '*', start_index = 0, max_size } = req.query;
 
     /* Query validity check. */
     if (max_size === undefined) {
@@ -13,7 +14,7 @@ export const list = async (req, res) => {
     }
 
     const FILTER_TYPE = filter_type;
-    if (FILTER_TYPE !== undefined && FILTER_TYPE !== 'notice' && FILTER_TYPE !== 'lostfound') {
+    if (FILTER_TYPE !== '*' && FILTER_TYPE !== 'notice' && FILTER_TYPE !== 'lostfound') {
         res.status(400);
         res.send({ msg: 'invalid filter_type' });
         return;
@@ -36,23 +37,15 @@ export const list = async (req, res) => {
     /* Fire database query. */
     try {
 
-        const images = await Post.select({
-                select: [],
-                where: [ 
-                    Post.where(Post.column('deleted'), false), 
-                    Post.where(Post.column('type'), FILTER_TYPE)
-                ],
-                limit: { min: START_INDEX, length: MAX_SIZE },
-                sort: { by: Post.column('created_time'), order: 'DESC' },
-                join: [ Image.innerJoin({
-                    on: Image.column('post_sid'),
-                    select: [ 
-                        Image.column('sid'),
-                        Image.column('url'),
-                        Image.column('post_sid')
-                    ]
-                }) ]
-            });
+        const images = await db.instance
+            .select('image.sid', 'image.url', 'image.post_sid')
+            .from('post')
+            .innerJoin('image', 'image.post_sid', 'post.sid')
+            .where({ 'post.deleted': 0, 'post.type': FILTER_TYPE })
+            .orderBy('post.created_time', 'desc')
+            .limit(MAX_SIZE)
+            .offset(START_INDEX);
+        
         res.status(200);
         res.send(images);
 
@@ -69,20 +62,16 @@ export const count = async (req, res) => {
     try {
 
         const data = {};
-        await Post.select({
-                select: [ Post.column('type') ],
-                where: [ Post.where(Post.column('deleted'), false) ],
-                group: Post.column('type'),
-                join: [ Image.innerJoin({
-                    on: Image.column('post_sid'),
-                    select: [ Image.count(Image.column('sid')) ]
-                }) ]
-            })
+        await db.instance
+            .select('post.type', db.instance.raw('COUNT(image.sid)'))
+            .from('post')
+            .innerJoin('image', 'image.post_sid', 'post.sid')
+            .where({ 'post.deleted': 0 })
+            .groupBy('post.type')
             .then(result => {
-                result.forEach(({ 
-                    [Image.count(Image.column('sid')).selectorString]: count, 
-                    type 
-                }) => { data[type] = count; });
+                result.forEach(({ 'COUNT(image.sid)': count, type }) => {
+                    data[type] = count;
+                })
             });
 
         res.status(200);

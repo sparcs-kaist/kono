@@ -1,5 +1,4 @@
-import Post from '../../../db/models/post';
-import Image from '../../../db/models/image';
+import db from '../../../db';
 
 export const count = async (req, res) => {
 
@@ -7,13 +6,13 @@ export const count = async (req, res) => {
     try {
 
         const data = {};
-        await Post.select({
-                where: [ Post.where(Post.column('deleted'), false) ],
-                select: [ Post.count(Post.column('sid')), Post.column('type') ],
-                group: Post.column('type')
-            })
+        await db.instance
+            .select(db.instance.raw('COUNT(sid)'), 'type')
+            .from('post')
+            .where({ deleted: 0 })
+            .groupBy('type')
             .then(result => {
-                result.forEach(({ [Post.count(Post.column('sid')).selectorString]: count, type }) => data[type] = count);
+                result.forEach(({ 'COUNT(sid)': count, type }) => data[type] = count);
             });
 
         res.status(200);
@@ -29,7 +28,7 @@ export const count = async (req, res) => {
 
 export const list = async (req, res) => {
 
-    const { filter_type = undefined, start_index = 0, max_size } = req.query;
+    const { filter_type = '*', start_index = 0, max_size } = req.query;
     
     /* Query validity check. */
     if (max_size === undefined) {
@@ -39,7 +38,7 @@ export const list = async (req, res) => {
     }
 
     const FILTER_TYPE = filter_type;
-    if (filter_type !== undefined && filter_type !== 'notice' && filter_type !== 'lostfound') {
+    if (filter_type !== '*' && filter_type !== 'notice' && filter_type !== 'lostfound') {
         res.status(400);
         res.send({ msg: 'invalid filter_type' });
         return;
@@ -62,21 +61,13 @@ export const list = async (req, res) => {
     /* Fire database query. */
     try {
 
-        const posts = await Post.select({
-            limit: { min: START_INDEX, length: MAX_SIZE },
-            where: [
-                Post.where(Post.column('deleted'), false), 
-                Post.where(Post.column('type'), FILTER_TYPE)
-            ],
-            select: [
-                Post.column('sid'),
-                Post.column('type'),
-                Post.column('title_kr'),
-                Post.column('title_en'),
-                Post.column('created_time')
-            ],
-            sort: { by: Post.column('created_time'), order: 'DESC' }
-        });
+        const posts = await db.instance
+            .select('sid', 'type', 'title_kr', 'title_en', 'created_time')
+            .from('post')
+            .where({ deleted: 0, type: FILTER_TYPE })
+            .orderBy('created_time', 'desc')
+            .limit(MAX_SIZE)
+            .offset(START_INDEX);
 
         res.status(200);
         res.send(posts);
@@ -103,28 +94,23 @@ export const single = async (req, res) => {
 
     /* Fire database query. */
     try {
-
-        const post = await Post.select({
-                where: [ Post.where(Post.column('sid'), SID) ],
-                select: Post.allColumns(),
-                join: [
-                    Image.innerJoin({ 
-                        on: Image.column('post_sid'), 
-                        select: [ Image.column('url') ] 
-                    })
-                ]
-            })
+        
+        const post = await db.instance
+            .select('post.*', 'image.url')
+            .from('post')
+            .leftJoin('image', 'post.sid', 'image.post_sid')
+            .where({ 'post.sid': SID })
             .then(result => {
-                if (result.length === 0)
+                if (result.length == 0)
                     return null;
                 const { url, deleted, ...row } = result[0];
                 if (deleted === 1)
                     return null;
                 return {
                     ...row,
-                    content_img: result.map(row => row.url)
-                };
-            });
+                    content_img: result.map(row => row.url).filter(e => !!e)
+                }
+            })
 
         if (post) {
             res.status(200);
