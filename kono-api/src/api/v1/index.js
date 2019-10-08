@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import post from './post';
 import image from './image';
+import room from './room';
 
 export default (() => {
 
@@ -8,6 +9,7 @@ export default (() => {
 
     v1.use('/post', post);
     v1.use('/image', image);
+    v1.use('/room', room);
 
     return v1;
 
