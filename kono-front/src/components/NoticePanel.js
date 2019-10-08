@@ -49,8 +49,7 @@ export default () => {
                     max_size: NOTICE_PAGINATION
                 }
             }]
-        },
-        data => data,           // dataProcessor
+        }
     );
 
     const text = useLanguages(Text);

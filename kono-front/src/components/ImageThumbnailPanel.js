@@ -9,7 +9,7 @@ export default ({
     gridColumn, gridColumnSize=1, 
     imageIndex,
     imageWidth, imageHeight,
-    imageURL,
+    imageURL, imageLink,
     showOverlapPanel, overlapText,
     useOnClick
 }) => {
@@ -66,11 +66,13 @@ export default ({
             }
             {
                 imageURL ? (
-                    <img
+                    <a href={imageLink}>
+                        <img
                         src={imageURL} 
                         alt={imageURL}
                         style={imageStyle}
                         onLoad={onLoad} />
+                    </a>
                 ) : null
             }
             {

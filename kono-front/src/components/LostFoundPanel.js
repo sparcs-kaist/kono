@@ -20,7 +20,7 @@ export default () => {
 
     const [
         numImages,
-        fetchImages,
+        fetchNumImages,
         NumImagesErrorHandler,
         showNumImagesErrorHandler
     ] = useFetch(
@@ -33,10 +33,10 @@ export default () => {
     );
 
     const [
-        imageURLs,
-        fetchImageURLs,
-        ImageURLsErrorHandler,
-        showImageURLsErrorHandler
+        images,
+        fetchImages,
+        ImagesErrorHandler,
+        showImagesErrorHandler
     ] = useFetch(
         [], // initialValue
         { // api
@@ -48,19 +48,20 @@ export default () => {
                     max_size: GRID_SIZE
                 }
             }]
-        },
-        data => data.map(image => image.url) // dataProcessor
+        }
     );
 
     const numPages = Math.max(1, Math.ceil(numImages / GRID_SIZE));
+    const imageURLs = images.map(image => image.url);
+    const imageLinks = images.map(image => `/post/${image.post_sid}`);
 
     useEffect(() => {
-        fetchImages();
+        fetchNumImages();
     }, [])
 
     /* Fetch new page when currentPage updates */
     useEffect(() => {
-        fetchImageURLs();
+        fetchImages();
     }, [currentPage])
 
     const text = useLanguages(Text);
@@ -70,15 +71,16 @@ export default () => {
         <div className={styles.LostFoundPanel}>
             <PanelHeader title={text.title} link="/lostfound"/>
             {
-                <ImageURLsErrorHandler height={291} showErrorText showSpinner />
+                <ImagesErrorHandler height={291} showErrorText showSpinner />
             }
             {
-                !showImageURLsErrorHandler && (
+                !showImagesErrorHandler && (
                     <ImageGridPanel 
                         gridNumRows={GRID_ROWS}
                         gridNumColumns={GRID_COLUMNS}
                         totalWidthPixels={PANEL_WIDTH}
                         imageURLs={imageURLs}
+                        imageLinks={imageLinks}
                     />
                 )
             }
