@@ -50,3 +50,38 @@ describe('Testing GET /api/v1/room/recent/:room_number ...', () => {
     });
 
 });
+
+describe('Testing GET /api/v1/room/recent ...', () => {
+
+    const testGeneralCase = () => (done) => {
+        request(apiURL)
+            .get(`/api/v1/room/recent`)
+            .then(res => {
+                expect(res).status(200);
+                expect(res.body).to.be.a('array');
+                let room_numbers = [];
+                res.body.forEach(room => {
+                    expect(room).to.have.keys(['room_number', 'state', 'timestamp']);
+                    const { room_number, state, timestamp } = room;
+                    expect(room_number).to.be.a('number');
+                    expect(room_number).to.be.least(1);
+                    expect(state).to.be.oneOf([1, 0]);
+                    expect(timestamp).to.satisfy(e => !isNaN(Date.parse(e)));
+                    room_numbers.push(room_number);
+                });
+                // Test if all room_numbers are unique.
+                room_numbers.forEach((value, index, array) => {
+                    expect(array.indexOf(value) === index);
+                });
+                done();
+            })
+            .catch(err => {
+                done(err);
+            });
+    };
+
+    describe('General case.', () => {
+        it('Test case 1', testGeneralCase());
+    });
+
+});
