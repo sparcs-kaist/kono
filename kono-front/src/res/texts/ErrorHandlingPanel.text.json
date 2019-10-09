@@ -11,6 +11,10 @@
         "kr": "서버에서 요청을 처리할 수 없었습니다.",
         "en": "The server could not process the request."
     },
+    "not_found_error": {
+        "kr": "존재하지 않는 내용입니다",
+        "en": "Content not found."
+    },
     "internal_server_error": {
         "kr": "서버에서 처리 중 문제가 발생했습니다.",
         "en": "There was a problem in the server."

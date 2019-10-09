@@ -4,6 +4,8 @@ import ErrorHandlingPanel from '../../components/ErrorHandlingPanel';
 export const ERROR_NONE = 'none';
 export const ERROR_CONN = 'connection_error';
 export const ERROR_400 = 'bad_request_error';
+export const ERROR_403 = 'forbidden_error';
+export const ERROR_404 = 'not_found_error';
 export const ERROR_500 = 'internal_server_error';
 export const ERROR_DEFAULT = 'default_error';
 
@@ -49,6 +51,9 @@ const useFetch = (
                     case 400:
                         setErrorCode(ERROR_400);
                         break;
+                    case 404:
+                        setErrorCode(ERROR_404);
+                        break;
                     case 500:
                         setErrorCode(ERROR_500);
                         break;
@@ -59,6 +64,7 @@ const useFetch = (
     }
 
     const ErrorHandlerComponent = ({
+        width,
         height,
         showErrorText,
         showSpinner
@@ -67,6 +73,7 @@ const useFetch = (
             <ErrorHandlingPanel
                 isLoading={isLoading}
                 errorCode={errorCode}
+                width={width}
                 height={height}
                 showErrorText={showErrorText}
                 showSpinner={showSpinner}
