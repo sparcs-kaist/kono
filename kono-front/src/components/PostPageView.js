@@ -13,10 +13,24 @@ import useLanguages from '../lib/hooks/useLanguages';
 
 export default ({ post }) => {
 
-    const { sid, type, title_kr, title_en, created_time, content_kr, content_en, content_img } = post;
+    const {
+        sid,
+        type, 
+        title_kr,
+        title_en, 
+        created_time, 
+        content_kr, 
+        content_en, 
+        content_img
+    } = post;
 
     if (!sid)
         return null;
+
+    const showContent = (content_kr || content_en);
+    const contentURL = (content_kr && content_en) 
+        ? useLanguages({ kr: content_kr, en: content_en })
+        : content_kr;
 
     const dispatch = useDispatch();
 
@@ -49,9 +63,13 @@ export default ({ post }) => {
                         </div>
                     )
                 }
-                <div className={style.PostPageView__text}>
-                    <StaticContent url={useLanguages({ kr: content_kr, en: content_en })} />
-                </div>
+                {
+                    showContent && (
+                        <div className={style.PostPageView__text}>
+                            <StaticContent url={contentURL} />
+                        </div>
+                    )
+                }
             </div>
             <div className={style.PostPageView__footer}>
                 <a href="/">

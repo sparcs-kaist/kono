@@ -37,7 +37,7 @@ export default ({ location }) => {
             )
             .catch(
                 (err) => {
-                    if (err.response.data) {
+                    if (err.response) {
                         const { msg } = err.response.data;
                         switch (msg) {
                             case 'password field required':

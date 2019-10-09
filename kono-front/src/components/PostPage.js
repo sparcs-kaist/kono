@@ -1,25 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import PostPageView from './PostPageView';
 import * as FullscreenActions from '../store/modules/fullscreen';
 import * as PostAPI from '../api/post';
+import useFetch from '../lib/hooks/useFetch';
 
 export default ({ match }) => {
 
-    const dispatch = useDispatch();
-    const [post, setPost] = useState({ });
-
     const { 'post_id': postSID } = match.params;
 
-    const fetchPost = async (postSID) => {
-        await PostAPI.single(postSID)
-            .then(({ data }) => {
-                setPost({ ...data });
-            });
-    };
-    
+    const dispatch = useDispatch();
+    const [
+        post,
+        fetchPost,
+        PostErrorHandler,
+        showPostErrorHandler
+    ] = useFetch(
+        {}, // initialValue
+        { // apihttp://localhost:3000/post/9
+            fn: PostAPI.single,
+            args: [ postSID ]
+        }
+    );
+
     useEffect(() => {
-        fetchPost(postSID);
+        fetchPost();
     }, [postSID])
 
     useEffect(() => {
@@ -28,7 +33,14 @@ export default ({ match }) => {
     }, [dispatch, post]);
 
     return (
-        <PostPageView post={post} />
+        <>
+        {
+            <PostErrorHandler width={800} height={500} showErrorText showSpinner/>
+        }
+        {
+            !showPostErrorHandler && <PostPageView post={post} />
+        }
+        </>
     );
 
 }

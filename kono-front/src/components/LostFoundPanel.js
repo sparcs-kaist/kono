@@ -3,9 +3,10 @@ import styles from '../styles/LostFoundPanel.module.scss';
 import PanelHeader from './PanelHeader';
 import PanelFooter from './PanelFooter';
 import ImageGridPanel from './ImageGridPanel';
-import * as PostAPI from '../api/post';
+import * as ImageAPI from '../api/image';
 import Text from '../res/texts/LostFoundPanel.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
+import useFetch from '../lib/hooks/useFetch';
 
 const GRID_ROWS = 2;
 const GRID_COLUMNS = 3;
@@ -16,49 +17,51 @@ const PANEL_WIDTH = 440;
 export default () => {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [numLostFounds, setNumLostFounds] = useState(0);
-    const [imageURLs, setImageURLs] = useState([]);
 
-    const numPages = Math.max(1, Math.ceil(numLostFounds / GRID_SIZE));
+    const [
+        numImages,
+        fetchNumImages,
+        NumImagesErrorHandler,
+        showNumImagesErrorHandler
+    ] = useFetch(
+        0, // initialValue
+        { // api
+            fn: ImageAPI.count,
+            args: []
+        },
+        data => data.lostfound // dataProcessor
+    );
 
-    const fetchPage = async (page) => {
-        const lostFounds = await PostAPI.list({
+    const [
+        images,
+        fetchImages,
+        ImagesErrorHandler,
+        showImagesErrorHandler
+    ] = useFetch(
+        [], // initialValue
+        { // api
+            fn: ImageAPI.list,
+            args: [{
                 params: {
                     filter_type: 'lostfound',
-                    start_index: (page - 1) * GRID_SIZE,
+                    start_index: (currentPage - 1) * GRID_SIZE,
                     max_size: GRID_SIZE
                 }
-            })
-            .then(({ data }) => {
-                setNumLostFounds(data.size);
-                return data.posts;
-            })
-            .catch(({ response }) => {
-                console.log(response);
-                return;
-            });
+            }]
+        }
+    );
 
-        /* TODO: This does not handle if a lost found post has more than one image.
-         * Should fix kono-api first then handle this by calling a new API. */
-        setImageURLs(
-            await Promise.all(
-                lostFounds.map(async ({ sid }) => {
-                    try {
-                        const { data } = await PostAPI.single(sid);
-                        const { content_img } = data;
-                        return content_img[0];
-                    } catch (e) {
-                        console.log(e);
-                        return null;
-                    }
-                })
-            )
-        );
-    };
+    const numPages = Math.max(1, Math.ceil(numImages / GRID_SIZE));
+    const imageURLs = images.map(image => image.url);
+    const imageLinks = images.map(image => `/post/${image.post_sid}`);
 
-    /* Fetch page when currentPage updates */
     useEffect(() => {
-        fetchPage(currentPage);
+        fetchNumImages();
+    }, [])
+
+    /* Fetch new page when currentPage updates */
+    useEffect(() => {
+        fetchImages();
     }, [currentPage])
 
     const text = useLanguages(Text);
@@ -67,17 +70,33 @@ export default () => {
     return (
         <div className={styles.LostFoundPanel}>
             <PanelHeader title={text.title} link="/lostfound"/>
-            <ImageGridPanel 
-                gridNumRows={GRID_ROWS}
-                gridNumColumns={GRID_COLUMNS}
-                totalWidthPixels={PANEL_WIDTH}
-                imageURLs={imageURLs}
-            />
-            <PanelFooter 
-                currentPage={currentPage}
-                numPages={numPages}
-                onClickPage={page => setCurrentPage(page)}
-            />
+            {
+                <ImagesErrorHandler height={291} showErrorText showSpinner />
+            }
+            {
+                !showImagesErrorHandler && (
+                    <ImageGridPanel 
+                        gridNumRows={GRID_ROWS}
+                        gridNumColumns={GRID_COLUMNS}
+                        totalWidthPixels={PANEL_WIDTH}
+                        imageURLs={imageURLs}
+                        imageLinks={imageLinks}
+                    />
+                )
+            }
+            {
+                <NumImagesErrorHandler height={64} />
+            }
+            {
+                !showNumImagesErrorHandler && (
+                    <PanelFooter 
+                        currentPage={currentPage}
+                        numPages={numPages}
+                        onClickPage={page => setCurrentPage(page)}
+                    />
+                )
+            }
+            
         </div>
     );
 

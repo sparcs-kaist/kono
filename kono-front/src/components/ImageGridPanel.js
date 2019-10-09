@@ -66,6 +66,7 @@ export default ({
     totalWidthPixels,
     gridGapPixels = 7, 
     imageURLs=[],
+    imageLinks=[],
     useDynamicPositioning,
     useOnClick
 }) => {
@@ -104,7 +105,7 @@ export default ({
                             imageIndex={idx}
                             imageWidth={gridCellSize * imageWidthCoeffs[idx] + gridGapPixels * (imageWidthCoeffs[idx] - 1)}
                             imageHeight={gridCellSize * imageHeightCoeffs[idx] + gridGapPixels * (imageHeightCoeffs[idx] - 1)}
-                            imageURL={imageURLs[idx]} 
+                            imageURL={imageURLs[idx]}
                             showOverlapPanel={showOverlapPanel}
                             overlapText={overlapText} 
                             useOnClick={useOnClick} />
@@ -138,6 +139,7 @@ export default ({
                             imageWidth={gridCellSize}
                             imageHeight={gridCellSize}
                             imageURL={imageURLs ? imageURLs[idx] : null}
+                            imageLink={imageLinks[idx]}
                             key={`thumbnail-${idx}`}
                             useOnClick={useOnClick} />
                     );

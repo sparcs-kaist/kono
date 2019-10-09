@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styles from '../styles/ImageThumbnailPanel.module.scss';
+import Spinner from './Spinner';
 import * as FullscreenActions from '../store/modules/fullscreen';
 
 export default ({
@@ -8,7 +9,7 @@ export default ({
     gridColumn, gridColumnSize=1, 
     imageIndex,
     imageWidth, imageHeight,
-    imageURL,
+    imageURL, imageLink,
     showOverlapPanel, overlapText,
     useOnClick
 }) => {
@@ -19,6 +20,7 @@ export default ({
     const dispatch = useDispatch();
     const [croppedImageWidth, setCroppedImageWidth] = useState(imageWidth);
     const [croppedImageHeight, setCroppedImageHeight] = useState(imageHeight);
+    const [isLoading, setLoading] = useState(false);
 
     const imageContainerStyle = {
         gridRow: `${gridRow} / ${gridRow + gridRowSize}`,
@@ -27,11 +29,10 @@ export default ({
         height: `${imageHeight}px`
     };
     const imageStyle = {
+        display: isLoading ? 'none' : 'block', // do not show blank div if not loaded
         width: `${croppedImageWidth}px`,
         height: `${croppedImageHeight}px`,
-        position: 'relative',
-        top: `${.5 * (imageHeight - croppedImageHeight)}px`, // Center image vertically
-        left: `${.5 * (imageWidth - croppedImageWidth)}px`  // Center image horizontally
+        position: 'relative'
     };
 
     const onLoad = ({ target: img }) => {
@@ -42,6 +43,7 @@ export default ({
             setCroppedImageWidth(naturalWidth * scale);
             setCroppedImageHeight(naturalHeight * scale);
         }
+        setLoading(false);
     };
 
     const onClick = () => {
@@ -49,18 +51,28 @@ export default ({
         dispatch(FullscreenActions.SetImageIndex(imageIndex));
     };
 
+    useEffect(() => {
+        if (imageURL)
+            setLoading(true);
+    }, [imageURL]);
+
     return (
         <div 
             className={styles.ImageThumbnailPanel}
             style={imageContainerStyle}
             onClick={useOnClick ? onClick : null}>
             {
+                isLoading && <Spinner />
+            }
+            {
                 imageURL ? (
-                    <img
+                    <a href={imageLink}>
+                        <img
                         src={imageURL} 
                         alt={imageURL}
                         style={imageStyle}
                         onLoad={onLoad} />
+                    </a>
                 ) : null
             }
             {

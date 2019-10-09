@@ -25,20 +25,22 @@ function getDateString(date) {
 export default (
     {
         type = 'post',
-        title = {
-            kr: '(제목 없음)',
-            en: '(No Title)'
-        },
+        title,
         date = new Date()
     }
 ) => {
 
-    const titleTranscripted = useLanguages(title);
+    const showTitle = (title.kr || title.en);
+    const titleTranscripted = (title.kr && title.en)
+        ? useLanguages(title)
+        : (title.kr ? title.kr : title.en);
     const text = useLanguages(Text);
 
     return (
         <div className={styles.PostHeader}>
-            <h1>{ titleTranscripted }</h1>
+            {
+                showTitle && (<h1>{ titleTranscripted }</h1>)
+            }
             <div className={styles.PostHeader__tags}>
                 <span><b>{ text[getTypeSelector(type)] }</b></span>
                 <span>{ getDateString(date) }</span>
