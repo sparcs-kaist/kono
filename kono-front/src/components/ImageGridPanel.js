@@ -108,7 +108,7 @@ export default ({
                             imageURL={imageURLs[idx]}
                             showOverlapPanel={showOverlapPanel}
                             overlapText={overlapText} 
-                            useOnClick={useOnClick} />
+                            useOnClick={useOnClick && (idx < numImages)} />
                     );
                 })
             }
