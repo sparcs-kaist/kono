@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import useFetch from '../lib/hooks/useFetch';
 
 export default ({ url }) => {
 
-    const [innerHTML, setInnerHTML] = useState('');
+    const [
+        innerHTML,
+        fetchInnerHTML,
+        InnerHTMLErrorHandler,
+        showInnerHTMLErrorHandler
+    ] = useFetch(
+        '',
+        {
+            fn: axios.get,
+            args: [ url ]
+        }
+    );
 
     useEffect(() => {
-        axios.get(url)
-            .then(res => setInnerHTML(res.data))
-            .catch(err => console.log(err));
+        fetchInnerHTML();
     }, [url]);
 
     return (
-        <div dangerouslySetInnerHTML={{ __html: innerHTML }} />
+        <>
+        {
+            <InnerHTMLErrorHandler showErrorText/>
+        }
+        {
+            !showInnerHTMLErrorHandler && <div dangerouslySetInnerHTML={{ __html: innerHTML }} />
+        }
+        </>
     );
 
 }
