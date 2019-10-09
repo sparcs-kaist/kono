@@ -22,7 +22,7 @@ export default ({ match }) => {
             args: [ postSID ]
         }
     );
-    
+
     useEffect(() => {
         fetchPost();
     }, [postSID])

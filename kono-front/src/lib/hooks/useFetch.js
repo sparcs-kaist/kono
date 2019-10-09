@@ -33,14 +33,13 @@ const useFetch = (
         setLoading(true);
         await fn(...args)
             .then(({ data }) => {
-                setLoading(false);
                 if (dataProcessor)
                     setData(dataProcessor(data));
                 else
                     setData(data);
+                setLoading(false);
             })
             .catch((err) => {
-                setLoading(false);
                 const { response } = err;
                 if (!response) {
                     setErrorCode(ERROR_CONN);
@@ -60,6 +59,7 @@ const useFetch = (
                     default:
                         setErrorCode(ERROR_DEFAULT);
                 }
+                setLoading(false);
             });
     }
 
