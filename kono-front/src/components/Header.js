@@ -3,6 +3,7 @@ import styles from '../styles/Header.module.scss';
 import { Link, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as Logo } from '../res/icons/logo.svg';
+import MaterialIcon from './MaterialIcon';
 import Text from '../res/texts/Header.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
 import * as AuthActions from '../store/modules/auth';
@@ -41,14 +42,18 @@ export default withRouter(({ history }) => {
                 </span>
                 <span 
                     className={styles.Header__common_menu}
-                    onClick={onClickToggleTheme}>
-                    __TOGGLE_THEME__
+                    onClick={onClickToggleTheme}
+                >
+                    <MaterialIcon style={{ padding: '0 5px' }}>brightness_4</MaterialIcon>
+                    <div>{ text.toggle_theme }</div>
                 </span>
-                <span 
+                <div 
                     className={styles.Header__common_menu}
-                    onClick={onClickToggleLanguage}>
-                    __TOGGLE_LAN__
-                </span>
+                    onClick={onClickToggleLanguage}
+                >
+                    <MaterialIcon style={{ padding: '0 5px' }}>language</MaterialIcon>
+                    <div>{ text.toggle_language }</div>
+                </div>
                 {
                     login && (
                         <>
