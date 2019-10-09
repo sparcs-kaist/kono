@@ -6,16 +6,32 @@
         margin: auto;
         width: 500px;
 
-        padding: 50px;
-
-        background-color: t(panel-background);
         color: t(text-primary);
 
         @include flexbox(column, $center: true);
 
-        h1, h2, h3, h4, h5, h6, p {
-            font-weight: normal;
-            text-align: center;
+        .CreditPage__row {
+            @include flexbox(row, $center: true);
+            span + span {
+                margin-left: 20px;
+            }
+        }
+
+        p {
+            color: t(text-secondary);
+            font-size: 12px;
+        }
+
+        span {
+            margin: 10px 0;
+        }
+
+        a {
+            @include link;
+        }
+
+        div {
+            @include flexbox(row, $center: true);
         }
 
     }
