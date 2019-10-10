@@ -2,7 +2,6 @@
 
 @include themed() {
     .RoomPanel {
-        background: t(panel-background);
         border-radius: 6px;
         width: 600px;
         height: calc(100vh - 180px);
