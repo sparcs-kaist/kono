@@ -1,50 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '../styles/RoomPanel.module.scss';
 import RoomStatePanel from './RoomStatePanel';
+import useFetch from '../lib/hooks/useFetch';
+import * as RoomAPI from '../api/room';
 
 export default () => {
 
-    const rooms = [
+    const [
+        rooms,
+        fetchRooms,
+        RoomsErrorHandler,
+        showRoomsErrorHandler
+    ] = useFetch(
+        [], // initialValue
         {
-            room_number: 1,
-            state: 0,
-            timestamp: new Date()
+            fn: RoomAPI.recentList,
+            args: []
         },
-        {
-            room_number: 2,
-            state: 1,
-            timestamp: new Date()
-        },
-        {
-            room_number: 3,
-            state: 1,
-            timestamp: new Date()
-        },
-        {
-            room_number: 4,
-            state: 1,
-            timestamp: new Date()
-        },
-        {
-            room_number: 5,
-            state: 0,
-            timestamp: new Date()
-        },
-        {
-            room_number: 6,
-            state: 0,
-            timestamp: new Date()
-        },
-        {
-            room_number: 7,
-            state: 1,
-            timestamp: new Date()
-        },
-    ]
+        (data) => {
+            const processed = {};
+            data.forEach(room => { processed[room.room_number] = room; });
+            return processed;
+        }
+    );
+
+    useEffect(() => {
+        fetchRooms();
+    }, []);
 
     return (
         <div className={styles.RoomPanel}>
-            <RoomStatePanel rooms={rooms} />
+            <RoomsErrorHandler
+                width={600}
+                height={'calc(100vh - 180px)'}
+                showSpinner
+                showErrorText
+            />
+            {
+                !showRoomsErrorHandler && (
+                    <RoomStatePanel rooms={rooms} />
+                )
+            }
         </div>
     );
 }
