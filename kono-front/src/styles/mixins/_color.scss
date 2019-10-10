@@ -13,7 +13,8 @@ $themes: (
         background: #FFFFFF,
         panel-background: #EFECEB,
         theme-background: material-color('brown', '500'),
-        theme-light-background: material-color('brown', '300')
+        theme-light-background: material-color('brown', '300'),
+        inactive-background: material-color('grey', '700')
     ),
     dark: (
         /* Text Colors */
@@ -27,7 +28,8 @@ $themes: (
         background: #19192C,
         panel-background: #373751,
         theme-background: #6078F5,
-        theme-light-background: #90CAF9
+        theme-light-background: #90CAF9,
+        inactive-background: material-color('grey', '700')
     )
 );
 

@@ -43,6 +43,7 @@ const useFetch = (
                 const { response } = err;
                 if (!response) {
                     setErrorCode(ERROR_CONN);
+                    setLoading(false);
                     return;
                 }
                 const { status } = response;

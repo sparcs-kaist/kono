@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from '../styles/RoomPanel.module.scss';
 import RoomStatePanel from './RoomStatePanel';
+import RoomLegendPanel from './RoomLegendPanel';
 import useFetch from '../lib/hooks/useFetch';
 import * as RoomAPI from '../api/room';
 
@@ -16,11 +17,6 @@ export default () => {
         {
             fn: RoomAPI.recentList,
             args: []
-        },
-        (data) => {
-            const processed = {};
-            data.forEach(room => { processed[room.room_number] = room; });
-            return processed;
         }
     );
 
@@ -38,7 +34,10 @@ export default () => {
             />
             {
                 !showRoomsErrorHandler && (
-                    <RoomStatePanel rooms={rooms} />
+                    <>
+                        <RoomStatePanel rooms={rooms} />
+                        <RoomLegendPanel />
+                    </>
                 )
             }
         </div>
