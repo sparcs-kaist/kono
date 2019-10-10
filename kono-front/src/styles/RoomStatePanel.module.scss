@@ -1,0 +1,21 @@
+@import 'mixins/all';
+
+@include themed() {
+
+    .RoomStatePanel {
+
+        .RoomStatePanel__room_empty {
+            fill: t(panel-background);
+        }
+
+        .RoomStatePanel__room_filled {
+            fill: t(theme-background);
+        }
+
+        .RoomStatePanel__room_null {
+            fill: t(panel-background);
+        }
+
+    }
+
+}

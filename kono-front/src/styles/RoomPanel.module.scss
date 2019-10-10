@@ -1,9 +1,13 @@
 @import 'mixins/all';
 
 @include themed() {
+
     .RoomPanel {
+
         border-radius: 6px;
         width: 600px;
         height: calc(100vh - 180px);
+
     }
+
 }
