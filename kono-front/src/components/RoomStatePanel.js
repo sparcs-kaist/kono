@@ -1,5 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import styles from '../styles/RoomStatePanel.module.scss';
+import RoomDetailPanel from './RoomDetailPanel';
 import SVGPaths from '../res/icons/room.json';
 import classnames from '../lib/classnames';
 
@@ -27,17 +28,21 @@ function highlight2state(highlight) {
 
 }
 
+const ROOM_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
+
 export default ({ rooms, highlight }) => {
 
     const [hover, setHover] = useState(null);
-
+    
     const roomComponents = (room_idx) => {
 
         const room = rooms.find(e => e.room_number === room_idx);
-        const { room_number, state, timestamp } = room || {};
+        const { room_number, state } = room || {};
+        
+        const isHovered = (hover === room_number);
 
-        const onMouseEnter = room && (() => setHover(room.room_number));
-        const onMouseLeave = room && (() => setHover(null));
+        const onMouseOver = room && (() => setHover(room.room_number));
+        const onMousOut = room && (() => setHover(null));
 
         return (
             <Fragment key={`room-fragment-${room_idx}`}>
@@ -45,11 +50,11 @@ export default ({ rooms, highlight }) => {
                     className={classnames([
                         state2classname(state),
                         (highlight2state(highlight) === state) && styles.RoomStatePanel__room_highlight,
-                        (hover === room_number) && styles.RoomStatePanel__room_highlight
+                        isHovered && styles.RoomStatePanel__room_highlight
                     ])} 
-                    d={SVGPaths[room_idx]} 
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
+                    d={SVGPaths.path[room_idx]} 
+                    onMouseOver={onMouseOver}
+                    onMouseOut={onMousOut}
                 />
             </Fragment>
         );
@@ -57,11 +62,26 @@ export default ({ rooms, highlight }) => {
     };
 
     return (
-        <svg className={styles.RoomStatePanel} width="541" height="601" viewBox="0 0 541 601" xmlns="http://www.w3.org/2000/svg">
+        <div>
+            <svg className={styles.RoomStatePanel} width="541" height="601" viewBox="0 0 541 601" xmlns="http://www.w3.org/2000/svg">
+                {
+                    ROOM_NUMBERS.map(i => roomComponents(i))
+                }
+            </svg>
             {
-                [1, 2, 3, 4, 5, 6, 7].map(i => roomComponents(i))
+                ROOM_NUMBERS.map(i => {
+                    if (hover !== i)
+                        return null;
+                    return (
+                        <RoomDetailPanel 
+                            x={SVGPaths.pos[i].x} 
+                            y={SVGPaths.pos[i].y}
+                            room={rooms.find(e => e.room_number === i)}
+                        />
+                    )
+                })
             }
-        </svg>
+        </div>
     );
 
 }

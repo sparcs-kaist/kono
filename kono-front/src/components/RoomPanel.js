@@ -12,8 +12,9 @@ import * as RoomAPI from '../api/room';
 import Text from '../res/texts/RoomPanel.text.json';
 
 const __temp_notices = [
+    '현재 지폐교환기 사용이 불가능합니다.',
     '현재 알파 서비스 중입니다.',
-    '???'
+    '...'
 ];
 
 export default () => {

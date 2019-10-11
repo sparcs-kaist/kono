@@ -1,0 +1,13 @@
+@import 'mixins/all';
+
+@include themed() {
+    .RoomDetailPanel {
+        width: 150px;
+        height: 75px;
+        position: absolute;
+        background: t(background);
+        border-radius: 6px;
+        border: 1px solid t(theme-light-background);
+        padding: 8px;
+    }
+}

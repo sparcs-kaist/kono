@@ -13,8 +13,9 @@
         .RoomNoticeBanner__single {
             @include flexbox(row, $center: true);
             padding: 4px 8px;
-            background-color: t(theme-light-background);
+            background-color: t(theme-background);
             color: t(background);
+            border: .5px solid t(theme-light-background);
             span {
                 line-height: 16px;
                 font-size: 14px;
