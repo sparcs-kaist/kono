@@ -5,4 +5,4 @@ API Server providing apis for the front-end web service.
 - MySQL (MariaDB) + Knex.js
 - Mocha.js
 
-[Documentation](https://app.gitbook.com/@sparcs/s/sparcs-kono/kono-api)
+[Documentation](https://docs.kono.sparcs.org/kono-api)
