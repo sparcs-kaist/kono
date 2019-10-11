@@ -74,6 +74,7 @@ export default ({ rooms, highlight }) => {
                         return null;
                     return (
                         <RoomDetailPanel 
+                            key={`room-detail-${i}`}
                             x={SVGPaths.pos[i].x} 
                             y={SVGPaths.pos[i].y}
                             room={rooms.find(e => e.room_number === i)}
