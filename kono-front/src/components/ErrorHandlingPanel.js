@@ -7,14 +7,14 @@ import useLanguages from '../lib/hooks/useLanguages';
 import * as errorCodes from '../lib/hooks/useFetch';
 import Text from '../res/texts/ErrorHandlingPanel.text.json';
 
-export default ({ isLoading, errorCode, width, height, showErrorText, showSpinner }) => {
+export default ({ isLoading, errorCode, width, height, showErrorText, showSpinner, showBackground }) => {
     
     const text = useLanguages(Text);
 
     const showError = !isLoading && (errorCode !== errorCodes.ERROR_NONE);
     const showIcon = (errorCode !== errorCodes.ERROR_CONN);
 
-    const useBackground = !isLoading && (showErrorText || showSpinner);
+    const useBackground = showBackground && !isLoading && (showErrorText || showSpinner);
 
     return (
         <div 

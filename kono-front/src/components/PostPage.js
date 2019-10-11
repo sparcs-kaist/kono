@@ -35,7 +35,7 @@ export default ({ match }) => {
     return (
         <>
         {
-            <PostErrorHandler width={800} height={500} showErrorText showSpinner/>
+            <PostErrorHandler width={800} height={500} showErrorText showSpinner showBackground/>
         }
         {
             !showPostErrorHandler && <PostPageView post={post} />

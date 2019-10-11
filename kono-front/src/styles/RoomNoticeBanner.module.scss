@@ -1,0 +1,32 @@
+@import 'mixins/all';
+
+@include themed() {
+    .RoomNoticeBanner {
+
+        @include flexbox(column, $center: false);
+        align-items: flex-start;
+
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+
+        .RoomNoticeBanner__single {
+            @include flexbox(row, $center: true);
+            padding: 4px 8px;
+            background-color: t(theme-background);
+            color: t(background);
+            border: .5px solid t(theme-light-background);
+            span {
+                line-height: 16px;
+                font-size: 14px;
+                margin: 0 5px;
+            }
+            border-radius: 12px;
+        }
+
+        .RoomNoticeBanner__single + .RoomNoticeBanner__single {
+            margin-top: 5px;
+        }
+
+    }
+}
