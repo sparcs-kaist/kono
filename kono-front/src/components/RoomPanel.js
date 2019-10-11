@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/RoomPanel.module.scss';
 import RoomStatePanel from './RoomStatePanel';
 import RoomLegendPanel from './RoomLegendPanel';
@@ -31,6 +31,7 @@ export default () => {
             args: []
         }
     );
+    const [highlight, setHighlight] = useState('none');
 
     const showRefreshButton = !isLoadingRooms;
     const showLoadingBanner = isLoadingRooms;
@@ -46,10 +47,10 @@ export default () => {
     return (
         <div className={styles.RoomPanel}>
             {
-                <RoomStatePanel rooms={rooms} />
+                <RoomStatePanel rooms={rooms} highlight={highlight}/>
             }
             {
-                <RoomLegendPanel />
+                <RoomLegendPanel setHighlight={setHighlight}/>
             }
             {
                 showRefreshButton && (

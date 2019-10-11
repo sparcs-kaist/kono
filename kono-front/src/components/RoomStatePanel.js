@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import styles from '../styles/RoomStatePanel.module.scss';
 import SVGPaths from '../res/icons/room.json';
+import classnames from '../lib/classnames';
 
 function state2classname(state) {
 
@@ -13,7 +14,20 @@ function state2classname(state) {
 
 }
 
-export default ({ rooms }) => {
+function highlight2state(highlight) {
+
+    if (highlight === 'none')
+        return 'none';
+    if (highlight === 'empty')
+        return 0;
+    if (highlight === 'filled')
+        return 1;
+    if (highlight === 'null')
+        return undefined;
+
+}
+
+export default ({ rooms, highlight }) => {
     
     const roomComponents = (room_idx) => {
 
@@ -22,7 +36,13 @@ export default ({ rooms }) => {
 
         return (
             <Fragment key={`room-fragment-${room_idx}`}>
-                <path className={state2classname(state)} d={SVGPaths[room_idx]} />
+                <path 
+                    className={classnames([
+                        state2classname(state),
+                        (highlight2state(highlight) === state) && styles.RoomStatePanel__room_highlight
+                    ])} 
+                    d={SVGPaths[room_idx]} 
+                />
             </Fragment>
         );
 

@@ -4,13 +4,20 @@ import classnames from '../lib/classnames';
 import Text from '../res/texts/RoomLegendPanel.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
 
-export default () => {
+export default ({ setHighlight }) => {
 
     const text = useLanguages(Text);
 
+    const onMouseEnter = (legend) => () => setHighlight(legend);
+    const onMouseLeave = () => setHighlight('none');
+
     return (
         <div className={styles.RoomLegendPanel}>
-            <div className={styles.RoomLegendPanel__row}>
+            <div 
+                className={styles.RoomLegendPanel__row}
+                onMouseEnter={onMouseEnter('empty')}
+                onMouseLeave={onMouseLeave}
+            >
                 <div className={
                     classnames([
                         styles.RoomLegendPanel__square,
@@ -20,7 +27,10 @@ export default () => {
                     { text.empty }
                 </div>
             </div>
-            <div className={styles.RoomLegendPanel__row}>
+            <div className={styles.RoomLegendPanel__row}
+                onMouseEnter={onMouseEnter('filled')}
+                onMouseLeave={onMouseLeave}
+            >
                 <div className={
                     classnames([
                         styles.RoomLegendPanel__square,
@@ -30,7 +40,10 @@ export default () => {
                     { text.filled }
                 </div>
             </div>
-            <div className={styles.RoomLegendPanel__row}>
+            <div className={styles.RoomLegendPanel__row}
+                onMouseEnter={onMouseEnter('null')}
+                onMouseLeave={onMouseLeave}
+            >
                 <div className={
                     classnames([
                         styles.RoomLegendPanel__square,

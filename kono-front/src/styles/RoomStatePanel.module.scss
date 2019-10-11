@@ -20,6 +20,11 @@
             fill: t(inactive-background);
         }
 
+        .RoomStatePanel__room_highlight {
+            stroke: t(text-highlight-on);
+            stroke-width: 2px;
+        }
+
     }
 
 }
