@@ -10,6 +10,18 @@
         width: 600px;
         height: calc(100vh - 180px);
 
+        .RoomPanel__refresh {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 14px;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid;
+            @include flexbox(row, $center: true);
+            @include link;
+        }
+
     }
 
 }

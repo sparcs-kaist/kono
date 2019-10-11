@@ -4,6 +4,10 @@
 
     .RoomStatePanel {
 
+        position: absolute;
+        top: 0;
+        left: 0;
+
         .RoomStatePanel__room_empty {
             fill: t(panel-background);
         }
