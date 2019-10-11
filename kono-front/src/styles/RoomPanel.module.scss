@@ -10,16 +10,30 @@
         width: 600px;
         height: calc(100vh - 180px);
 
-        .RoomPanel__refresh {
+        .RoomPanel__state {
             position: absolute;
             top: 5px;
             left: 5px;
             font-size: 14px;
             padding: 6px;
             border-radius: 6px;
-            border: 1px solid;
+            border: 1px solid t(text-primary);
+            color: t(text-primary);
             @include flexbox(row, $center: true);
+            span {
+                margin-left: 6px;
+            }
+            &:hover {
+                border-color: t(text-highlight-on);
+            }
+        }
+
+        .RoomPanel__refresh {
             @include link;
+        }
+
+        .RoomPanel__loading {
+
         }
 
     }

@@ -2,5 +2,9 @@
     "refresh": {
         "kr": "새로고침",
         "en": "Refresh"
+    },
+    "loading": {
+        "kr": "불러오는 중...",
+        "en": "Loading ..."
     }
 }

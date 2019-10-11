@@ -68,7 +68,8 @@ const useFetch = (
         width,
         height,
         showErrorText,
-        showSpinner
+        showSpinner,
+        showBackground
     }) => (
         showErrorHandlerComponent && (
             <ErrorHandlingPanel
@@ -78,6 +79,7 @@ const useFetch = (
                 height={height}
                 showErrorText={showErrorText}
                 showSpinner={showSpinner}
+                showBackground={showBackground}
             />
         )
     )
@@ -86,7 +88,8 @@ const useFetch = (
         data, 
         fetchData, 
         ErrorHandlerComponent,
-        showErrorHandlerComponent
+        showErrorHandlerComponent,
+        isLoading
     ];
 
 }

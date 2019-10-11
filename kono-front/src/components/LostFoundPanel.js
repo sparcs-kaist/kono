@@ -71,7 +71,7 @@ export default () => {
         <div className={styles.LostFoundPanel}>
             <PanelHeader title={text.title} link="/lostfound"/>
             {
-                <ImagesErrorHandler height={291} showErrorText showSpinner />
+                <ImagesErrorHandler height={291} showErrorText showSpinner showBackground />
             }
             {
                 !showImagesErrorHandler && (

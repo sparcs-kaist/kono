@@ -3,8 +3,10 @@ import styles from '../styles/RoomPanel.module.scss';
 import RoomStatePanel from './RoomStatePanel';
 import RoomLegendPanel from './RoomLegendPanel';
 import MaterialIcon from './MaterialIcon';
+import Spinner from './Spinner';
 import useFetch from '../lib/hooks/useFetch';
 import useLanguages from '../lib/hooks/useLanguages';
+import classnames from '../lib/classnames';
 import * as RoomAPI from '../api/room';
 import Text from '../res/texts/RoomPanel.text.json';
 
@@ -14,7 +16,8 @@ export default () => {
         rooms,
         fetchRooms,
         RoomsErrorHandler,
-        showRoomsErrorHandler
+        showRoomsErrorHandler,
+        isLoadingRooms
     ] = useFetch(
         [], // initialValue
         {
@@ -34,20 +37,38 @@ export default () => {
             {
                 <RoomStatePanel rooms={rooms} />
             }
-            <RoomsErrorHandler
-                width={600}
-                height={'calc(100vh - 180px)'}
-                showSpinner
-                showErrorText
-            />
             {
                 <RoomLegendPanel />
             }
             {
-                <div className={styles.RoomPanel__refresh}>
-                    <MaterialIcon md24 style={{ marginRight: '6px' }}>refresh</MaterialIcon>
-                    <span>{ text.refresh }</span>
-                </div>
+                !isLoadingRooms && (
+                    <div className={classnames([
+                            styles.RoomPanel__state,
+                            styles.RoomPanel__refresh
+                        ])}>
+                        <MaterialIcon md24>refresh</MaterialIcon>
+                        <span>{ text.refresh }</span>
+                    </div>
+                )
+            }
+            {
+                isLoadingRooms && (
+                    <div className={classnames([
+                        styles.RoomPanel__state,
+                        styles.RoomPanel__loading
+                    ])}>
+                        <Spinner small primary/>
+                        <span>{ text.loading }</span>
+                    </div>
+                )
+            }
+            {
+                <RoomsErrorHandler
+                    width={600}
+                    height={'calc(100vh - 180px)'}
+                    showSpinner
+                    showErrorText
+                />
             }
         </div>
     );

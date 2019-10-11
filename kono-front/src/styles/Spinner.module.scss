@@ -36,6 +36,24 @@
             animation-delay: -0.15s;
         }
 
+        &.Spinner__small {
+            width: 16px;
+            height: 16px;
+
+            div {
+                width: 14px;
+                height: 14px;
+                margin: 1px;
+                border-width: 2px;
+            }
+        }
+
+        &.Spinner__primary {
+            div {
+                border-color: t(text-primary) transparent transparent transparent;
+            }
+        }
+
     }
 }
 

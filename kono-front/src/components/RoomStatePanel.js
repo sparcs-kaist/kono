@@ -14,9 +14,7 @@ function state2classname(state) {
 }
 
 export default ({ rooms }) => {
-
-    rooms = rooms.slice(1);
-
+    
     const roomComponents = (room_idx) => {
 
         const room = rooms.find(e => e.room_number === room_idx);
