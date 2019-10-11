@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const { REACT_APP_KONO_AUTH_URL: apiURL } = process.env;
+const { REACT_APP_KONO_API_URL: apiURL } = process.env;
 
 axios.defaults.withCredentials = true;
 

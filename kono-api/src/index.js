@@ -3,8 +3,10 @@ import '@babel/polyfill';
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import routes from './routes';
 import db from './db';
+import JWTMiddleware from './lib/JWTMiddleware';
 
 dotenv.config();
 const { NODE_ENV, DEV_PORT, PROD_PORT } = process.env;
@@ -28,6 +30,8 @@ app.use((req, res, next) => {
 });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(JWTMiddleware());
 
 app.use('/', routes);
 
