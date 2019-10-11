@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import styles from '../styles/RoomStatePanel.module.scss';
 import SVGPaths from '../res/icons/room.json';
 import classnames from '../lib/classnames';
@@ -28,20 +28,28 @@ function highlight2state(highlight) {
 }
 
 export default ({ rooms, highlight }) => {
-    
+
+    const [hover, setHover] = useState(null);
+
     const roomComponents = (room_idx) => {
 
         const room = rooms.find(e => e.room_number === room_idx);
-        const { state, timestamp } = room || {};
+        const { room_number, state, timestamp } = room || {};
+
+        const onMouseEnter = room && (() => setHover(room.room_number));
+        const onMouseLeave = room && (() => setHover(null));
 
         return (
             <Fragment key={`room-fragment-${room_idx}`}>
                 <path 
                     className={classnames([
                         state2classname(state),
-                        (highlight2state(highlight) === state) && styles.RoomStatePanel__room_highlight
+                        (highlight2state(highlight) === state) && styles.RoomStatePanel__room_highlight,
+                        (hover === room_number) && styles.RoomStatePanel__room_highlight
                     ])} 
                     d={SVGPaths[room_idx]} 
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
                 />
             </Fragment>
         );

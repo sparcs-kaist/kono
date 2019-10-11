@@ -21,8 +21,8 @@
         }
 
         .RoomStatePanel__room_highlight {
-            stroke: t(text-highlight-on);
-            stroke-width: 2px;
+            stroke: t(theme-light-background);
+            stroke-width: 1px;
         }
 
     }
