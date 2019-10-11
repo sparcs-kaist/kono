@@ -4,11 +4,17 @@ import RoomStatePanel from './RoomStatePanel';
 import RoomLegendPanel from './RoomLegendPanel';
 import MaterialIcon from './MaterialIcon';
 import Spinner from './Spinner';
+import RoomNoticeBanner from './RoomNoticeBanner';
 import useFetch from '../lib/hooks/useFetch';
 import useLanguages from '../lib/hooks/useLanguages';
 import classnames from '../lib/classnames';
 import * as RoomAPI from '../api/room';
 import Text from '../res/texts/RoomPanel.text.json';
+
+const __temp_notices = [
+    '현재 알파 서비스 중입니다.',
+    '???'
+];
 
 export default () => {
 
@@ -25,6 +31,9 @@ export default () => {
             args: []
         }
     );
+
+    const showRefreshButton = !isLoadingRooms;
+    const showLoadingBanner = isLoadingRooms;
     
     const text = useLanguages(Text);
 
@@ -43,7 +52,7 @@ export default () => {
                 <RoomLegendPanel />
             }
             {
-                !isLoadingRooms && (
+                showRefreshButton && (
                     <div className={classnames([
                             styles.RoomPanel__state,
                             styles.RoomPanel__refresh
@@ -55,7 +64,7 @@ export default () => {
                 )
             }
             {
-                isLoadingRooms && (
+                showLoadingBanner && (
                     <div className={classnames([
                         styles.RoomPanel__state,
                         styles.RoomPanel__loading
@@ -64,6 +73,9 @@ export default () => {
                         <span>{ text.loading }</span>
                     </div>
                 )
+            }
+            {
+                <RoomNoticeBanner notices={__temp_notices}/>
             }
             {
                 <RoomsErrorHandler
