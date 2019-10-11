@@ -2,12 +2,44 @@
 
 @include themed() {
     .RoomDetailPanel {
-        width: 150px;
+
+        width: 200px;
         height: 75px;
         position: absolute;
         background: t(background);
         border-radius: 6px;
         border: 1px solid t(theme-light-background);
         padding: 8px;
+
+        @include flexbox(column, $center: false);
+        align-items: flex-end;
+
+        color: t(text-primary);
+
+        .RoomDetailPanel__row {
+            font-size: 14px;
+            .RoomDetailPanel__large {
+                font-size: 28px;
+            }
+            .RoomDetailPanel__highlight {
+                color: t(text-highlight);
+            }
+            .RoomDetailPanel__highlight_on {
+                color: t(text-highlight-on);
+            }
+            .RoomDetailPanel__theme_background {
+                color: t(theme-background);
+            }
+        }
+
+        .RoomDetailPanel__row + .RoomDetailPanel__row {
+            margin-top: 4px;
+        }
+
+        .RoomDetailPanel__timestamp {
+            font-size: 12px;
+            color: t(text-secondary);
+        }
+
     }
 }
