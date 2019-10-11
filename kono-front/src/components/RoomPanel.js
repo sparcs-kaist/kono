@@ -32,6 +32,8 @@ export default () => {
         fetchRooms();
     }, []);
 
+    const onClickRefresh = () => { fetchRooms(); }
+
     return (
         <div className={styles.RoomPanel}>
             {
@@ -45,7 +47,8 @@ export default () => {
                     <div className={classnames([
                             styles.RoomPanel__state,
                             styles.RoomPanel__refresh
-                        ])}>
+                        ])}
+                        onClick={onClickRefresh}>
                         <MaterialIcon md24>refresh</MaterialIcon>
                         <span>{ text.refresh }</span>
                     </div>
