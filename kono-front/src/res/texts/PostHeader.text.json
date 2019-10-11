@@ -1,0 +1,14 @@
+{
+    "type_notice": {
+        "kr": "공지사항",
+        "en": "Notice"
+    },
+    "type_lostfound": {
+        "kr": "분실물",
+        "en": "Lost & Found"
+    },
+    "type_default": {
+        "kr": "게시물",
+        "en": "Post"
+    }
+}

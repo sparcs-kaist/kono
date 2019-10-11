@@ -1,0 +1,54 @@
+@import 'mixins/all';
+
+@include themed() {
+    .FullScreenPanel {
+
+        width: 100%;
+        height: 100%;
+        
+        min-width: 176px;
+        min-height: 176px;
+
+        @include flexbox(column, $center: true);
+
+        .FullScreenPanel__content {
+
+            width: 100%;
+            margin: auto 0;
+
+            .FullScreenPanel__arrow {
+                margin: 0 20px;
+                color: white;
+                cursor: pointer;
+            }
+            
+            @include flexbox(row, $center: true);
+            
+            img {
+                margin: 0 auto;
+            }
+
+        }
+
+        .FullScreenPanel__footer {
+            
+            margin-bottom: 20px;
+            
+            @include flexbox(row, $center: true);
+
+            .FullScreenPanel__dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 3px;
+                margin: 4px;
+                background-color: white;
+            }
+
+            .FullScreenPanel__dot_highlight {
+                background-color: #6078F5;
+            }
+
+        }
+
+    }
+}

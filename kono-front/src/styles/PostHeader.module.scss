@@ -1,0 +1,24 @@
+@import 'mixins/all';
+
+@include themed() {
+    .PostHeader {
+        h1 {
+            font-size: 24px;
+            line-height: 28px;
+            color: t(text-primary);
+            margin: 0;
+        }
+        .PostHeader__tags {
+            margin-top: 13px;
+            span {
+                font-size: 15px;
+                line-height: 18px;
+                color: t(text-secondary);
+                margin: 0;
+            }
+            span + span {
+                margin-left: 8px;
+            }
+        }
+    }
+}

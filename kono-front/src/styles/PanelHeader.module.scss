@@ -1,0 +1,18 @@
+@import 'mixins/all';
+
+@include themed() {
+    .PanelHeader {
+
+        margin-bottom: 46px;
+
+        color: t(text-primary);
+
+        .PanelHeader__title {
+            font-style: normal;
+            font-weight: 900;
+            font-size: 30px;
+            line-height: 35px;
+        }
+
+    }
+}

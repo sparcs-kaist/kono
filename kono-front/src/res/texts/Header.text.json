@@ -1,0 +1,22 @@
+{
+    "refund": {
+        "kr": "환불신청",
+        "en": "Refund"
+    },
+    "admin_menu": {
+        "kr": "관리자 서비스",
+        "en": "Adminstrator Services"
+    },
+    "admin_logout": {
+        "kr": "로그아웃",
+        "en": "Logout"
+    },
+    "toggle_language": {
+        "kr": "English",
+        "en": "한국어"
+    },
+    "toggle_theme": {
+        "kr": "테마 변경",
+        "en": "Alter Theme"
+    }
+}

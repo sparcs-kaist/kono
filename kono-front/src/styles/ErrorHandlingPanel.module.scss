@@ -1,0 +1,21 @@
+@import 'mixins/all';
+
+@include themed() {
+
+    .ErrorHandlingPanel {
+
+        &.ErrorHandlingPanel__use_background {
+            background: t(panel-background);
+        }
+
+        border-radius: 6px;
+
+        margin: auto;
+
+        color: t(text-primary);
+
+        @include flexbox(column, $center: true);
+
+    }
+
+}

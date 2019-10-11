@@ -1,0 +1,46 @@
+@import 'lib/fonts';
+@import 'mixins/all';
+
+html, body {
+    min-height: 100vh;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+}
+
+#root {
+    width: 100%;
+    min-width: 1080px;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+/* SVG Theme Controls */
+.theme_default .sparcs-logo-cls-1 {
+    fill: #040000;
+}
+.theme_default .sparcs-logo-cls-2 {
+    fill: #333;
+}
+.theme_default .kono-logo-cls-1 {
+    fill: #5F453D;
+}
+.theme_default .kono-logo-cls-2 {
+    fill: #412F29;
+}
+.theme_dark .sparcs-logo-cls-1 {
+    fill: #DDD;
+}
+.theme_dark .sparcs-logo-cls-2 {
+    fill: #FFF;
+}
+.theme_dark .kono-logo-cls-1 {
+    fill: #6078F5;
+}
+.theme_dark .kono-logo-cls-2 {
+    fill: #4860D2;
+}

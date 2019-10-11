@@ -1,0 +1,38 @@
+@import 'mixins/all';
+
+@include themed() {
+    .CreditPage {
+
+        margin: auto;
+        width: 500px;
+
+        color: t(text-primary);
+
+        @include flexbox(column, $center: true);
+
+        .CreditPage__row {
+            @include flexbox(row, $center: true);
+            span + span {
+                margin-left: 20px;
+            }
+        }
+
+        p {
+            color: t(text-secondary);
+            font-size: 12px;
+        }
+
+        span {
+            margin: 10px 0;
+        }
+
+        a {
+            @include link;
+        }
+
+        div {
+            @include flexbox(row, $center: true);
+        }
+
+    }
+}

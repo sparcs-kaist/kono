@@ -1,0 +1,21 @@
+@import 'mixins/all';
+
+.LandingPage {
+
+    margin: auto;
+
+    @include flexbox(column, $center: true);
+
+    color: #343434;
+
+    .LandingPage__post {
+        @include flexbox(row, $center: true);
+    }
+
+    .LandingPage__room {
+        @include flexbox(row, $center: true);
+        
+        margin: 64px auto;
+    }
+
+}

@@ -1,0 +1,53 @@
+@import 'mixins/all';
+
+@include themed() {
+    .PostPageView {
+
+        width: 800px;
+
+        margin: auto;
+        padding: 50px;
+
+        .PostPageView__content {
+                
+            padding: 42px 0;
+            
+            .PostPageView__thumbnails {
+                margin-bottom: 24px;
+            }
+
+            .PostPageView__text {
+                color: t(text-primary);
+
+                p {
+                    font-size: 15px;
+                    line-height: 24px;
+                    margin: 0;
+                }
+
+                p + p {
+                    margin-top: 30px;
+                }
+
+                a {
+                    color: t(text-highlight);
+                    &:hover {
+                        color: t(text-highlight-on);
+                    }
+                }
+            }
+
+        }
+
+        .PostPageView__footer {
+
+            @include flexbox(row, $center: false);
+
+            div+div, a+div, div+a, a+a {
+                margin-left: 8px;
+            }
+
+        }
+
+    }
+}

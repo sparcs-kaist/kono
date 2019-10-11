@@ -1,0 +1,21 @@
+@import 'color';
+
+@mixin link {
+    a {
+        color: t(text-primary);
+        &:hover {
+            color: t(text-highlight-on);
+        }
+        text-decoration: none;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+    
+    color: t(text-primary);
+    &:hover {
+        color: t(text-highlight-on);
+    }
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+}
