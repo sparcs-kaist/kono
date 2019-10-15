@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+  db_production:
+    build: db/
+    ports:
+      - 3306:3306
+    volumes:
+      - data_volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets:
+      - db_root_password
+      - db_dev_password
+      - db_unauthorized_api_password
+      - db_authorized_api_password
+
+volumes:
+  data_volume:
+
+secrets:
+  db_root_password:
+    file: config/db_root_password
+  db_dev_password:
+    file: config/db_dev_password
+  db_unauthorized_api_password:
+    file: config/db_unauthorized_api_password
+  db_authorized_api_password:
+    file: config/db_authorized_api_password
