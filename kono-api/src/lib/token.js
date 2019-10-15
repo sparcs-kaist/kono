@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken';
+import dockerConfig from './docker.config';
 
-const jwtKey = () => {
-    const { JWT_KEY } = process.env;
-    return JWT_KEY;
-};
+const jwtKey = () => (process.env.JWT_KEY || dockerConfig.env.JWT_KEY);
 
 export const generateToken = (payload) => {
 
@@ -32,4 +30,4 @@ export const decodeToken = (token) => {
         });
     });
 
-}
+};

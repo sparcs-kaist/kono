@@ -4,26 +4,62 @@ services:
   db_production:
     build: db/
     ports:
-      - 3306:3306
+      - 3307:3306
     volumes:
-      - data_volume:/var/lib/mysql
+      - data_production_volume:/var/lib/mysql
     environment:
+      DB_ENV: "production"
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     secrets:
       - db_root_password
       - db_dev_password
       - db_unauthorized_api_password
       - db_authorized_api_password
-
+  db_dev:
+    build: db/
+    ports:
+      - 3306:3306
+    volumes:
+      - data_dev_volume:/var/lib/mysql
+    environment:
+      DB_ENV: "development"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  api:
+    build: kono-api/
+    ports:
+      - 8081:4000
+    environment:
+      HOST: "api.kono.sparcs.org"
+      PORT: 4000
+      DB_HOST: "db_production"
+      DB_PORT: 3306
+      DB_AUTH_USER: "api"
+      DB_AUTH_PASSWORD_FILE: /run/secrets/db_authorized_api_password
+      DB_USER: "unauthorized_api"
+      DB_PASSWORD_FILE: /run/secrets/db_unauthorized_api_password
+      DB_DATABASE: "kono"
+      PASSWORD_KEY_FILE: /run/secrets/api_password_key
+      JWT_KEY_FILE: /run/secrets/api_jwt_key
+    secrets:
+      - db_authorized_api_password
+      - db_unauthorized_api_password
+      - api_password_key
+      - api_jwt_key
+      
 volumes:
-  data_volume:
+  data_production_volume:
+  data_dev_volume:
 
 secrets:
   db_root_password:
-    file: config/db_root_password
+    file: config/production/db_root_password
   db_dev_password:
-    file: config/db_dev_password
+    file: config/production/db_dev_password
   db_unauthorized_api_password:
-    file: config/db_unauthorized_api_password
+    file: config/production/db_unauthorized_api_password
   db_authorized_api_password:
-    file: config/db_authorized_api_password
+    file: config/production/db_authorized_api_password
+  api_password_key:
+    file: config/production/api_password_key
+  api_jwt_key:
+    file: config/production/api_jwt_key

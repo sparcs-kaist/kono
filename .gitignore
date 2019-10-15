@@ -1,2 +1,9 @@
+# Secret configuration files.
 config/*
+
+# Backup files.
 backup/*
+
+# vi temporary files
+**/*.swp
+**/*.swo

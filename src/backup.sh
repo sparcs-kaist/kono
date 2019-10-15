@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OUTPUT_FILE_DIRECTORY="./backup"
-DB_ROOT_PASSWORD_FILE="./config/db_root_password"
+DB_ROOT_PASSWORD_FILE="./config/production/db_root_password"
 DB_DATABASE="kono"
 IMAGE_NAME="kono_db_production"
 

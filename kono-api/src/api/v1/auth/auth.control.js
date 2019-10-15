@@ -1,14 +1,15 @@
 import crypto from 'crypto';
 import { generateToken } from '../../../lib/token';
+import dockerConfig from '../../../lib/docker.config';
 import db from '../../../db';
 
 function host() {
-    const { DEV_HOST, PROD_HOST, NODE_ENV } = process.env;
-    return (NODE_ENV === 'development') ? DEV_HOST : PROD_HOST;
+    const { HOST } = process.env;
+    return HOST;
 };
 
 function hash(password) {
-    const { PASSWORD_KEY: secret } = process.env;
+    const secret = process.env.PASSWORD_KEY || dockerConfig.env.PASSWORD_KEY;
     return crypto.createHmac('sha256', secret).update(password).digest('hex');
 }
 

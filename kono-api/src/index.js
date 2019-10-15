@@ -7,9 +7,21 @@ import cookieParser from 'cookie-parser';
 import routes from './routes';
 import db from './db';
 import JWTMiddleware from './lib/JWTMiddleware';
+import dockerConfig from './lib/docker.config';
 
 dotenv.config();
-const { NODE_ENV, DEV_PORT, PROD_PORT } = process.env;
+const { NODE_ENV, PORT } = process.env;
+
+const dbConfig = async () => {
+    if (NODE_ENV === 'development')
+        db.init();
+    else if (NODE_ENV === 'production')
+	await dockerConfig.init()
+	    .then(() => { db.init() });
+};
+
+/* DB initialization. */
+dbConfig();
 
 const app = express();
 
@@ -35,9 +47,6 @@ app.use(JWTMiddleware());
 
 app.use('/', routes);
 
-db.init();
-
-const port = NODE_ENV === 'production' ? PROD_PORT : DEV_PORT;
-app.listen(port, () => {
-    console.log(`Starting kono-api ${NODE_ENV} server listening at port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Starting kono-api ${NODE_ENV} server listening at port ${PORT}`);
 });

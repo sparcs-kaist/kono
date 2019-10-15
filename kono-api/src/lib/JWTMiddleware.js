@@ -1,8 +1,8 @@
 import { decodeToken, generateToken } from './token';
 
 const host = () => {
-    const { DEV_HOST, PROD_HOST, NODE_ENV } = process.env;
-    return (NODE_ENV === 'development') ? DEV_HOST : PROD_HOST;
+    const { HOST } = process.env;
+    return HOST;
 };
 
 export default () => async (req, res, next) => {
