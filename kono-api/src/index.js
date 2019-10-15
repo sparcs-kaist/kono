@@ -13,11 +13,8 @@ dotenv.config();
 const { NODE_ENV, PORT } = process.env;
 
 const dbConfig = async () => {
-    if (NODE_ENV === 'development')
-        db.init();
-    else if (NODE_ENV === 'production')
-	await dockerConfig.init()
-	    .then(() => { db.init() });
+    await dockerConfig.init()
+        .then(() => { db.init() });
 };
 
 /* DB initialization. */

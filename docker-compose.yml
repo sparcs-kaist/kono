@@ -45,6 +45,25 @@ services:
       - db_unauthorized_api_password
       - api_password_key
       - api_jwt_key
+  api_dev:
+    build: kono-api/
+    ports:
+      - 8087:4000
+    environment:
+      HOST: "api-dev.kono.sparcs.org"
+      PORT: 4000
+      DB_HOST: "db_dev"
+      DB_PORT: 3306
+      DB_AUTH_USER: "api"
+      DB_USER: "unauthorized_api"
+      DB_DATABASE: "kono"
+      PASSWORD_KEY_FILE: /run/secrets/api_password_key
+      JWT_KEY_FILE: /run/secrets/api_jwt_key
+    secrets:
+      - source: api_password_key_dev
+        target: api_password_key
+      - source: api_jwt_key_dev
+        target: api_jwt_key
       
 volumes:
   data_production_volume:
@@ -63,3 +82,7 @@ secrets:
     file: config/production/api_password_key
   api_jwt_key:
     file: config/production/api_jwt_key
+  api_password_key_dev:
+    file: config/dev/api_password_key
+  api_jwt_key_dev:
+    file: config/dev/api_jwt_key

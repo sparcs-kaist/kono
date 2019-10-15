@@ -18,19 +18,19 @@ export default (() => {
         async init() {
 
             try {
-                const dbAuthPassword = processText(await readFileAsync(DB_AUTH_PASSWORD_FILE));
-	        const dbPassword     = processText(await readFileAsync(DB_PASSWORD_FILE));
-	        const passwordKey    = processText(await readFileAsync(PASSWORD_KEY_FILE));
-	        const jwtKey         = processText(await readFileAsync(JWT_KEY_FILE));
+                const dbAuthPassword = DB_AUTH_PASSWORD_FILE && processText(await readFileAsync(DB_AUTH_PASSWORD_FILE));
+	        const dbPassword     = DB_PASSWORD_FILE      && processText(await readFileAsync(DB_PASSWORD_FILE));
+	        const passwordKey    = PASSWORD_KEY_FILE     && processText(await readFileAsync(PASSWORD_KEY_FILE));
+	        const jwtKey         = JWT_KEY_FILE          && processText(await readFileAsync(JWT_KEY_FILE));
 
 	        env.DB_AUTH_PASSWORD = dbAuthPassword;
-	        env.DB_PASSWORD      = dbPassword;
+		env.DB_PASSWORD      = dbPassword;
 	        env.PASSWORD_KEY     = passwordKey;
 	        env.JWT_KEY          = jwtKey;
             } catch (err) {
 	        throw new Error('Error occured while configuring docker environment variables');
             }
-
+	
         },
 	env
     }
