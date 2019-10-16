@@ -4,7 +4,7 @@ echo "Initializing ${DB_ENV} database ..."
 
 if [ "${DB_ENV}" = "production" ]; then
   echo "Creating users in initialized ${DB_ENV} database ..."
-  mysql -uroot -p$(cat /run/secrets/db_root_password)<<EOSQL
+  mysql -u root -p$(cat /run/secrets/db_root_password)<<EOSQL
   CREATE USER IF NOT EXISTS "sparcs_developer" IDENTIFIED BY "$(cat /run/secrets/db_dev_password)";
   GRANT ALL PRIVILEGES ON TABLE kono.* TO "sparcs_developer";
   
@@ -16,7 +16,7 @@ if [ "${DB_ENV}" = "production" ]; then
 EOSQL
 elif [ "${DB_ENV}" = "development" ]; then
   echo "Creating users in initialized ${DB_ENV} database ..."
-  mysql -uroot<<EOSQL
+  mysql -u root -p$(cat /run/secrets/db_root_password)<<EOSQL
   CREATE USER IF NOT EXISTS "sparcs_developer";
   GRANT ALL PRIVILEGES ON TABLE kono.* TO "sparcs_developer";
 

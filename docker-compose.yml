@@ -3,8 +3,6 @@ version: '3.1'
 services:
   db_production:
     build: db/
-    ports:
-      - 3307:3306
     volumes:
       - data_production_volume:/var/lib/mysql
     environment:
@@ -15,21 +13,26 @@ services:
       - db_dev_password
       - db_unauthorized_api_password
       - db_authorized_api_password
+
   db_dev:
     build: db/
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
       - data_dev_volume:/var/lib/mysql
     environment:
       DB_ENV: "development"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets:
+      - source: db_root_password_dev
+        target: db_root_password
+
   api:
     build: kono-api/
     ports:
-      - 8081:4000
+      - "8022:22"
     environment:
-      HOST: "api.kono.sparcs.org"
+      HOST: "kono.sparcs.org"
       PORT: 4000
       DB_HOST: "db_production"
       DB_PORT: 3306
@@ -45,29 +48,26 @@ services:
       - db_unauthorized_api_password
       - api_password_key
       - api_jwt_key
-  api_dev:
-    build: kono-api/
-    ports:
-      - 8087:4000
+
+  app:
+    build: kono-front/
     environment:
-      HOST: "api-dev.kono.sparcs.org"
-      PORT: 4000
-      DB_HOST: "db_dev"
-      DB_PORT: 3306
-      DB_AUTH_USER: "api"
-      DB_USER: "unauthorized_api"
-      DB_DATABASE: "kono"
-      PASSWORD_KEY_FILE: /run/secrets/api_password_key
-      JWT_KEY_FILE: /run/secrets/api_jwt_key
-    secrets:
-      - source: api_password_key_dev
-        target: api_password_key
-      - source: api_jwt_key_dev
-        target: api_jwt_key
-      
+      REACT_APP_KONO_API_URL: "http://52.79.92.127"
+      GENERATE_SOURCEMAP: "false"
+    volumes:
+      - app_build:/usr/src/app/build
+
+  nginx:
+    build: nginx/
+    ports:
+      - "80:80"
+    volumes: 
+      - app_build:/usr/share/nginx/html
+
 volumes:
   data_production_volume:
   data_dev_volume:
+  app_build:
 
 secrets:
   db_root_password:
@@ -78,11 +78,9 @@ secrets:
     file: config/production/db_unauthorized_api_password
   db_authorized_api_password:
     file: config/production/db_authorized_api_password
+  db_root_password_dev:
+    file: config/dev/db_root_password
   api_password_key:
     file: config/production/api_password_key
   api_jwt_key:
     file: config/production/api_jwt_key
-  api_password_key_dev:
-    file: config/dev/api_password_key
-  api_jwt_key_dev:
-    file: config/dev/api_jwt_key

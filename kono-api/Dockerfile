@@ -10,6 +10,12 @@ COPY . .
 
 RUN npm run build
 
+# Create users
+RUN adduser --gecos "" --disabled-password sysop
+RUN usermod -G sudo sysop
+RUN adduser --gecos "" --disabled-password wheel
+RUn usermod -G sudo wheel
+
 EXPOSE $PORT
 
 CMD [ "npm", "run", "serve" ]

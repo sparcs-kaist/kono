@@ -2,3 +2,4 @@ node_modules/
 dev-build/
 dist/
 .env
+.api_log-key
