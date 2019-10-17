@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.7'
 
 services:
   db_production:
@@ -50,8 +50,9 @@ services:
       - api_jwt_key
 
   api_dev:
-    build: kono-api/
-    dockerfile: Dockerfile-dev
+    build: 
+      context: kono-api/
+      dockerfile: Dockerfile-dev
     ports:
       - "8106:8106"
     environment:
@@ -67,7 +68,7 @@ services:
     secrets:
       - source: api_dev_password_key
         target: api_password_key
-      - souuce: api_dev_jwt_key
+      - source: api_dev_jwt_key
         target: api_jwt_key
 
   app:

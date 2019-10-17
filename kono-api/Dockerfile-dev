@@ -3,6 +3,8 @@ MAINTAINER inhibitor <inhibitor@kaist.ac.kr>
 
 WORKDIR /usr/src/app
 
+RUN npm i -g nodemon
+
 COPY package*.json ./
 RUN npm install
 
@@ -10,4 +12,4 @@ COPY . .
 
 EXPOSE $PORT
 
-CMD [ "/bin/bash" ]
+CMD [ "npm", "run", "start:dev" ]
