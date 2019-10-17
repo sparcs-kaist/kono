@@ -1,0 +1,13 @@
+FROM node:10
+MAINTAINER inhibitor <inhibitor@kaist.ac.kr>
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE $PORT
+
+CMD [ "/bin/bash" ]

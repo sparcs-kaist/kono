@@ -49,6 +49,27 @@ services:
       - api_password_key
       - api_jwt_key
 
+  api_dev:
+    build: kono-api/
+    dockerfile: Dockerfile-dev
+    ports:
+      - "8106:8106"
+    environment:
+      HOST: "kono.sparcs.org"
+      PORT: 8106
+      DB_HOST: $KONO_IP
+      DB_PORT: 3306
+      DB_AUTH_USER: "api"
+      DB_USER: "unauthorized_api"
+      DB_DATABASE: "kono"
+      PASSWORD_KEY_FILE: /run/secrets/api_password_key
+      JWT_KEY_FILE: /run/secrets/api_jwt_key
+    secrets:
+      - source: api_dev_password_key
+        target: api_password_key
+      - souuce: api_dev_jwt_key
+        target: api_jwt_key
+
   app:
     build: kono-front/
     environment:
@@ -84,3 +105,7 @@ secrets:
     file: config/production/api_password_key
   api_jwt_key:
     file: config/production/api_jwt_key
+  api_dev_password_key:
+    file: config/dev/api_password_key
+  api_dev_jwt_key:
+    file: config/dev/api_jwt_key
