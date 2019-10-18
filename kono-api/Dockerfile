@@ -14,8 +14,8 @@ RUN npm run build
 RUN adduser --gecos "" --disabled-password sysop
 RUN usermod -G sudo sysop
 RUN adduser --gecos "" --disabled-password wheel
-RUn usermod -G sudo wheel
+RUN usermod -G sudo wheel
 
-EXPOSE $PORT
+EXPOSE 4000
 
 CMD [ "npm", "run", "serve" ]

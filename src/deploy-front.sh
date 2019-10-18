@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # pull from master branch
-git pull origin master
+git pull origin production
 
 # rebuild and run image
-docker-compose up -d --build app
+HOST_IP=$HOST_IP docker-compose up -d --build app
 
 # cleanup
 docker image prune -f

@@ -43,6 +43,8 @@ services:
       DB_DATABASE: "kono"
       PASSWORD_KEY_FILE: /run/secrets/api_password_key
       JWT_KEY_FILE: /run/secrets/api_jwt_key
+    volumes:
+      - app_static:/usr/src/app/assets/
     secrets:
       - db_authorized_api_password
       - db_unauthorized_api_password
@@ -52,7 +54,7 @@ services:
   app:
     build: kono-front/
     environment:
-      REACT_APP_KONO_API_URL: "http://52.79.92.127"
+      REACT_APP_KONO_API_URL: "http://${HOST_IP}"
       GENERATE_SOURCEMAP: "false"
     volumes:
       - app_build:/usr/src/app/build
@@ -61,13 +63,17 @@ services:
     build: nginx/
     ports:
       - "80:80"
+    environment:
+      REACT_APP_KONO_API_URL: "http://${HOST_IP}"
     volumes: 
       - app_build:/usr/share/nginx/html
+      - app_static:/usr/share/nginx/assets/
 
 volumes:
   data_production_volume:
   data_dev_volume:
   app_build:
+  app_static:
 
 secrets:
   db_root_password:
