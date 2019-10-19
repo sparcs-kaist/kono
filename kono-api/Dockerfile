@@ -3,19 +3,12 @@ MAINTAINER inhibitor <inhibitor@kaist.ac.kr>
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN npm install
+VOLUME /usr/src/app
+VOLUME /usr/src/assets
+VOLUME /usr/src/log
 
-COPY . .
-
-RUN npm run build
-
-# Create users
-RUN adduser --gecos "" --disabled-password sysop
-RUN usermod -G sudo sysop
-RUN adduser --gecos "" --disabled-password wheel
-RUN usermod -G sudo wheel
+RUN npm i -g nodemon
 
 EXPOSE 4000
 
-CMD [ "npm", "run", "serve" ]
+CMD [ "/bin/sh", "-c", "nodemon bundle.js > /usr/src/log/stdout.log 2> /usr/src/log/stderr.log" ]

@@ -16,8 +16,6 @@ services:
 
   db_dev:
     build: db/
-    ports:
-      - "3306:3306"
     volumes:
       - data_dev_volume:/var/lib/mysql
     environment:
@@ -28,9 +26,10 @@ services:
         target: db_root_password
 
   api:
+    depends_on:
+      - maintainer
+    restart: always
     build: kono-api/
-    ports:
-      - "8022:22"
     environment:
       HOST: "kono.sparcs.org"
       PORT: 4000
@@ -44,35 +43,51 @@ services:
       PASSWORD_KEY_FILE: /run/secrets/api_password_key
       JWT_KEY_FILE: /run/secrets/api_jwt_key
     volumes:
-      - app_static:/usr/src/app/assets/
+      - api_build:/usr/src/app
+      - api_log:/usr/src/log
+      - app_static:/usr/src/assets
     secrets:
       - db_authorized_api_password
       - db_unauthorized_api_password
       - api_password_key
       - api_jwt_key
 
-  app:
-    build: kono-front/
+  maintainer:
+    build:
+      context: .
+      dockerfile: Dockerfile-maintainer
+    ports:
+      - "8022:22"      
     environment:
-      REACT_APP_KONO_API_URL: "http://${HOST_IP}"
       GENERATE_SOURCEMAP: "false"
     volumes:
+      - api_build:/usr/src/api/dist
+      - api_log:/usr/src/log/api
       - app_build:/usr/src/app/build
+      - nginx_log:/usr/src/log/nginx
+    secrets:
+      - db_root_password
 
   nginx:
+    depends_on:
+      - api
+      - maintainer
+    restart: always
     build: nginx/
     ports:
       - "80:80"
-    environment:
-      REACT_APP_KONO_API_URL: "http://${HOST_IP}"
-    volumes: 
+    volumes:
       - app_build:/usr/share/nginx/html
-      - app_static:/usr/share/nginx/assets/
+      - nginx_log:/var/log/nginx
+      - app_static:/usr/share/nginx/assets
 
 volumes:
   data_production_volume:
   data_dev_volume:
+  api_build:
+  api_log:
   app_build:
+  nginx_log:
   app_static:
 
 secrets:

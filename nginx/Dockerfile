@@ -2,6 +2,8 @@ FROM nginx:1.17.4
 MAINTAINER inhibitor <inhibitor@kaist.ac.kr>
 
 VOLUME /usr/share/nginx/html
+VOLUME /usr/share/nginx/assets
+VOLUME /var/log/nginx
 
 ADD config/*.conf /etc/nginx/conf.d/
 
