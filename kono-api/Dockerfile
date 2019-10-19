@@ -11,4 +11,4 @@ RUN npm i -g nodemon
 
 EXPOSE 4000
 
-CMD [ "/bin/sh", "-c", "nodemon bundle.js > /usr/src/log/stdout.log 2> /usr/src/log/stderr.log" ]
+CMD [ "/bin/sh", "-c", "NODE_ENV=production nodemon bundle.js > /usr/src/log/stdout.log 2> /usr/src/log/stderr.log" ]
