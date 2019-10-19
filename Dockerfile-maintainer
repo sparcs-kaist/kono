@@ -36,6 +36,7 @@ VOLUME /usr/src/app/build
 WORKDIR /usr/src
 RUN git clone https://github.com/sparcs-kaist/kono.git
 WORKDIR /usr/src/kono
+RUN git checkout production
 
 # Setup kono-api
 WORKDIR /usr/src/kono/kono-api

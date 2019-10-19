@@ -23,7 +23,7 @@ module.exports = {
     },
     externals: {
         knex: 'commonjs knex'
-    }
+    },
     plugins: [
         new webpack.NormalModuleReplacementPlugin(/\.\.\/migrate/, '../util/noop.js'),
 	new webpack.NormalModuleReplacementPlugin(/\.\.\/seed/, '../util/noop.js'),
