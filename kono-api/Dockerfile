@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12
 MAINTAINER inhibitor <inhibitor@kaist.ac.kr>
 
 WORKDIR /usr/src/app
