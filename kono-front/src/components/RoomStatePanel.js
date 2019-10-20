@@ -63,7 +63,7 @@ export default ({ rooms, highlight }) => {
 
     return (
         <div>
-            <svg className={styles.RoomStatePanel} width="541" height="601" viewBox="0 0 541 601" xmlns="http://www.w3.org/2000/svg">
+            <svg className={styles.RoomStatePanel} width="545" height="604" viewBox="0 0 545 604" xmlns="http://www.w3.org/2000/svg">
                 {
                     ROOM_NUMBERS.map(i => roomComponents(i))
                 }
