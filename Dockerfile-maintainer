@@ -17,11 +17,14 @@ RUN usermod -G sudo sysop
 
 # Install node.js
 RUN apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 
-# Install git
+# Install some commands
 RUN apt-get install -y git
+RUN apt-get install -y sudo
+RUN apt-get install -y vim
+RUN apt-get install -y mysql-client
 
 # Add maintainer shell scripts
 WORKDIR /usr/src/scripts
@@ -36,6 +39,7 @@ VOLUME /usr/src/app/build
 WORKDIR /usr/src
 RUN git clone https://github.com/sparcs-kaist/kono.git
 WORKDIR /usr/src/kono
+RUN git checkout production
 
 # Setup kono-api
 WORKDIR /usr/src/kono/kono-api

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 cd /usr/src/kono
-git pull origin master
-git checkout master
+git pull origin production
+git checkout production
 
 cd kono-api
 npm install
