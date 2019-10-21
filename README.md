@@ -19,11 +19,13 @@
 kono는 SPARCS에서 2019년 4월부터 개발중인 프로젝트입니다. 카이스트 코인노래방의 7개 방의 사용 여부를 실시간으로 받아 웹 서비스로 제공합니다. 코인노래방을 운영하는 카이스트 학생복지위원회(https://welfare.kaist.ac.kr/) 관리자를 위한 공지사항, 알림, 분실물 게시 서비스도 제공합니다.
 ## 개발 서버 실행
 ```bash
-# 의존성 설치
+git clone https://github.com/sparcs-kaist/kono.git
+cd kono/kono-api
 npm install
 
-# localhost:3000 개발 모드
-npm run dev
+# 개발 서버 실행
+npm run start:dev
+
 
 # 개발 서버 테스트
 npm run test:dev
