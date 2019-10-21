@@ -1,7 +1,8 @@
 import React, { useState, Fragment } from 'react';
 import styles from '../styles/RoomStatePanel.module.scss';
 import RoomDetailPanel from './RoomDetailPanel';
-import SVGPaths from '../res/icons/room.json';
+import SVGPathsEmpty from '../res/icons/room-empty.json';
+import SVGPathsFilled from '../res/icons/room-filled.json';
 import classnames from '../lib/classnames';
 
 function state2classname(state) {
@@ -28,6 +29,16 @@ function highlight2state(highlight) {
 
 }
 
+function state2path(state) {
+
+    if (state === 0)
+        return SVGPathsEmpty;
+    if (state === 1)
+        return SVGPathsFilled;
+    return SVGPathsFilled;
+
+}
+
 const ROOM_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
 
 export default ({ rooms, highlight }) => {
@@ -50,7 +61,7 @@ export default ({ rooms, highlight }) => {
                     style={{
                         position: 'absolute',
                         width: 600,
-                        height:600,
+                        height:604,
                     }}
                     className={classnames([
                         state2classname(state),
@@ -59,7 +70,7 @@ export default ({ rooms, highlight }) => {
                     ])} 
                 >
                     <path
-                    d={SVGPaths.path[room_idx]} 
+                    d={state2path(state).path[room_idx]} 
                     onMouseOver={onMouseOver}
                     onMouseOut={onMousOut}
                     />
@@ -83,8 +94,8 @@ export default ({ rooms, highlight }) => {
                     return (
                         <RoomDetailPanel 
                             key={`room-detail-${i}`}
-                            x={SVGPaths.pos[i].x} 
-                            y={SVGPaths.pos[i].y}
+                            x={SVGPathsFilled.pos[i].x} 
+                            y={SVGPathsFilled.pos[i].y}
                             room={rooms.find(e => e.room_number === i)}
                         />
                     )
