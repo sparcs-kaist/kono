@@ -21,10 +21,9 @@
         }
 
         .RoomStatePanel__room_highlight {
-            stroke: t(theme-light-background);
-            stroke-width: 1px;
+            filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2)) brightness(0.9);          
         }
 
     }
-
+    
 }

@@ -46,16 +46,24 @@ export default ({ rooms, highlight }) => {
 
         return (
             <Fragment key={`room-fragment-${room_idx}`}>
-                <path 
+                <svg
+                    style={{
+                        position: 'absolute',
+                        width: 600,
+                        height:600,
+                    }}
                     className={classnames([
                         state2classname(state),
                         (highlight2state(highlight) === state) && styles.RoomStatePanel__room_highlight,
                         isHovered && styles.RoomStatePanel__room_highlight
                     ])} 
+                >
+                    <path
                     d={SVGPaths.path[room_idx]} 
                     onMouseOver={onMouseOver}
                     onMouseOut={onMousOut}
-                />
+                    />
+                </svg>
             </Fragment>
         );
 
@@ -63,11 +71,11 @@ export default ({ rooms, highlight }) => {
 
     return (
         <div>
-            <svg className={styles.RoomStatePanel} width="545" height="604" viewBox="0 0 545 604" xmlns="http://www.w3.org/2000/svg">
+            <div className={styles.RoomStatePanel} width="545" height="604" viewBox="0 0 545 604" xmlns="http://www.w3.org/2000/svg">
                 {
                     ROOM_NUMBERS.map(i => roomComponents(i))
                 }
-            </svg>
+            </div>
             {
                 ROOM_NUMBERS.map(i => {
                     if (hover !== i)
