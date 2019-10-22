@@ -5,7 +5,7 @@ import chaiHttp from 'chai-http';
 import chaiAsPromised from 'chai-as-promised';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({ path: `.env.test.${process.env.NODE_ENV}` });
 
 /* Add plugins to chai. */
 chai.use(chaiHttp);
@@ -17,11 +17,7 @@ function importTest(path) {
     });
 };
 
-const {
-    NODE_ENV
-} = process.env;
-
-describe(`Running tests for kono-api ${NODE_ENV} server.`, () => {
+describe(`Running tests for kono-api ${process.env.NODE_ENV} server.`, () => {
 
     importTest('../routes.test');
     importTest('../api/v1/post/post.test');
