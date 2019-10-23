@@ -1,5 +1,19 @@
 @import 'mixins/all';
 
+@keyframes test{
+
+    0%      {fill: red;}
+    12%     {fill: #FF9500;}
+    25%     {fill: #FFD200;}
+    37%     {fill: #74E600;}
+    50%     {fill: #6078F5;}
+    62%     {fill: #1049A9;}
+    75%     {fill: #4212AF;}
+    87%     {fill: black;}
+    100%    {fill: #A600A6;}
+
+}
+
 @include themed() {
 
     .RoomStatePanel {
@@ -21,9 +35,13 @@
         }
 
         .RoomStatePanel__room_highlight {
-            filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2)) brightness(0.9);          
+            filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2)) brightness(0.9);         
+        }
+
+        .RoomStatePanel__room_filled_animation {
+            animation: test 2s infinite; 
         }
 
     }
-    
+
 }

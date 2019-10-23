@@ -66,11 +66,11 @@ export default ({ rooms, highlight }) => {
                     className={classnames([
                         state2classname(state),
                         (highlight2state(highlight) === state) && styles.RoomStatePanel__room_highlight,
-                        isHovered && styles.RoomStatePanel__room_highlight
+                        (state === 1)? isHovered && styles.RoomStatePanel__room_filled_animation : isHovered && styles.RoomStatePanel__room_highlight
                     ])} 
                 >
                     <path
-                    d={state2path(state).path[room_idx]} 
+                    d={state2path(state).path[room_idx]}
                     onMouseOver={onMouseOver}
                     onMouseOut={onMousOut}
                     />
