@@ -4,8 +4,12 @@ import * as chai from 'chai';
 import chaiHttp from 'chai-http';
 import chaiAsPromised from 'chai-as-promised';
 import dotenv from 'dotenv';
+import { db } from './common';
 
 dotenv.config({ path: `.env.test.${process.env.NODE_ENV}` });
+
+/* Initialize DB instance in common.js */
+db.init();
 
 /* Add plugins to chai. */
 chai.use(chaiHttp);
