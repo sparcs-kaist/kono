@@ -1,7 +1,7 @@
 @import 'mixins/all';
 
-@keyframes test{
-
+@keyframes fillColorChange {
+    
     0%      {fill: red;}
     12%     {fill: #FF9500;}
     25%     {fill: #FFD200;}
@@ -39,7 +39,7 @@
         }
 
         .RoomStatePanel__room_filled_animation {
-            animation: test 2s infinite; 
+            animation: fillColorChange 2s infinite;
         }
 
     }
