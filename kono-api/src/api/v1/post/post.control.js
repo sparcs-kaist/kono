@@ -5,7 +5,7 @@ export const count = async (req, res) => {
     /* Fire database query. */
     try {
 
-        const data = {};
+        const data = { notice: 0, lostfound: 0 };
         await db.instance
             .select(db.instance.raw('COUNT(sid)'), 'type')
             .from('post')
