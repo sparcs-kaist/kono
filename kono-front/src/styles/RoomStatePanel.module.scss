@@ -40,6 +40,7 @@
 
         .RoomStatePanel__room_filled_animation {
             animation: fillColorChange 2s infinite;
+            filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2));
         }
 
     }

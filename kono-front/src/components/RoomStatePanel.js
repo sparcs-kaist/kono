@@ -55,16 +55,18 @@ export default ({ rooms, highlight }) => {
         const onMouseOver = room && (() => setHover(room.room_number));
         const onMousOut = room && (() => setHover(null));
 
-        const showHighlight = (highlight2state(highlight) === state) || ( (state === 1) && isHovered );
-        const showAnimation = (state !== 1) && isHovered;
+        const showHighlight = (highlight2state(highlight) === state) || ( (state !== 1) && isHovered );
+        const showAnimation = (state === 1) && isHovered;
 
         return (
             <Fragment key={`room-fragment-${room_idx}`}>
                 <svg
                     style={{
                         position: 'absolute',
-                        width: 600,
+                        width: 545,
                         height:604,
+                        zIndex: room_idx,
+                        pointerEvents: 'none',
                     }}
                     className={classnames([
                         state2classname(state),
@@ -73,6 +75,9 @@ export default ({ rooms, highlight }) => {
                     ])} 
                 >
                     <path
+                    style={{
+                        pointerEvents: 'auto',
+                    }}
                     d={state2path(state).path[room_idx]}
                     onMouseOver={onMouseOver}
                     onMouseOut={onMousOut}
