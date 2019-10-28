@@ -1,5 +1,3 @@
-// import Post from '../../../db/models/post';
-// import Image from '../../../db/models/image';
 import db from '../../../db';
 
 export const list = async (req, res) => {
@@ -61,7 +59,7 @@ export const count = async (req, res) => {
 
     try {
 
-        const data = {};
+        const data = { notice: 0, lostfound: 0 };
         await db.instance
             .select('post.type', db.instance.raw('COUNT(image.sid)'))
             .from('post')
