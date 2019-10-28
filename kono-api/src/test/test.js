@@ -1,11 +1,12 @@
 import '@babel/polyfill';
-
+import './config';
 import * as chai from 'chai';
 import chaiHttp from 'chai-http';
 import chaiAsPromised from 'chai-as-promised';
-import dotenv from 'dotenv';
+import { apiURL, db } from './common';
 
-dotenv.config();
+/* Initialize DB instance in common.js */
+db.init();
 
 /* Add plugins to chai. */
 chai.use(chaiHttp);
@@ -17,11 +18,7 @@ function importTest(path) {
     });
 };
 
-const {
-    NODE_ENV
-} = process.env;
-
-describe(`Running tests for kono-api ${NODE_ENV} server.`, () => {
+describe(`Running tests for kono-api ${process.env.NODE_ENV} server.`, () => {
 
     importTest('../routes.test');
     importTest('../api/v1/post/post.test');

@@ -18,6 +18,8 @@ services:
     build: db/
     volumes:
       - data_dev_volume:/var/lib/mysql
+    ports:
+      - "3306:3306"
     environment:
       DB_ENV: "development"
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
