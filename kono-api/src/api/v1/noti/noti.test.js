@@ -331,7 +331,7 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
 
         /* Clean table. */
         await db.instance('noti').del();
-        /* Put a noti of sid 1~3. */
+        /* Put a noti of sid 1. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
 
         const token = await generateToken({ sid: 0 });
@@ -355,7 +355,7 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
 
         /* Clean table. */
         await db.instance('noti').del();
-        /* Put a noti of sid 1~3. */
+        /* Put a noti of sid 1. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
 
         const res = await request(apiURL)
@@ -369,7 +369,7 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
 
         /* Clean table. */
         await db.instance('noti').del();
-        
+
     }
 
     it('Single update test.', testSingleUpdate());
@@ -388,10 +388,122 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
             noti_kr: '로그인 안 한 상태',
             noti_en: 'I\'m not logged in!'
         }));
-        it('Invalid parameter "sid"', testInvalidQuery(2, {
+        it('Invalid parameter "sid" (nonexistent)', testInvalidQuery(2, {
             noti_kr: '테스트',
             noti_en: 'test'
         }));
+        it('Invalid parameter "sid" (negative)', testInvalidQuery(-1, {
+            noti_kr: '테스트',
+            noti_en: 'test'
+        }));
+        
+    });
+
+});
+
+describe('Testing DELETE /api/v1/noti/:sid ...', () => {
+
+    const testSingleDelete = () => async () => {
+
+        const token = await generateToken({ sid: 0 });
+
+        /* Clean table. */
+        await db.instance('noti').del();
+        /* Put a noti of sid 1. */
+        await db.instance('noti').insert({ sid: 1, noti_kr: '테스트', noti_en: 'test' });
+
+        const res = await request(apiURL)
+            .delete(`/api/v1/noti/1`);
+
+        expect(res).to.have.status(204);
+
+        const select = await db.instance.select('*').from('noti');
+        expect(select).to.have.lengthOf(0);
+
+        /* Clean table. */
+        await db.instance('noti').del();
+
+    };
+
+    const testMultipleDelete = () => async () => {
+
+        const token = await generateToken({ sid: 0 });
+
+        /* Clean table. */
+        await db.instance('noti').del();
+        /* Put a noti of sid 1~3. */
+        await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
+        await db.instance('noti').insert({ sid: 2, noti_kr: '테스트2', noti_en: 'test2' });
+        await db.instance('noti').insert({ sid: 3, noti_kr: '테스트3', noti_en: 'test3' });
+
+        const res1 = await request(apiURL)
+            .delete(`/api/v1/noti/1`);
+        
+        expect(res1).to.have.status(204);
+
+        const res3 = await request(apiURL)
+            .delete(`/api/v1/noti/3`);
+        
+        expect(res3).to.have.status(204);
+
+        const select = await db.instance.select('*').from('noti');
+        expect(select).to.have.lengthOf(0);
+        const [noti] = select;
+        const { sid } = noti;
+        expect(sid).to.equal(2);
+
+        /* Clean table. */
+        await db.instance('noti').del();
+
+    };
+
+    const testInvalidQuery = (sid) => async () => {
+
+        const token = await generateToken({ sid: 0 });
+
+        /* Clean table. */
+        await db.instance('noti').del();
+        /* Put a noti of sid 1. */
+        await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
+
+        const res = await request(apiURL)
+            .delete(`/api/v1/noti/${sid}`);
+
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.key('msg');
+        expect(res.body.msg).to.equal(`invalid ${invalidField}`);
+
+        /* Clean table. */
+        await db.instance('noti').del();
+
+    };
+
+    const testForbidden = (sid) => async () => {
+
+        /* Clean table. */
+        await db.instance('noti').del();
+        /* Put a noti of sid 1. */
+        await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
+
+        const res = await request(apiURL)
+            .delete(`/api/v1/noti/${sid}`);
+
+        expect(res).to.have.status(403);
+        expect(res.body).to.have.key('msg');
+        expect(res.body.msg).to.equal('login required');
+
+        /* Clean table. */
+        await db.instance('noti').del();
+
+    };
+
+    it('Single delete test.', testSingleDelete());
+    it('Multiple delete test.', testMultipleDelete());
+    describe('Error handling tests.', () => {
+
+        it('Not logged', testForbidden(1));
+        it('Invalid parameter "sid" (nonexistent)', testInvalidQuery(2));
+        it('Invalid parameter "sid" (negative)', testInvalidQuery(-1));
         
     });
 
