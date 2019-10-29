@@ -460,14 +460,14 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         expect(res3).to.have.status(204);
 
         const select = await db.instance.select('*').from('noti');
-        expect(select).to.have.lengthOf(0);
+        expect(select).to.have.lengthOf(1);
         const [noti] = select;
         const { sid } = noti;
         expect(sid).to.equal(2);
 
     };
 
-    const testInvalidQuery = (sid) => async () => {
+    const testInvalidQuery = (sid, invalidField) => async () => {
 
         const token = await generateToken({ sid: 0 });
 
@@ -521,7 +521,7 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
 
         it('Not logged', testForbidden(1));
         it('Invalid parameter "sid" (nonexistent)', testNonExistent(2));
-        it('Invalid parameter "sid" (negative)', testInvalidQuery(-1));
+        it('Invalid parameter "sid" (negative)', testInvalidQuery(-1, 'sid'));
         
     });
 

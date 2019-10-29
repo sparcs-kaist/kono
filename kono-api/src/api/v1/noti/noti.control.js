@@ -161,7 +161,40 @@ export const updateNoti = async (req, res) => {
 
 export const deleteNoti = async (req, res) => {
 
-    res.status(200);
-    res.send('DELETE /api/v1/noti/:sid')
+    if (!req.admin) {
+        res.status(403);
+        res.send({ msg: 'login required' });
+        return;
+    }
+
+    const { sid } = req.params;
+
+    const SID = parseInt(sid);
+    if (isNaN(SID) || !Number.isSafeInteger(SID) || SID < 0) {
+        res.status(400);
+        res.send({ msg: 'invalid sid' });
+        return;
+    }
+
+    try {
+
+        const deleteResult = await db.authorizedInstance('noti')
+            .del()
+            .where({ sid });
+
+        if (deleteResult === 0) {
+            res.status(404);
+            res.send({ msg: 'noti does not exist' });
+            return;
+        }
+
+        res.status(204);
+        res.end();
+
+    } catch (e) {
+        console.log(e);
+        res.status(500);
+        res.send({ msg: 'server error' });
+    }
 
 };
