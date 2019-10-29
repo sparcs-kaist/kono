@@ -159,11 +159,11 @@ describe('Testing POST /api/v1/noti ...', () => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.keys([ 'sid', 'noti_kr', 'noti_en', 'created_time' ]);
         const { sid, noti_kr, noti_en, created_time } = res.body;
-        expect(noti_kr).to.equal(body.noti_kr);
-        expect(noti_en).to.equal(body.noti_en);
+        expect(noti_kr).to.equal(body.noti_kr ? body.noti_kr : null);
+        expect(noti_en).to.equal(body.noti_en ? body.noti_en : null);
         expect(created_time).to.satisfy(e => !isNaN(Date.parse(e)));
 
-        const rawRes = await db.instance
+        const [rawRes] = await db.instance
             .select('*')
             .from('noti')
             .where({ deleted: 0 })
@@ -221,7 +221,7 @@ describe('Testing POST /api/v1/noti ...', () => {
         it('Invalid field "noti_en"', testInvalidQuery({
             noti_kr: '테스트',
             noti_en: 'blablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablabla'
-        }));
+        }, 'noti_en'));
         it('Not logged', testForbidden({
             noti_kr: '로그인 안 한 상태',
             noti_en: 'I\'m not logged in!'

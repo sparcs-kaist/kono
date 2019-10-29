@@ -4,7 +4,6 @@ export const list = async (req, res) => {
 
     const { max_size } = req.query;
 
-    /* Query validity check. */
     if (max_size === undefined) {
         res.status(400);
         res.send({ msg: 'invalid max_size' });
@@ -18,7 +17,6 @@ export const list = async (req, res) => {
         return;
     }
 
-    /* Fire database query. */
     try {
 
         const notis = await db.instance
@@ -50,8 +48,48 @@ export const list = async (req, res) => {
 
 export const createNoti = async (req, res) => {
 
-    res.status(200);
-    res.send('POST /api/v1/noti');
+    if (!req.admin) {
+        res.status(403);
+        res.send({ msg: 'login required' });
+        return;
+    }
+
+    const { noti_kr, noti_en } = req.body;
+
+    if (noti_kr) {
+        if (typeof noti_kr !== 'string' || noti_kr.length > 40) {
+            res.status(400);
+            res.send({ msg: 'invalid noti_kr' });
+        }
+    }
+    if (noti_en) {
+        if (typeof noti_en !== 'string' || noti_en.length > 80) {
+            res.status(400);
+            res.send({ msg: 'invalid noti_en' });
+        }
+    }
+
+    try {
+
+        await db.authorizedInstance('noti')
+            .insert({ noti_kr, noti_en });
+
+        const [{ 'last_insert_id()': sid }] = await db.authorizedInstance
+            .select(db.authorizedInstance.raw('last_insert_id()'));
+
+        const [noti] = await db.authorizedInstance
+            .select('sid', 'noti_kr', 'noti_en', 'created_time')
+            .from('noti')
+            .where({ sid });
+
+        res.status(201);
+        res.send(noti);
+
+    } catch (e) {
+        console.log(e);
+        res.status(500);
+        res.send({ msg: 'server error' });
+    }
 
 };
 
