@@ -339,6 +339,25 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
 
     };
 
+    const testNonExistent = (sid, body) => async () => {
+
+        /* Put a noti of sid 1. */
+        await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
+
+        const token = await generateToken({ sid: 0 });
+
+        const res = await request(apiURL)
+            .put(`/api/v1/noti/${sid}`)
+            .set('content-type', 'application/json')
+            .set('Cookie', `access_token=${token}`)
+            .send(JSON.stringify(body));
+
+        expect(res).to.have.status(404);
+        expect(res.body).to.have.key('msg');
+        expect(res.body.msg).to.equal(`noti does not exist`);
+
+    }
+
     const testForbidden = (sid, body) => async () => {
 
         /* Put a noti of sid 1. */
@@ -371,7 +390,7 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
             noti_kr: '로그인 안 한 상태',
             noti_en: 'I\'m not logged in!'
         }));
-        it('Invalid parameter "sid" (nonexistent)', testInvalidQuery(2, {
+        it('Invalid parameter "sid" (nonexistent)', testNonExistent(2, {
             noti_kr: '테스트',
             noti_en: 'test'
         }));
@@ -453,6 +472,23 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
 
     };
 
+    const testNonExistent = (sid, body) => async () => {
+
+        /* Put a noti of sid 1. */
+        await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
+
+        const token = await generateToken({ sid: 0 });
+
+        const res = await request(apiURL)
+            .delete(`/api/v1/noti/${sid}`)
+            .set('Cookie', `access_token=${token}`)
+
+        expect(res).to.have.status(404);
+        expect(res.body).to.have.key('msg');
+        expect(res.body.msg).to.equal(`noti does not exist`);
+
+    }
+
     const testForbidden = (sid) => async () => {
 
         /* Put a noti of sid 1. */
@@ -472,7 +508,7 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
     describe('Error handling tests.', () => {
 
         it('Not logged', testForbidden(1));
-        it('Invalid parameter "sid" (nonexistent)', testInvalidQuery(2));
+        it('Invalid parameter "sid" (nonexistent)', testNonExistent(2));
         it('Invalid parameter "sid" (negative)', testInvalidQuery(-1));
         
     });
