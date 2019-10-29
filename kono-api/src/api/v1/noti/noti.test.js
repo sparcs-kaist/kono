@@ -4,7 +4,15 @@ import { generateToken } from '../../../lib/token';
 
 describe('Testing GET /api/v1/noti ...', () => {
 
+    beforeEach(async () => { await db.instance('noti').del(); });
+    afterEach (async () => { await db.instance('noti').del(); });
+
+    const _notis = Object.keys([...Array(20)]).map(i => ({ noti_kr: `kr${i}`, noti_en: `en${i}` }));
+
     const testSimple = (query) => async () => {
+
+        await db.instance('noti').insert(_notis);
+
         const { max_size } = query;
         const res = await request(apiURL).get('/api/v1/noti').query(query);
         expect(res).to.have.status(200);
@@ -19,14 +27,10 @@ describe('Testing GET /api/v1/noti ...', () => {
             expect(noti_en).to.be.a('string');
             expect(created_time).to.satisfy(e => !isNaN(Date.parse(e)));
         });
+
     }
 
     const testSorted = (query) => async () => {
-
-        /* Clean table */
-        await db.instance('noti').del();
-
-        const _notis = Object.keys([...Array(20)]).map(i => ({ noti_kr: `kr${i}`, noti_en: `en${i}` }));
 
         for (let i = 0; i < 20; i++) {
             await db.instance('noti').insert(_notis[i]);
@@ -38,18 +42,11 @@ describe('Testing GET /api/v1/noti ...', () => {
         const created_times = res.body.map(e => e.created_time);
         expect(created_times).to.satisfy(arr => arr.slice(1).every((item, idx) => arr[idx] >= item));
 
-        /* Clean table */
-        await db.instance('noti').del();
-
     }
 
     const testUpdate = () => async () => {
 
         let res;
-        const _notis = Object.keys([...Array(20)]).map(i => ({ noti_kr: `kr${i}`, noti_en: `en${i}` }));
-
-        /* Clean table */
-        await db.instance('noti').del();
 
         res = await request(apiURL).get('/api/v1/noti').query({ max_size: 5 });
         expect(res).to.have.status(200);
@@ -93,9 +90,6 @@ describe('Testing GET /api/v1/noti ...', () => {
         expect(res.body).to.have.lengthOf(5);
         expect(res.body[0].noti_kr).to.equal('kr19');
         expect(res.body[3].noti_en).to.equal('en16');
-
-        /* Clean table */
-        await db.instance('noti').del();
 
     }
 
@@ -148,6 +142,9 @@ describe('Testing GET /api/v1/noti ...', () => {
 });
 
 describe('Testing POST /api/v1/noti ...', () => {
+
+    beforeEach(async () => { await db.instance('noti').del(); });
+    afterEach (async () => { await db.instance('noti').del(); });
 
     const testSimple = (body) => async () => {
 
@@ -232,12 +229,13 @@ describe('Testing POST /api/v1/noti ...', () => {
 
 describe('Testing PUT /api/v1/noti/:sid', () => {
 
+    beforeEach(async () => { await db.instance('noti').del(); });
+    afterEach (async () => { await db.instance('noti').del(); });
+
     const testSingleUpdate = () => async () => {
 
         const token = await generateToken({ sid: 0 });
 
-        /* Clean table. */
-        await db.instance('noti').del();
         /* Put a noti of sid 1. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트', noti_en: 'test' });
 
@@ -259,17 +257,12 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
         expect(updatedNoti.noti_kr).to.equal('테스트2');
         expect(updatedNoti.noti_en).to.equal('test2');
 
-        /* Clean table. */
-        await db.instance('noti').del();
-
     };
 
     const testMultipleUpdate = () => async () => {
 
         const token = await generateToken({ sid: 0 });
 
-        /* Clean table. */
-        await db.instance('noti').del();
         /* Put a noti of sid 1~3. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
         await db.instance('noti').insert({ sid: 2, noti_kr: '테스트2', noti_en: 'test2' });
@@ -322,15 +315,10 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
         expect(notis[2].noti_kr).to.equal('흠...');
         expect(notis[2].noti_en).to.equal('hmm...');
 
-        /* Clean table. */
-        await db.instance('noti').del();
-
     };
 
     const testInvalidQuery = (sid, body, invalidField) => async () => {
 
-        /* Clean table. */
-        await db.instance('noti').del();
         /* Put a noti of sid 1. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
 
@@ -346,15 +334,10 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
         expect(res.body).to.have.key('msg');
         expect(res.body.msg).to.equal(`invalid ${invalidField}`);
 
-        /* Clean table. */
-        await db.instance('noti').del();
-
     };
 
     const testForbidden = (sid, body) => async () => {
 
-        /* Clean table. */
-        await db.instance('noti').del();
         /* Put a noti of sid 1. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
 
@@ -366,9 +349,6 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
         expect(res).to.have.status(403);
         expect(res.body).to.have.key('msg');
         expect(res.body.msg).to.equal('login required');
-
-        /* Clean table. */
-        await db.instance('noti').del();
 
     }
 
@@ -403,12 +383,13 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
 
 describe('Testing DELETE /api/v1/noti/:sid ...', () => {
 
+    beforeEach(async () => { await db.instance('noti').del(); });
+    afterEach (async () => { await db.instance('noti').del(); });
+
     const testSingleDelete = () => async () => {
 
         const token = await generateToken({ sid: 0 });
 
-        /* Clean table. */
-        await db.instance('noti').del();
         /* Put a noti of sid 1. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트', noti_en: 'test' });
 
@@ -420,17 +401,12 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         const select = await db.instance.select('*').from('noti');
         expect(select).to.have.lengthOf(0);
 
-        /* Clean table. */
-        await db.instance('noti').del();
-
     };
 
     const testMultipleDelete = () => async () => {
 
         const token = await generateToken({ sid: 0 });
 
-        /* Clean table. */
-        await db.instance('noti').del();
         /* Put a noti of sid 1~3. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
         await db.instance('noti').insert({ sid: 2, noti_kr: '테스트2', noti_en: 'test2' });
@@ -452,17 +428,12 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         const { sid } = noti;
         expect(sid).to.equal(2);
 
-        /* Clean table. */
-        await db.instance('noti').del();
-
     };
 
     const testInvalidQuery = (sid) => async () => {
 
         const token = await generateToken({ sid: 0 });
 
-        /* Clean table. */
-        await db.instance('noti').del();
         /* Put a noti of sid 1. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
 
@@ -473,15 +444,10 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         expect(res.body).to.have.key('msg');
         expect(res.body.msg).to.equal(`invalid ${invalidField}`);
 
-        /* Clean table. */
-        await db.instance('noti').del();
-
     };
 
     const testForbidden = (sid) => async () => {
 
-        /* Clean table. */
-        await db.instance('noti').del();
         /* Put a noti of sid 1. */
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
 
@@ -491,9 +457,6 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         expect(res).to.have.status(403);
         expect(res.body).to.have.key('msg');
         expect(res.body.msg).to.equal('login required');
-
-        /* Clean table. */
-        await db.instance('noti').del();
 
     };
 
