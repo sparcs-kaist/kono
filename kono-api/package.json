@@ -4,7 +4,7 @@
   "description": "API Server providing apis for the front-end web service. - Express.js",
   "main": "index.js",
   "scripts": {
-    "start:dev": "NODE_ENV=development nodemon -L --watch src/ --exec babel-node src/index.js",
+    "start:dev": "NODE_ENV=development nodemon -L --delay 3 --watch src/ --exec babel-node src/index.js",
     "test:dev": "NODE_ENV=development node_modules/.bin/mocha --exit --require @babel/register src/test/test.js",
     "test:staging": "NODE_ENV=staging node_modules/.bin/mocha --exit --require @babel/register src/test/test.js",
     "build": "webpack --config webpack.config.js",
