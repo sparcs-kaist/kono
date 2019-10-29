@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import styles from '../styles/RoomStatePanel.module.scss';
 import RoomDetailPanel from './RoomDetailPanel';
+import RoomDiscoBall from './RoomDiscoBall';
 import SVGPathsEmpty from '../res/icons/room-empty.json';
 import SVGPathsFilled from '../res/icons/room-filled.json';
 import classnames from '../lib/classnames';
@@ -65,7 +66,6 @@ export default ({ rooms, highlight }) => {
                         position: 'absolute',
                         width: 545,
                         height:604,
-                        zIndex: room_idx,
                         pointerEvents: 'none',
                     }}
                     className={classnames([
@@ -74,14 +74,28 @@ export default ({ rooms, highlight }) => {
                         showAnimation && styles.RoomStatePanel__room_filled_animation
                     ])} 
                 >
+                    <defs>
+                        <clipPath id={`clipPath${room_idx}`} >
+                            <path d={state2path(state).path[room_idx]}/>
+                        </clipPath>
+                    </defs>
                     <path
-                    style={{
-                        pointerEvents: 'auto',
-                    }}
-                    d={state2path(state).path[room_idx]}
-                    onMouseOver={onMouseOver}
-                    onMouseOut={onMousOut}
+                        style={{
+                            pointerEvents: 'auto',
+                        }}
+                        d={state2path(state).path[room_idx]}
+                        onMouseOver={onMouseOver}
+                        onMouseOut={onMousOut}
                     />
+                    {/* <rect width="60%" height="60%" fill="black" clip-path={`url(#clipPath${room_idx})`} /> */}
+                    <foreignObject x="0" y="0" width="100%" height="100%" clip-path={`url(#clipPath${room_idx})`}>
+                        <RoomDiscoBall
+                            key={`room-discoball-${room_idx}`}
+                            x={SVGPathsFilled.discoBallPos[room_idx].x}
+                            y={SVGPathsFilled.discoBallPos[room_idx].y+255}
+                            isHovered={showAnimation}
+                        />
+                    </foreignObject>
                 </svg>
             </Fragment>
         );

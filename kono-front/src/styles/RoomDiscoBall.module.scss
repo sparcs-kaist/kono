@@ -1,0 +1,97 @@
+@import 'mixins/all';
+
+@keyframes rotate {
+  0%    {transform: rotateX(0) rotateY(0) rotateZ(0);}
+  100%  {transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);}
+}
+
+$side: 70px;
+$l: 70px;
+$num: 10;
+$dur: 10s;
+
+@mixin plane($w, $h) {
+  width: $w;
+  height: $h;
+  transform-style: preserve-3d;
+}
+  
+@mixin view($p) {
+  position: relative;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // bottom: 0;
+  perspective: $p;
+}
+
+@mixin center {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+} 
+
+@include themed() {
+  .discoBall{
+
+    .view {
+      @include view(400);
+      //z-index: 9;
+      pointer-events: none;
+    }
+    
+    .plane {
+      @include plane($side, $side);
+      
+      &.main {
+        @include center;
+        transform: rotateX(60deg) rotateZ(-30deg);
+        animation: rotate 10s infinite linear;
+          
+        .circle {
+          width: $side;
+          height: $side;
+          position: absolute;
+          transform-style: preserve-3d;
+          border-radius: 100%;
+          box-sizing: border-box;
+          box-shadow: 0 0 60px rgba(yellow, 1), inset 0 0 60px rgba(white, 1);
+      
+          &::before, &::after {
+            content: '';
+            display: block;
+            @include center;
+            width: 10%;
+            height: 10%;
+            border-radius: 100%;
+            background: rgba(white, 1);
+            box-sizing: border-box;
+            box-shadow: 0 0 60px 2px rgba(crimson, 1);
+          }
+    
+          &::before {
+            transform: translateZ(-$l);
+          }
+  
+          &::after {
+            transform: translateZ($l);
+          }
+    
+          @for $i from 1 through 5 {
+            &:nth-child(#{$i}) {
+              transform: rotateZ($i / 5 * 360deg) rotateX(63.435deg);
+            }
+          }
+  
+        }
+
+      }
+
+    }
+
+  }
+
+}
