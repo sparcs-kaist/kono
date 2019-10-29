@@ -307,7 +307,19 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
         expect(res3.body.noti_kr).to.equal('정말?');
         expect(res3.body.noti_en).to.equal('please?');
 
-        const notis = await db.instance.select('*').from('noti');
+        const notis = await db.instance
+            .select('*')
+            .from('noti')
+            .orderBy([ 
+                {
+                    column: 'created_time', 
+                    order: 'desc'
+                },
+                {
+                    column: 'sid', 
+                    order: 'desc'
+                }
+            ]);
         expect(notis[0].sid).to.equal(3);
         expect(notis[0].noti_kr).to.equal('정말?');
         expect(notis[0].noti_en).to.equal('please?');
@@ -385,7 +397,7 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
         it('Invalid field "noti_en"', testInvalidQuery(1, {
             noti_kr: '테스트',
             noti_en: 'blablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablablabla'
-        }));
+        }, 'noti_en'));
         it('Not logged', testForbidden(1, {
             noti_kr: '로그인 안 한 상태',
             noti_en: 'I\'m not logged in!'
@@ -397,7 +409,7 @@ describe('Testing PUT /api/v1/noti/:sid', () => {
         it('Invalid parameter "sid" (negative)', testInvalidQuery(-1, {
             noti_kr: '테스트',
             noti_en: 'test'
-        }));
+        }, 'sid'));
         
     });
 
