@@ -156,7 +156,7 @@ describe('Testing POST /api/v1/noti ...', () => {
             .set('Cookie', `access_token=${token}`)
             .send(JSON.stringify(body));
 
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(201);
         expect(res.body).to.have.keys([ 'sid', 'noti_kr', 'noti_en', 'created_time' ]);
         const { sid, noti_kr, noti_en, created_time } = res.body;
         expect(noti_kr).to.equal(body.noti_kr);
@@ -205,8 +205,11 @@ describe('Testing POST /api/v1/noti ...', () => {
 
     describe('Simple cases.', () => {
         it('Test case 1', testSimple({
-            noti_kr: '테스트',
-            noti_en: 'test'
+            noti_kr: '테스트1',
+            noti_en: 'test1'
+        }))
+        it('Test case 2', testSimple({
+            noti_kr: '테스트2'
         }))
     });
 
@@ -394,7 +397,8 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트', noti_en: 'test' });
 
         const res = await request(apiURL)
-            .delete(`/api/v1/noti/1`);
+            .delete(`/api/v1/noti/1`)
+            .set('Cookie', `access_token=${token}`);
 
         expect(res).to.have.status(204);
 
@@ -413,12 +417,14 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         await db.instance('noti').insert({ sid: 3, noti_kr: '테스트3', noti_en: 'test3' });
 
         const res1 = await request(apiURL)
-            .delete(`/api/v1/noti/1`);
+            .delete(`/api/v1/noti/1`)
+            .set('Cookie', `access_token=${token}`);
         
         expect(res1).to.have.status(204);
 
         const res3 = await request(apiURL)
-            .delete(`/api/v1/noti/3`);
+            .delete(`/api/v1/noti/3`)
+            .set('Cookie', `access_token=${token}`);
         
         expect(res3).to.have.status(204);
 
@@ -438,7 +444,8 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         await db.instance('noti').insert({ sid: 1, noti_kr: '테스트1', noti_en: 'test1' });
 
         const res = await request(apiURL)
-            .delete(`/api/v1/noti/${sid}`);
+            .delete(`/api/v1/noti/${sid}`)
+            .set('Cookie', `access_token=${token}`);
 
         expect(res).to.have.status(400);
         expect(res.body).to.have.key('msg');
@@ -468,6 +475,119 @@ describe('Testing DELETE /api/v1/noti/:sid ...', () => {
         it('Invalid parameter "sid" (nonexistent)', testInvalidQuery(2));
         it('Invalid parameter "sid" (negative)', testInvalidQuery(-1));
         
+    });
+
+});
+
+describe('Integrated test.', () => {
+
+    before(async () => { await db.instance('noti').del(); })
+    after (async () => { await db.instance('noti').del(); })
+
+    let sid1, sid2, token;
+
+    it('POST /api/v1/auth/login', async () => {
+        const res = await request(apiURL).post('/api/v1/auth/login')
+            .set('content-type', 'application/json')
+            .send(JSON.stringify({
+                password: 'inhibitor'
+            }));
+        expect(res).to.have.status(200);
+        expect(res.body.msg).to.equal('login success');
+        token = res.header['set-cookie'][0].split(';').filter(str => str.includes('access_token'))[0].split('=')[1];
+    });
+
+    it('GET /api/v1/noti', async () => {
+        const res = await request(apiURL).get('/api/v1/noti').query({ max_size: 8 });
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.have.lengthOf(0);
+    });
+
+    it('POST /api/v1/noti', async () => {
+        const res = await request(apiURL).post('/api/v1/noti')
+            .set('content-type', 'application/json')
+            .set('Cookie', `access_token=${token}`)
+            .send(JSON.stringify({
+                noti_kr: '현재 지폐교환기 사용이 불가합니다.', 
+                noti_en: 'Bill exchanger not available at the moment.'
+            }));
+        expect(res).to.have.status(201);
+        expect(res.body).to.have.keys([ 'sid', 'noti_kr', 'noti_en', 'created_time' ]);
+        const { noti_kr, noti_en, created_time } = res.body;
+        sid1 = res.body.sid;
+        expect(noti_kr).to.equal('현재 지폐교환기 사용이 불가합니다.');
+        expect(noti_en).to.equal('Bill exchanger not available at the moment.');
+        expect(created_time).to.satisfy(e => !isNaN(Date.parse(e)));
+    });
+
+    it('GET /api/v1/noti', async () => {
+        const res = await request(apiURL).get('/api/v1/noti').query({ max_size: 8 });
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.have.lengthOf(1);
+        expect(res.body[0].sid).to.equal(sid1);
+        expect(res.body[0].noti_kr).to.equal('현재 지폐교환기 사용이 불가합니다.');
+        expect(res.body[0].noti_en).to.equal('Bill exchanger not available at the moment.');
+    });
+
+    it('POST /api/v1/noti', async () => {
+        const res = await request(apiURL).post('/api/v1/noti')
+            .set('content-type', 'application/json')
+            .set('Cookie', `access_token=${token}`)
+            .send(JSON.stringify({
+                noti_kr: '현재 모바일 페이지에서 잘 작동하지 않습니다.', 
+                noti_en: 'Mobile page not available.'
+            }));
+        expect(res).to.have.status(201);
+        expect(res.body).to.have.keys([ 'sid', 'noti_kr', 'noti_en', 'created_time' ]);
+        const { noti_kr, noti_en, created_time } = res.body;
+        sid2 = res.body.sid;
+        expect(noti_kr).to.equal('현재 모바일 페이지에서 잘 작동하지 않습니다.');
+        expect(noti_en).to.equal('Mobile page not available.');
+        expect(created_time).to.satisfy(e => !isNaN(Date.parse(e)));
+    });
+
+    it('PUT /api/v1/noti/:sid', async () => {
+        const res = await request(apiURL).put(`/api/v1/noti/${sid1}`)
+            .set('content-type', 'application/json')
+            .set('Cookie', `access_token=${token}`)
+            .send(JSON.stringify({
+                noti_kr: '현재 지폐교환기 사용이 불가능합니다.'
+            }));
+        expect(res).to.have.status(200);
+        expect(res.body.sid).to.equal(sid1);
+        expect(res.body.noti_kr).to.equal('현재 지폐교환기 사용이 불가능합니다.');
+        expect(res.body.noti_en).to.equal('Bill exchanger not available at the moment.');
+    });
+
+    it('GET /api/v1/noti', async () => {
+        const res = await request(apiURL).get('/api/v1/noti').query({ max_size: 8 });
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.have.lengthOf(2);
+        expect(res.body[0].sid).to.equal(sid2);
+        expect(res.body[0].noti_kr).to.equal('현재 모바일 페이지에서 잘 작동하지 않습니다.');
+        expect(res.body[0].noti_en).to.equal('Mobile page not available.');
+        expect(res.body[1].sid).to.equal(sid1);
+        expect(res.body[1].noti_kr).to.equal('현재 지폐교환기 사용이 불가능합니다.');
+        expect(res.body[1].noti_en).to.equal('Bill exchanger not available at the moment.');
+    });
+
+    it('DELETE /api/v1/noti/:sid', async () => {
+        const res = await request(apiURL).delete(`/api/v1/noti/${sid2}`)
+            .set('Cookie', `access_token=${token}`);
+        expect(res).to.have.status(204);
+    });
+
+    it('GET /api/v1/noti', async () => {
+        const res = await request(apiURL).get('/api/v1/noti').query({ max_size: 8 });
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.have.lengthOf(1);
+        expect(res.body[0].sid).to.equal(sid1);
+        expect(res.body[0].noti_kr).to.equal('현재 지폐교환기 사용이 불가능합니다.');
+        expect(res.body[0].noti_en).to.equal('Bill exchanger not available at the moment.');
     });
 
 });
