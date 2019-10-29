@@ -65,7 +65,6 @@ export default ({ rooms, highlight }) => {
                         position: 'absolute',
                         width: 545,
                         height:604,
-                        zIndex: room_idx,
                         pointerEvents: 'none',
                     }}
                     className={classnames([
