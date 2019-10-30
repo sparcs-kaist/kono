@@ -75,3 +75,10 @@ export const recentList = async (req, res) => {
         res.send({ msg: 'server error' });
     }
 };
+
+export const create = async (req, res) => {
+
+    res.status(201);
+    res.end();
+
+}
