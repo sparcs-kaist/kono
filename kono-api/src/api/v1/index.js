@@ -3,6 +3,7 @@ import auth from './auth';
 import post from './post';
 import image from './image';
 import room from './room';
+import noti from './noti';
 
 export default (() => {
 
@@ -12,6 +13,7 @@ export default (() => {
     v1.use('/post', post);
     v1.use('/image', image);
     v1.use('/room', room);
+    v1.use('/noti', noti);
 
     return v1;
 

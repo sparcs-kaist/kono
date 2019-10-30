@@ -3,18 +3,18 @@
 $themes: (
     default: (
         /* Text Colors */
-        text-primary: #000000,
+        text-primary: #333333,
         text-secondary: material-color('grey', '500'),
         text-error: #E53935,
-        text-highlight: material-color('brown', '500'),
-        text-highlight-on: material-color('brown', '300'),
+        text-highlight: #6078F5,
+        text-highlight-on: #6078F5,
 
         /* Background Colors */
         background: #FFFFFF,
-        panel-background: #EFECEB,
-        theme-background: material-color('brown', '500'),
-        theme-light-background: material-color('brown', '300'),
-        inactive-background: material-color('grey', '400')
+        panel-background: #CBD1F3,
+        theme-background: #6078F5,
+        theme-light-background: #6078F5,
+        inactive-background: #BBBBBB
     ),
     dark: (
         /* Text Colors */
@@ -29,7 +29,7 @@ $themes: (
         panel-background: #373751,
         theme-background: #6078F5,
         theme-light-background: #90CAF9,
-        inactive-background: material-color('grey', '700')
+        inactive-background: #000000
     )
 );
 
