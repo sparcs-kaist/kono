@@ -1,7 +1,8 @@
 import React, { useState, Fragment } from 'react';
 import styles from '../styles/RoomStatePanel.module.scss';
 import RoomDetailPanel from './RoomDetailPanel';
-import SVGPaths from '../res/icons/room.json';
+import SVGPathsEmpty from '../res/icons/room-empty.json';
+import SVGPathsFilled from '../res/icons/room-filled.json';
 import classnames from '../lib/classnames';
 
 function state2classname(state) {
@@ -28,6 +29,16 @@ function highlight2state(highlight) {
 
 }
 
+function state2path(state) {
+
+    if (state === 0)
+        return SVGPathsEmpty;
+    if (state === 1)
+        return SVGPathsFilled;
+    return SVGPathsFilled;
+
+}
+
 const ROOM_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
 
 export default ({ rooms, highlight }) => {
@@ -44,18 +55,33 @@ export default ({ rooms, highlight }) => {
         const onMouseOver = room && (() => setHover(room.room_number));
         const onMousOut = room && (() => setHover(null));
 
+        const showHighlight = (highlight2state(highlight) === state) || ( (state !== 1) && isHovered );
+        const showAnimation = (state === 1) && isHovered;
+
         return (
             <Fragment key={`room-fragment-${room_idx}`}>
-                <path 
+                <svg
+                    style={{
+                        position: 'absolute',
+                        width: 545,
+                        height:604,
+                        pointerEvents: 'none',
+                    }}
                     className={classnames([
                         state2classname(state),
-                        (highlight2state(highlight) === state) && styles.RoomStatePanel__room_highlight,
-                        isHovered && styles.RoomStatePanel__room_highlight
+                        showHighlight && styles.RoomStatePanel__room_highlight,
+                        showAnimation && styles.RoomStatePanel__room_filled_animation
                     ])} 
-                    d={SVGPaths.path[room_idx]} 
+                >
+                    <path
+                    style={{
+                        pointerEvents: 'auto',
+                    }}
+                    d={state2path(state).path[room_idx]}
                     onMouseOver={onMouseOver}
                     onMouseOut={onMousOut}
-                />
+                    />
+                </svg>
             </Fragment>
         );
 
@@ -63,11 +89,11 @@ export default ({ rooms, highlight }) => {
 
     return (
         <div>
-            <svg className={styles.RoomStatePanel} width="541" height="601" viewBox="0 0 541 601" xmlns="http://www.w3.org/2000/svg">
+            <div className={styles.RoomStatePanel} width="545" height="604" viewBox="0 0 545 604" xmlns="http://www.w3.org/2000/svg">
                 {
                     ROOM_NUMBERS.map(i => roomComponents(i))
                 }
-            </svg>
+            </div>
             {
                 ROOM_NUMBERS.map(i => {
                     if (hover !== i)
@@ -75,8 +101,8 @@ export default ({ rooms, highlight }) => {
                     return (
                         <RoomDetailPanel 
                             key={`room-detail-${i}`}
-                            x={SVGPaths.pos[i].x} 
-                            y={SVGPaths.pos[i].y}
+                            x={SVGPathsFilled.pos[i].x} 
+                            y={SVGPathsFilled.pos[i].y}
                             room={rooms.find(e => e.room_number === i)}
                         />
                     )

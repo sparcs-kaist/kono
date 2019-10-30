@@ -10,6 +10,8 @@
         border-radius: 6px;
         border: 1px solid t(theme-light-background);
         padding: 8px;
+        z-index: 10;
+        pointer-events: none;
 
         @include flexbox(column, $center: false);
         align-items: flex-end;
