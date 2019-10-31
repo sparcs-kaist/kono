@@ -1,6 +1,7 @@
 import knex from 'knex';
 
 export const apiURL = process.env.API_URL_TEST;
+export const password = process.env.API_PASSWORD;
 
 export const db = (() => {
 
