@@ -18,7 +18,16 @@ export const recentSingle = async (req, res) => {
             .select('state', 'timestamp')
             .from('room')
             .where({ room_number: ROOM_NUMBER })
-            .orderBy('timestamp', 'desc')
+            .orderBy([
+                {
+                    column: 'timestamp',
+                    order: 'desc'
+                },
+                {
+                    column: 'sid',
+                    order: 'desc'
+                }
+            ])
             .limit(1)
             .then(result => {
                 if (result.length === 0)
@@ -49,9 +58,9 @@ export const recentList = async (req, res) => {
         const room = await db.instance
             .select('room_number', 'state', 'timestamp')
             .from(db.instance.raw('room r1'))
-            .where('timestamp', (builder) => { 
+            .where('sid', (builder) => { 
                 builder
-                .max('timestamp')
+                .max('sid')
                 .from(db.instance.raw('room r2'))
                 .where(db.instance.raw('r1.room_number = r2.room_number'))})
             .orderBy('room_number')
@@ -78,7 +87,40 @@ export const recentList = async (req, res) => {
 
 export const create = async (req, res) => {
 
-    res.status(201);
-    res.end();
+    if (!req.admin) {
+        res.status(403);
+        res.send({ msg: 'login required' });
+        return;
+    }
+
+    const { room_number, state } = req.query;
+
+    const ROOM_NUMBER = parseInt(room_number);
+    if (isNaN(ROOM_NUMBER) || !Number.isSafeInteger(ROOM_NUMBER) || ROOM_NUMBER <= 0) {
+        res.status(400);
+        res.send({ msg: 'invalid room_number' });
+        return;
+    }
+
+    const STATE = parseInt(state);
+    if (isNaN(STATE) || !Number.isSafeInteger(STATE) || (STATE !== 0 && STATE !== 1)) {
+        res.status(400);
+        res.send({ msg: 'invalid state' });
+        return;
+    }
+
+    try {
+
+        await db.authorizedInstance('room')
+            .insert({ room_number: ROOM_NUMBER, state: STATE });
+
+        res.status(201);
+        res.end();
+
+    } catch (e) {
+        console.log(e);
+        res.status(500);
+        res.send({ msg: 'server error' });
+    }
 
 }

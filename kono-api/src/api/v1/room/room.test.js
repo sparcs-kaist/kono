@@ -115,7 +115,7 @@ describe('Testing POST /api/v1/room', () => {
         const token = await generateToken({ sid: 0 });
 
         const res = await request(apiURL)
-            .post(`/api/v1/room?room_number=${room_number}?state=${state}`)
+            .post(`/api/v1/room?room_number=${room_number}&state=${state}`)
             .set('Cookie', `access_token=${token}`);
 
         expect(res).to.have.status(201);
@@ -123,7 +123,7 @@ describe('Testing POST /api/v1/room', () => {
         const [recentRes] = await db.instance
             .select('*')
             .from('room')
-            .orderBy('created_time', 'desc')
+            .orderBy('timestamp', 'desc')
             .limit(1);
 
         expect(recentRes.room_number).to.equal(room_number);
@@ -212,11 +212,11 @@ describe('Integrated test.', () => {
 
     it('POST /api/v1/room', async () => {
         const RECORDS = [1, 0, 1, 1, 1, 0, 1];
-        RECORDS.forEach(async (state, index) => {
-            const res = await request(apiURL).post(`/api/v1/room?room_number=${index+1}&state=${state}`)
-                .set('Cookie', `access_token=${token}`)
-            expect(res).to.have.status(201);
-        });
+        await Promise.all(RECORDS.map((state, index) => {
+            return request(apiURL).post(`/api/v1/room?room_number=${index+1}&state=${state}`)
+            .set('Cookie', `access_token=${token}`)
+            .then(res => { expect(res).to.have.status(201); })
+        }));
     });
 
     it('GET /api/v1/room/recent', async () => {
@@ -243,6 +243,19 @@ describe('Integrated test.', () => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.keys(['state', 'timestamp']);
         expect(res.body.state).to.equal(0);
+    });
+
+    it('GET /api/v1/room/recent', async () => {
+        const RECORDS = [1, 0, 1, 0, 1, 0, 1];
+        const res = await request(apiURL).get('/api/v1/room/recent');
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.have.lengthOf(7);
+        res.body.forEach(record => {
+            expect(record).to.have.keys(['room_number', 'state', 'timestamp']);
+            const { room_number, state } = record;
+            expect(state).to.equal(RECORDS[room_number - 1]);
+        })
     });
 
 });
