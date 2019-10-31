@@ -82,20 +82,13 @@ export default ({ rooms, highlight }) => {
                         onMouseOver={onMouseOver}
                         onMouseOut={onMousOut}
                     />
-                    {/* <defs>
-                        <clipPath id={`clipPath${room_idx}`} >
-                            <path d={state2path(state).path[room_idx]}/>
-                        </clipPath>
-                    </defs> */}
-                    <foreignObject x="0" y="0" width="100%" height="100%" clip-path={`url(#clipPath${room_idx})`}>
-                        <RoomDiscoBall
-                            key={`room-discoball-${room_idx}`}
-                            x={SVGPathsFilled.discoBallPos[room_idx].x}
-                            y={SVGPathsFilled.discoBallPos[room_idx].y+255}
-                            isHovered={showAnimation}
-                        />
-                    </foreignObject>
                 </svg>
+                <RoomDiscoBall
+                    key={`room-discoball-${room_idx}`}
+                    x={SVGPathsFilled.discoBallPos[room_idx].x-35}
+                    y={SVGPathsFilled.discoBallPos[room_idx].y+10}
+                    isHovered={showAnimation}
+                />
             </Fragment>
         );
 
