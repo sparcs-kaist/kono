@@ -2,9 +2,7 @@ import React from 'react';
 import styles from '../styles/RoomDiscoBall.module.scss';
 import classnames from '../lib/classnames';
 
-export default ({ x = 0, y = 0, isHovered }) => {
-  if ( !isHovered )
-    return null;
+export default ({ x = 0, y = 0 }) => {
   return (
     <div className={styles.discoBall}>
       <div
