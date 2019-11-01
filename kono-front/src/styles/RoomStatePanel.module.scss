@@ -2,22 +2,22 @@
 
 @keyframes fillColorChange {
     
-    0%      {fill: #6078F5;}
-    12%     {fill: #4C82A2;}
-    25%     {fill: #47D2B1;}
-    37%     {fill: #FFF4E8;}
-    50%     {fill: #FFE44B;}
-    62%     {fill: #FF2369;}
-    75%     {fill: #A01789;}
-    87%     {fill: #6430B8;}
-    100%    {fill: #1B2272;}
+    0%      {fill: #6078F5; transform: scale(1);}
+    12%     {fill: #4C82A2; transform: scale(1.03);}
+    25%     {fill: #47D2B1; transform: scale(1);}
+    37%     {fill: #FFF4E8; transform: scale(1.03);}
+    50%     {fill: #FFE44B; transform: scale(1);}
+    62%     {fill: #FF2369; transform: scale(1.03);}
+    75%     {fill: #A01789; transform: scale(1);}
+    87%     {fill: #6430B8; transform: scale(1.03);}
+    100%    {fill: #1B2272; transform: scale(1);}
 
 }
 
 @include themed() {
 
     .RoomStatePanel {
-
+        overflow: visible;
         position: absolute;
         top: 0;
         left: 30px;

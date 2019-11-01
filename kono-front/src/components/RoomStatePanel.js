@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import styles from '../styles/RoomStatePanel.module.scss';
 import RoomDetailPanel from './RoomDetailPanel';
+import RoomDiscoBall from './RoomDiscoBall';
 import SVGPathsEmpty from '../res/icons/room-empty.json';
 import SVGPathsFilled from '../res/icons/room-filled.json';
 import classnames from '../lib/classnames';
@@ -74,14 +75,20 @@ export default ({ rooms, highlight }) => {
                     ])} 
                 >
                     <path
-                    style={{
-                        pointerEvents: 'auto',
-                    }}
-                    d={state2path(state).path[room_idx]}
-                    onMouseOver={onMouseOver}
-                    onMouseOut={onMousOut}
+                        style={{
+                            pointerEvents: 'auto',
+                        }}
+                        d={state2path(state).path[room_idx]}
+                        onMouseOver={onMouseOver}
+                        onMouseOut={onMousOut}
                     />
                 </svg>
+                {showAnimation && <RoomDiscoBall
+                    key={`room-discoball-${room_idx}`}
+                    x={SVGPathsFilled.discoBallPos[room_idx].x}
+                    y={SVGPathsFilled.discoBallPos[room_idx].y}
+                    isHovered={showAnimation}
+                />}
             </Fragment>
         );
 
