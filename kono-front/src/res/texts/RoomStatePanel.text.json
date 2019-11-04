@@ -1,0 +1,14 @@
+{
+    "empty": {
+        "kr": "사용 가능",
+        "en": "Vacant"
+    },
+    "filled": {
+        "kr": "사용 중",
+        "en": "Occupied"
+    },
+    "null": {
+        "kr": "데이터 없음",
+        "en": "Data unavailable"
+    }
+}

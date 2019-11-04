@@ -1,42 +1,31 @@
 import React, { useState, Fragment } from 'react';
+import { useSelector } from 'react-redux';
 import styles from '../styles/RoomStatePanel.module.scss';
 import RoomDiscoBall from './RoomDiscoBall';
 import SVGPathsEmpty from '../res/icons/room-empty.json';
 import SVGPathsFilled from '../res/icons/room-filled.json';
 import classnames from '../lib/classnames';
+import Text from '../res/texts/RoomStatePanel.text.json';
+import useLanguages from '../lib/hooks/useLanguages';
 
-function state2classname(state) {
-
+function formatState(state) {
     if (state === 0)
-        return styles.RoomStatePanel__room_empty;
+        return 'empty';
     if (state === 1)
-        return styles.RoomStatePanel__room_filled;
-    
-    return styles.RoomStatePanel__room_null;
-
-}
-
-function highlight2state(highlight) {
-
-    if (highlight === 'none')
-        return 'none';
-    if (highlight === 'empty')
-        return 0;
-    if (highlight === 'filled')
-        return 1;
-    if (highlight === 'null')
-        return undefined;
-
+        return 'filled';
+    return 'null';
 }
 
 function state2path(state) {
-
     if (state === 0)
         return SVGPathsEmpty;
     if (state === 1)
         return SVGPathsFilled;
     return SVGPathsFilled;
+}
 
+function roomNumber2text(room_number) {
+    return String.fromCharCode('\u2776'.charCodeAt() + room_number - 1);
 }
 
 const ROOM_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
@@ -44,18 +33,21 @@ const ROOM_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
 export default ({ rooms, highlight }) => {
 
     const [hover, setHover] = useState(null);
+    const text = useLanguages(Text);
+    const language = useSelector(state => state.config.language);
     
     const roomComponents = (room_idx) => {
 
         const room = rooms.find(e => e.room_number === room_idx);
-        const { room_number, state } = room || {};
+        const { state } = room || {};
+        const stateType = formatState(state);
         
-        const isHovered = (hover === room_number);
+        const isHovered = (hover === room_idx);
 
-        const onMouseOver = room && (() => setHover(room.room_number));
-        const onMousOut = room && (() => setHover(null));
+        const onMouseOver = room && (() => setHover(room_idx));
+        const onMouseOut = room && (() => setHover(null));
 
-        const showHighlight = (highlight2state(highlight) === state) || ( (state !== 1) && isHovered );
+        const showHighlight = (highlight === stateType) || ( (state !== 1) && isHovered );
         const showAnimation = (state === 1) && isHovered;
 
         return (
@@ -68,7 +60,7 @@ export default ({ rooms, highlight }) => {
                         pointerEvents: 'none',
                     }}
                     className={classnames([
-                        state2classname(state),
+                        styles[`RoomStatePanel__room_${stateType}`],
                         showHighlight && styles.RoomStatePanel__room_highlight,
                         showAnimation && styles.RoomStatePanel__room_filled_animation
                     ])} 
@@ -79,25 +71,31 @@ export default ({ rooms, highlight }) => {
                         }}
                         d={state2path(state).path[room_idx]}
                         onMouseOver={onMouseOver}
-                        onMouseOut={onMousOut}
+                        onMouseOut={onMouseOut}
                     />
                     <text
-                        text-anchor="middle"
+                        textAnchor="middle"
                         fill="black"
                     >
                         <tspan 
                             x={state2path(state).pos[room_idx].x}
                             y={state2path(state).pos[room_idx].y}
-                            font-size="20"
+                            fontSize="20"
+                            letterSpacing="-0.1em"
                         >
-                            ❶번 방
+                            {
+                                language === 'kr'
+                                ? `${roomNumber2text(room_idx)}번 방`
+                                : `Room ${roomNumber2text(room_idx)}`
+                            }
                         </tspan>
                         <tspan
                             x={state2path(state).pos[room_idx].x}
                             y={state2path(state).pos[room_idx].y + 30}
-                            font-size="14"
+                            fontSize="14"
+                            letterSpacing="-0.1em"
                         >
-                            사용 가능
+                            { text[stateType] }
                         </tspan>
                     </text>
                 </svg>
