@@ -12,8 +12,8 @@
         "en": "Data unavailable"
     },
     "refresh": {
-        "kr": "새로고침",
-        "en": "Refresh"
+        "kr": "마지막 갱신",
+        "en": "Last updated"
     },
     "loading": {
         "kr": "불러오는 중...",

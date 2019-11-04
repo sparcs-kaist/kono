@@ -22,12 +22,16 @@ export default () => {
         }
     );
     const [highlight, setHighlight] = useState('none');
+    const [lastUpdatedTime, setLastUpdatedTime] = useState(Date.now());
+
+    const refreshRooms = () => {
+        fetchRooms(); 
+        setLastUpdatedTime(Date.now());
+    };
 
     useEffect(() => {
-        fetchRooms();
+        refreshRooms();
     }, []);
-
-    const refresh = () => { fetchRooms(); }
 
     return (
         <div className={styles.RoomPanel}>
@@ -36,9 +40,10 @@ export default () => {
             }
             {
                 <RoomLegendPanel 
-                    setHighlight={setHighlight}
                     isLoadingRooms={isLoadingRooms}
-                    refresh={refresh}
+                    lastUpdatedTime={lastUpdatedTime}
+                    refreshRooms={refreshRooms}
+                    setHighlight={setHighlight}
                 />
             }
             {
