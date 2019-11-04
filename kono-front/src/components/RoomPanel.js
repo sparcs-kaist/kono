@@ -2,19 +2,9 @@ import React, { useEffect, useState } from 'react';
 import styles from '../styles/RoomPanel.module.scss';
 import RoomStatePanel from './RoomStatePanel';
 import RoomLegendPanel from './RoomLegendPanel';
-import MaterialIcon from './MaterialIcon';
-import Spinner from './Spinner';
 import RoomNoticeBanner from './RoomNoticeBanner';
 import useFetch from '../lib/hooks/useFetch';
-import useLanguages from '../lib/hooks/useLanguages';
-import classnames from '../lib/classnames';
 import * as RoomAPI from '../api/room';
-import Text from '../res/texts/RoomPanel.text.json';
-
-const __temp_notices = [
-    '알파 서비스 중입니다.',
-    '현재 모바일 페이지에서 잘 작동하지 않습니다.'
-];
 
 export default () => {
 
@@ -32,17 +22,16 @@ export default () => {
         }
     );
     const [highlight, setHighlight] = useState('none');
+    const [lastUpdatedTime, setLastUpdatedTime] = useState(Date.now());
 
-    const showRefreshButton = !isLoadingRooms;
-    const showLoadingBanner = isLoadingRooms;
-    
-    const text = useLanguages(Text);
+    const refreshRooms = () => {
+        fetchRooms(); 
+        setLastUpdatedTime(Date.now());
+    };
 
     useEffect(() => {
-        fetchRooms();
+        refreshRooms();
     }, []);
-
-    const onClickRefresh = () => { fetchRooms(); }
 
     return (
         <div className={styles.RoomPanel}>
@@ -50,33 +39,12 @@ export default () => {
                 <RoomStatePanel rooms={rooms} highlight={highlight}/>
             }
             {
-                <RoomLegendPanel setHighlight={setHighlight}/>
-            }
-            {
-                showRefreshButton && (
-                    <div className={classnames([
-                            styles.RoomPanel__state,
-                            styles.RoomPanel__refresh
-                        ])}
-                        onClick={onClickRefresh}>
-                        <MaterialIcon md24>refresh</MaterialIcon>
-                        <span>{ text.refresh }</span>
-                    </div>
-                )
-            }
-            {
-                showLoadingBanner && (
-                    <div className={classnames([
-                        styles.RoomPanel__state,
-                        styles.RoomPanel__loading
-                    ])}>
-                        <Spinner small primary/>
-                        <span>{ text.loading }</span>
-                    </div>
-                )
-            }
-            {
-                <RoomNoticeBanner notices={__temp_notices}/>
+                <RoomLegendPanel 
+                    isLoadingRooms={isLoadingRooms}
+                    lastUpdatedTime={lastUpdatedTime}
+                    refreshRooms={refreshRooms}
+                    setHighlight={setHighlight}
+                />
             }
             {
                 <RoomsErrorHandler

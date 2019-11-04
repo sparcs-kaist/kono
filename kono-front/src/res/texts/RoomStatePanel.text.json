@@ -10,13 +10,5 @@
     "null": {
         "kr": "데이터 없음",
         "en": "Data unavailable"
-    },
-    "refresh": {
-        "kr": "마지막 갱신",
-        "en": "Last updated"
-    },
-    "loading": {
-        "kr": "불러오는 중...",
-        "en": "Loading ..."
     }
 }
