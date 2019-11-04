@@ -65,26 +65,28 @@ export default ({ rooms, highlight }) => {
                         onMouseOver={onMouseOver}
                         onMouseOut={onMouseOut}
                     />
-                    <text>
-                        <tspan 
-                            x={state2path(state).pos[room_idx].x}
-                            y={state2path(state).pos[room_idx].y}
-                            fontSize="20"
-                        >
-                            {
-                                language === 'kr'
-                                ? `${roomNumber2text(room_idx)}번 방`
-                                : `Room ${roomNumber2text(room_idx)}`
-                            }
-                        </tspan>
-                        <tspan
-                            x={state2path(state).pos[room_idx].x}
-                            y={state2path(state).pos[room_idx].y + 30}
-                            fontSize="14"
-                        >
-                            { text[stateType] }
-                        </tspan>
-                    </text>
+                    {
+                        isHovered && <text>
+                            <tspan 
+                                x={state2path(state).pos[room_idx].x}
+                                y={state2path(state).pos[room_idx].y}
+                                fontSize="20"
+                            >
+                                {
+                                    language === 'kr'
+                                    ? `${roomNumber2text(room_idx)}번 방`
+                                    : `Room ${roomNumber2text(room_idx)}`
+                                }
+                            </tspan>
+                            <tspan
+                                x={state2path(state).pos[room_idx].x}
+                                y={state2path(state).pos[room_idx].y + 30}
+                                fontSize="14"
+                            >
+                                { text[stateType] }
+                            </tspan>
+                        </text>
+                    }
                 </svg>
                 {
                     showAnimation && <RoomDiscoBall
