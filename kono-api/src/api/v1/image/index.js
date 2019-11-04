@@ -7,6 +7,7 @@ export default (() => {
 
     image.get('/', imageControl.list);
     image.get('/count', imageControl.count);
+    image.post('/upload', imageControl.upload);
 
     return image;
 
