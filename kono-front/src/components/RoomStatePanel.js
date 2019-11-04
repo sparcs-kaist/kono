@@ -1,6 +1,5 @@
 import React, { useState, Fragment } from 'react';
 import styles from '../styles/RoomStatePanel.module.scss';
-import RoomDetailPanel from './RoomDetailPanel';
 import RoomDiscoBall from './RoomDiscoBall';
 import SVGPathsEmpty from '../res/icons/room-empty.json';
 import SVGPathsFilled from '../res/icons/room-filled.json';
@@ -82,13 +81,33 @@ export default ({ rooms, highlight }) => {
                         onMouseOver={onMouseOver}
                         onMouseOut={onMousOut}
                     />
+                    <text
+                        text-anchor="middle"
+                        fill="black"
+                    >
+                        <tspan 
+                            x={state2path(state).pos[room_idx].x}
+                            y={state2path(state).pos[room_idx].y}
+                            font-size="20"
+                        >
+                            ❶번 방
+                        </tspan>
+                        <tspan
+                            x={state2path(state).pos[room_idx].x}
+                            y={state2path(state).pos[room_idx].y + 30}
+                            font-size="14"
+                        >
+                            사용 가능
+                        </tspan>
+                    </text>
                 </svg>
-                {showAnimation && <RoomDiscoBall
-                    key={`room-discoball-${room_idx}`}
-                    x={SVGPathsFilled.discoBallPos[room_idx].x}
-                    y={SVGPathsFilled.discoBallPos[room_idx].y}
-                    isHovered={showAnimation}
-                />}
+                {
+                    showAnimation && <RoomDiscoBall
+                        key={`room-discoball-${room_idx}`}
+                        x={SVGPathsFilled.discoBallPos[room_idx].x}
+                        y={SVGPathsFilled.discoBallPos[room_idx].y}
+                    />
+                }
             </Fragment>
         );
 
@@ -96,25 +115,17 @@ export default ({ rooms, highlight }) => {
 
     return (
         <div>
-            <div className={styles.RoomStatePanel} width="545" height="604" viewBox="0 0 545 604" xmlns="http://www.w3.org/2000/svg">
+            <div 
+                className={styles.RoomStatePanel} 
+                width="545"
+                height="604" 
+                viewBox="0 0 545 604" 
+                xmlns="http://www.w3.org/2000/svg"
+            >
                 {
                     ROOM_NUMBERS.map(i => roomComponents(i))
                 }
             </div>
-            {
-                ROOM_NUMBERS.map(i => {
-                    if (hover !== i)
-                        return null;
-                    return (
-                        <RoomDetailPanel 
-                            key={`room-detail-${i}`}
-                            x={SVGPathsFilled.pos[i].x} 
-                            y={SVGPathsFilled.pos[i].y}
-                            room={rooms.find(e => e.room_number === i)}
-                        />
-                    )
-                })
-            }
         </div>
     );
 
