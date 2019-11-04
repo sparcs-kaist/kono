@@ -4,11 +4,19 @@
         "en": "Vacant"
     },
     "filled": {
-        "kr": "사용중",
+        "kr": "사용 중",
         "en": "Occupied"
     },
     "null": {
         "kr": "데이터 없음",
         "en": "Data unavailable"
+    },
+    "refresh": {
+        "kr": "새로고침",
+        "en": "Refresh"
+    },
+    "loading": {
+        "kr": "불러오는 중...",
+        "en": "Loading ..."
     }
 }
