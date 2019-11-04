@@ -43,6 +43,28 @@
             filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2));
         }
 
+        .RoomStatePanel__room_svg {
+
+            position: absolute;
+            width: 545px;
+            height: 604px;
+            pointer-events: none;
+
+            path {
+                pointer-events: auto;
+            }
+
+            text {
+                text-anchor: middle;
+                fill: t(text-primary);
+            }
+
+            tspan {
+                letter-spacing: -0.1em;
+            }
+
+        }
+
     }
 
 }

@@ -53,35 +53,23 @@ export default ({ rooms, highlight }) => {
         return (
             <Fragment key={`room-fragment-${room_idx}`}>
                 <svg
-                    style={{
-                        position: 'absolute',
-                        width: 545,
-                        height:604,
-                        pointerEvents: 'none',
-                    }}
                     className={classnames([
+                        styles.RoomStatePanel__room_svg,
                         styles[`RoomStatePanel__room_${stateType}`],
                         showHighlight && styles.RoomStatePanel__room_highlight,
                         showAnimation && styles.RoomStatePanel__room_filled_animation
                     ])} 
                 >
                     <path
-                        style={{
-                            pointerEvents: 'auto',
-                        }}
                         d={state2path(state).path[room_idx]}
                         onMouseOver={onMouseOver}
                         onMouseOut={onMouseOut}
                     />
-                    <text
-                        textAnchor="middle"
-                        fill="black"
-                    >
+                    <text>
                         <tspan 
                             x={state2path(state).pos[room_idx].x}
                             y={state2path(state).pos[room_idx].y}
                             fontSize="20"
-                            letterSpacing="-0.1em"
                         >
                             {
                                 language === 'kr'
@@ -93,7 +81,6 @@ export default ({ rooms, highlight }) => {
                             x={state2path(state).pos[room_idx].x}
                             y={state2path(state).pos[room_idx].y + 30}
                             fontSize="14"
-                            letterSpacing="-0.1em"
                         >
                             { text[stateType] }
                         </tspan>
