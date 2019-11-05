@@ -3,7 +3,9 @@
 @include themed() {
     .HeaderDesktop {
 
+        z-index: 50;
         @include flexbox(column, $center: false);
+        background-color: t(background);
 
         .HeaderDesktop__bar {
             height: 5px;

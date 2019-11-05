@@ -6,6 +6,10 @@
 
         height: 50px;
         @include flexbox(row, $center: true);
+        z-index: 50;
+        position: absolute;
+        bottom: 0;
+        width: 100vw;
 
         &.Footer__desktop {
             .Footer__logo {

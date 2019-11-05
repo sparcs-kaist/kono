@@ -3,8 +3,10 @@
 @include themed() {
     .HeaderMobile {
 
+        z-index: 50;
         @include flexbox(column, $center: false);
         box-shadow: 0 5px 15px t(panel-background);
+        background-color: t(background);
 
         .HeaderMobile__bar {
             height: 5px;
