@@ -21,52 +21,40 @@ export default () => {
     const [
         numImages,
         fetchNumImages,
-        NumImagesErrorHandler,
-        showNumImagesErrorHandler
-    ] = useFetch(
-        0, // initialValue
-        { // api
-            fn: ImageAPI.count,
-            args: []
-        },
-        data => data.lostfound // dataProcessor
-    );
+        , // isLoading
+        isErrorNumImages,
+        NumImagesErrorHandler
+    ] = useFetch(0);
 
     const [
         images,
         fetchImages,
-        ImagesErrorHandler,
-        showImagesErrorHandler
-    ] = useFetch(
-        [], // initialValue
-        { // api
-            fn: ImageAPI.list,
-            args: [{
-                params: {
-                    filter_type: 'lostfound',
-                    start_index: (currentPage - 1) * GRID_SIZE,
-                    max_size: GRID_SIZE
-                }
-            }]
-        }
-    );
+        , // isLoading
+        isErrorImages,
+        ImagesErrorHandler
+    ] = useFetch([]);
 
     const numPages = Math.max(1, Math.ceil(numImages / GRID_SIZE));
     const imageURLs = images.map(image => image.url);
     const imageLinks = images.map(image => `/post/${image.post_sid}`);
 
     useEffect(() => {
-        fetchNumImages();
-    }, [])
+        fetchNumImages(ImageAPI.count, [], data => data.lostfound);
+    }, [fetchNumImages])
 
     /* Fetch new page when currentPage updates */
     useEffect(() => {
-        fetchImages();
-    }, [currentPage])
+        fetchImages(ImageAPI.list, [{
+            params: {
+                filter_type: 'lostfound',
+                start_index: (currentPage - 1) * GRID_SIZE,
+                max_size: GRID_SIZE
+            }
+        }]);
+    }, [fetchImages, currentPage])
 
-    const text = useLanguages(Text);
+    const [text] = useLanguages(Text);
 
-    /* TODO: Add links to image grids (to post page) */
     return (
         <div className={styles.LostFoundPanel}>
             <PanelHeader title={text.title} link="/lostfound"/>
@@ -74,7 +62,7 @@ export default () => {
                 <ImagesErrorHandler height={291} showErrorText showSpinner showBackground />
             }
             {
-                !showImagesErrorHandler && (
+                !isErrorImages && (
                     <ImageGridPanel 
                         gridNumRows={GRID_ROWS}
                         gridNumColumns={GRID_COLUMNS}
@@ -88,7 +76,7 @@ export default () => {
                 <NumImagesErrorHandler height={64} />
             }
             {
-                !showNumImagesErrorHandler && (
+                !isErrorNumImages && (
                     <PanelFooter 
                         currentPage={currentPage}
                         numPages={numPages}

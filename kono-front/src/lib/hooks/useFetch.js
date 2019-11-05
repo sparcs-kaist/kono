@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import ErrorHandlingPanel from '../../components/ErrorHandlingPanel';
 
 export const ERROR_NONE = 'none';
@@ -9,41 +9,26 @@ export const ERROR_404 = 'not_found_error';
 export const ERROR_500 = 'internal_server_error';
 export const ERROR_DEFAULT = 'default_error';
 
-/**
- * 
- * @param {any} initialValue 
- * @param {{fn: Function, args: [any]}} api 
- * @param {Function} dataProcessor 
- * @param {{divHeight: number, showErrorText: boolean, showSpinner: boolean}} handlerComponentConfig 
- */
-const useFetch = (
-    initialValue,
-    api,
-    dataProcessor
-) => {
-
-    const { fn, args } = api;
+export default (initialValue) => {
     
     const [data, setData] = useState(initialValue);
     const [isLoading, setLoading] = useState(false);
     const [errorCode, setErrorCode] = useState(ERROR_NONE);
-    const showErrorHandlerComponent = isLoading || (errorCode !== ERROR_NONE);
+    const isError = isLoading || (errorCode !== ERROR_NONE);
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async (fn, args, postProcessor) => {
+
         setLoading(true);
         await fn(...args)
             .then(({ data }) => {
-                if (dataProcessor)
-                    setData(dataProcessor(data));
-                else
-                    setData(data);
                 setLoading(false);
+                setData(postProcessor ? postProcessor(data) : data);
             })
             .catch((err) => {
                 const { response } = err;
+                setLoading(false);
                 if (!response) {
                     setErrorCode(ERROR_CONN);
-                    setLoading(false);
                     return;
                 }
                 const { status } = response;
@@ -60,9 +45,9 @@ const useFetch = (
                     default:
                         setErrorCode(ERROR_DEFAULT);
                 }
-                setLoading(false);
             });
-    }
+
+    }, [setData, setLoading, setErrorCode]);
 
     const ErrorHandlerComponent = ({
         width,
@@ -71,7 +56,7 @@ const useFetch = (
         showSpinner,
         showBackground
     }) => (
-        showErrorHandlerComponent && (
+        isError && (
             <ErrorHandlingPanel
                 isLoading={isLoading}
                 errorCode={errorCode}
@@ -84,14 +69,6 @@ const useFetch = (
         )
     )
 
-    return [
-        data, 
-        fetchData, 
-        ErrorHandlerComponent,
-        showErrorHandlerComponent,
-        isLoading
-    ];
+    return [data, fetchData, isLoading, isError, ErrorHandlerComponent];
 
 }
-
-export default useFetch;

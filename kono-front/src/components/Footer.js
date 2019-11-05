@@ -10,7 +10,7 @@ import useLanguages from '../lib/hooks/useLanguages';
 export default () => {
 
     const login = useSelector(state => state.auth.login, []);
-    const text = useLanguages(Text);
+    const [text] = useLanguages(Text);
 
     return (
         <div className={styles.Footer}>

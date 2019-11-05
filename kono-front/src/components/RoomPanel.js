@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styles from '../styles/RoomPanel.module.scss';
 import RoomStatePanel from './RoomStatePanel';
 import RoomLegendPanel from './RoomLegendPanel';
-import RoomNoticeBanner from './RoomNoticeBanner';
 import useFetch from '../lib/hooks/useFetch';
 import * as RoomAPI from '../api/room';
 
@@ -11,27 +10,19 @@ export default () => {
     const [
         rooms,
         fetchRooms,
+        isLoadingRooms,
+        , // isError
         RoomsErrorHandler,
-        showRoomsErrorHandler,
-        isLoadingRooms
-    ] = useFetch(
-        [], // initialValue
-        {
-            fn: RoomAPI.recentList,
-            args: []
-        }
-    );
+    ] = useFetch([]);
     const [highlight, setHighlight] = useState('none');
     const [lastUpdatedTime, setLastUpdatedTime] = useState(Date.now());
 
     const refreshRooms = () => {
-        fetchRooms(); 
+        fetchRooms(RoomAPI.recentList, []); 
         setLastUpdatedTime(Date.now());
     };
 
-    useEffect(() => {
-        refreshRooms();
-    }, []);
+    useEffect(refreshRooms, [fetchRooms]);
 
     return (
         <div className={styles.RoomPanel}>

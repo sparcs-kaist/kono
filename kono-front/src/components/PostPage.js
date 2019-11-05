@@ -13,24 +13,19 @@ export default ({ match }) => {
     const [
         post,
         fetchPost,
-        PostErrorHandler,
-        showPostErrorHandler
-    ] = useFetch(
-        {}, // initialValue
-        { // apihttp://localhost:3000/post/9
-            fn: PostAPI.single,
-            args: [ postSID ]
-        }
-    );
+        , // isLoading
+        isErrorPost,
+        PostErrorHandler
+    ] = useFetch({});
 
     useEffect(() => {
-        fetchPost();
-    }, [postSID])
+        fetchPost(PostAPI.single, [postSID]);
+    }, [fetchPost, postSID])
 
     useEffect(() => {
         if (post.content_img)
             dispatch(FullscreenActions.SetImageURLs(post.content_img));
-    }, [dispatch, post]);
+    }, [post, dispatch]);
 
     return (
         <>
@@ -38,7 +33,7 @@ export default ({ match }) => {
             <PostErrorHandler width={800} height={500} showErrorText showSpinner showBackground/>
         }
         {
-            !showPostErrorHandler && <PostPageView post={post} />
+            !isErrorPost && <PostPageView post={post} />
         }
         </>
     );

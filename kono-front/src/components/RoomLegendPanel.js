@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from '../styles/RoomLegendPanel.module.scss';
-import { useSelector } from 'react-redux';
 import classnames from '../lib/classnames';
 import MaterialIcon from './MaterialIcon';
 import Spinner from './Spinner';
@@ -9,8 +8,7 @@ import useLanguages from '../lib/hooks/useLanguages';
 
 export default ({ setHighlight, isLoadingRooms, refreshRooms, lastUpdatedTime }) => {
 
-    const text = useLanguages(Text);
-    const language = useSelector(state => state.config.language);
+    const [text, language] = useLanguages(Text);
 
     const onMouseEnter = (legend) => () => setHighlight(legend);
     const onMouseLeave = () => setHighlight('none');

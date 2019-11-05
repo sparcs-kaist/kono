@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from 'react';
-import { useSelector } from 'react-redux';
 import styles from '../styles/RoomStatePanel.module.scss';
 import RoomDiscoBall from './RoomDiscoBall';
 import SVGPathsEmpty from '../res/icons/room-empty.json';
@@ -33,9 +32,8 @@ const ROOM_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
 export default ({ rooms, highlight }) => {
 
     const [hover, setHover] = useState(null);
-    const text = useLanguages(Text);
-    const language = useSelector(state => state.config.language);
-    
+    const [text, language] = useLanguages(Text);
+
     const roomComponents = (room_idx) => {
 
         const room = rooms.find(e => e.room_number === room_idx);
