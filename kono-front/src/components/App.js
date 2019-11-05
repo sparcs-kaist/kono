@@ -40,13 +40,15 @@ export default () => {
     return (
         <div className={`${theme} ${styles.App}`}>
             <Header />
-            <Switch>
-                <Route exact path="/" component={LandingPage} />
-                <Route path="/login" component={login ? () => <Redirect to="/" /> : LoginPage} />
-                <Route path="/post/:post_id" component={PostPage} />
-                <Route path="/credit" component={CreditPage} />
-                <Route component={() => <Redirect to="/" />} />
-            </Switch>
+            <div className={styles.App__wrapper}>
+                <Switch>
+                    <Route exact path="/" component={LandingPage} />
+                    <Route path="/login" component={login ? () => <Redirect to="/" /> : LoginPage} />
+                    <Route path="/post/:post_id" component={PostPage} />
+                    <Route path="/credit" component={CreditPage} />
+                    <Route component={() => <Redirect to="/" />} />
+                </Switch>
+            </div >
             <Footer />
         </div>
     );
