@@ -1,26 +1,26 @@
 @import 'mixins/all';
 
 @include themed() {
-    .Header {
+    .HeaderDesktop {
 
         @include flexbox(column, $center: false);
 
-        .Header__bar {
+        .HeaderDesktop__bar {
             height: 5px;
             background-color: t(theme-background);
         }
 
-        .Header__content {
+        .HeaderDesktop__content {
 
             height: 50px;
             @include flexbox(row, $center: false);
 
-            .Header__logo {
+            .HeaderDesktop__logo {
                 margin: 11px 0 12px 24px;
                 @include flexbox(row, $center: false);
             }
             
-            .Header__menu {
+            .HeaderDesktop__menu {
                 margin: 17px 0 18px 24px;
                 height: 15px;
                 font-size: 15px;
@@ -29,11 +29,11 @@
                 @include link;
             }
 
-            .Header__menu + .Header__menu {
+            .HeaderDesktop__menu + .HeaderDesktop__menu {
                 margin-right: 24px;
             }
         
-            .Header__common_menu {
+            .HeaderDesktop__common_menu {
                 margin: 17px 24px 17px auto;
                 height: 14px;
                 font-size: 14px;
@@ -42,7 +42,7 @@
                 @include link;
             }
 
-            .Header__common_menu + .Header__common_menu {
+            .HeaderDesktop__common_menu + .HeaderDesktop__common_menu {
                 margin-left: 24px;
             }
 

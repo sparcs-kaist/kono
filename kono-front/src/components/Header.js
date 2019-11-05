@@ -1,13 +1,13 @@
 import React from 'react';
-import styles from '../styles/Header.module.scss';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReactComponent as Logo } from '../res/icons/logo.svg';
-import MaterialIcon from './MaterialIcon';
+import HeaderDesktop from './HeaderDesktop';
+import HeaderMobile from './HeaderMobile';
 import Text from '../res/texts/Header.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
+import useWindowDimension from '../lib/hooks/useWindowDimension';
 import * as AuthActions from '../store/modules/auth';
-import * as ConfigActions from '../store/modules/config'; // TEMPORARY
+import * as ConfigActions from '../store/modules/config';
 import { logout } from '../api/auth';
 
 export default withRouter(({ history }) => {
@@ -15,6 +15,9 @@ export default withRouter(({ history }) => {
     const dispatch = useDispatch();
     const login = useSelector(state => state.auth.login, []);
     const [text] = useLanguages(Text);
+    const { width } = useWindowDimension();
+
+    const showDesktopHeader = width >= 800;
 
     const onLogout = async () => await logout()
         .then(
@@ -23,51 +26,18 @@ export default withRouter(({ history }) => {
                 history.push('/login?state=logout');
             }
         );
-    const onClickToggleTheme = () => { dispatch(ConfigActions.ToggleTheme()); }
-    const onClickToggleLanguage = () => { dispatch(ConfigActions.ToggleLanguage()); }
+    const onToggleTheme = () => { dispatch(ConfigActions.ToggleTheme()); }
+    const onToggleLanguage = () => { dispatch(ConfigActions.ToggleLanguage()); }
 
-    return (
-        <div className={styles.Header}>
-            <div className={styles.Header__bar}></div>
-            <div className={styles.Header__content}>
-                <span className={styles.Header__logo}>
-                    <Link to="/">
-                        <Logo />
-                    </Link>
-                </span>
-                <span className={styles.Header__menu}>
-                    <a href="https://docs.google.com/forms/d/1Wb33uCYDl4kAyg-_5lZ6n20ByJ-NhelUDOz_8_U5Y6w/edit">
-                        { text.refund }
-                    </a>
-                </span>
-                <span 
-                    className={styles.Header__common_menu}
-                    onClick={onClickToggleTheme}
-                >
-                    <MaterialIcon style={{ padding: '0 5px' }}>brightness_4</MaterialIcon>
-                    <div>{ text.toggle_theme }</div>
-                </span>
-                <div 
-                    className={styles.Header__common_menu}
-                    onClick={onClickToggleLanguage}
-                >
-                    <MaterialIcon style={{ padding: '0 5px' }}>language</MaterialIcon>
-                    <div>{ text.toggle_language }</div>
-                </div>
-                {
-                    login && (
-                        <>
-                            <span className={styles.Header__common_menu}>
-                                { text.admin_menu }
-                            </span>
-                            <span className={styles.Header__common_menu} onClick={onLogout}>
-                                { text.admin_logout }
-                            </span>
-                        </>
-                    )
-                }
-            </div>
-            
-        </div>
+    return showDesktopHeader ? (
+        <HeaderDesktop
+            text={text}
+            login={login}
+            onToggleTheme={onToggleTheme}
+            onToggleLanguage={onToggleLanguage}
+            onLogout={onLogout}
+        />
+    ) : (
+        <HeaderMobile />
     )
 })
