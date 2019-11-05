@@ -38,14 +38,14 @@ export default () => {
                 </a>
             </span>
             {
-                    !login && (
-                        <span className={styles.Footer__common_menu}>
-                            <Link to="/login">
-                                { text.admin_login }
-                            </Link>
-                        </span>
-                    )
-                }
+                !login && (
+                    <span className={styles.Footer__common_menu}>
+                        <Link to="/login">
+                            { text.admin_login }
+                        </Link>
+                    </span>
+                )
+            }
             <span className={styles.Footer__common_menu}>
                 <a href="https://forms.gle/daJLFiyjygWuqM5j9">
                     { text.contact }

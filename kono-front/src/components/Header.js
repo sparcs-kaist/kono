@@ -38,6 +38,12 @@ export default withRouter(({ history }) => {
             onLogout={onLogout}
         />
     ) : (
-        <HeaderMobile />
+        <HeaderMobile 
+            text={text}
+            login={login}
+            onToggleTheme={onToggleTheme}
+            onToggleLanguage={onToggleLanguage}
+            onLogout={onLogout}
+        />
     )
 })

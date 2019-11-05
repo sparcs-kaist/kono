@@ -4,6 +4,7 @@
     .HeaderMobile {
 
         @include flexbox(column, $center: false);
+        box-shadow: 0 5px 15px t(panel-background);
 
         .HeaderMobile__bar {
             height: 5px;
@@ -26,16 +27,35 @@
                 font-size: 14px;
                 
                 @include flexbox(row, $center: true);
-                
-                cursor: pointer;
-                color: t(theme-background);
-                &:hover {
-                    color: t(theme-light-background);
-                }
+                color: t(text-primary);
             }
 
-            .HeaderMobile__menu_pressed {
-                color: t(theme-light-background);
+        }
+        
+        .HeaderMobile__dropdown {
+            
+            padding: 24px 36px;
+            color: t(text-primary);
+
+            border-bottom: .5px solid t(panel-background);
+
+            .HeaderMobile__dropdown_group {
+
+                .HeaderMobile__dropdown_item {
+                    font-size: 14px;
+                    line-height: 18px;
+                    @include mobile_link;
+                    @include flexbox(row, $center: false);
+                }
+
+                .HeaderMobile__dropdown_item + .HeaderMobile__dropdown_item {
+                    padding-top: 18px;
+                }
+
+            }
+
+            .HeaderMobile__dropdown_group + .HeaderMobile__dropdown_group {
+                padding-top: 30px;
             }
 
         }
