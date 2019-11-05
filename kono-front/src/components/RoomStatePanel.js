@@ -80,7 +80,7 @@ export default ({ rooms, highlight }) => {
                             </tspan>
                             <tspan
                                 x={state2path(state).pos[room_idx].x}
-                                y={(state === 1)? state2path(state).pos[room_idx].y + 43 : state2path(state).pos[room_idx].y + 18}
+                                y={(state === 1)? state2path(state).pos[room_idx].y + 45 : state2path(state).pos[room_idx].y + 20}
                                 fontSize="20"
                             >
                                 { text[stateType] }
