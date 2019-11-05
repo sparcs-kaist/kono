@@ -5,11 +5,16 @@
     .Footer {
 
         height: 50px;
-        @include flexbox(row, $center: false);
+        @include flexbox(row, $center: true);
+
+        &.Footer__desktop {
+            .Footer__logo {
+                margin: 11px 0 12px 24px;
+            }
+        }
 
         .Footer__logo {
             
-            margin: 11px 0 12px 24px;
             @include flexbox(row, $center: true);
 
             .Footer__sparcs_logo {
