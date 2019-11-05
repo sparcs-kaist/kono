@@ -7,19 +7,14 @@ export default ({ url }) => {
     const [
         innerHTML,
         fetchInnerHTML,
-        InnerHTMLErrorHandler,
-        showInnerHTMLErrorHandler
-    ] = useFetch(
-        '',
-        {
-            fn: axios.get,
-            args: [ url ]
-        }
-    );
+        , // isLoading
+        isErrorInnerHTML,
+        InnerHTMLErrorHandler
+    ] = useFetch('');
 
     useEffect(() => {
-        fetchInnerHTML();
-    }, [url]);
+        fetchInnerHTML(axios.get, [url]);
+    }, [fetchInnerHTML, url]);
 
     return (
         <>
@@ -27,7 +22,7 @@ export default ({ url }) => {
             <InnerHTMLErrorHandler showErrorText/>
         }
         {
-            !showInnerHTMLErrorHandler && <div dangerouslySetInnerHTML={{ __html: innerHTML }} />
+            !isErrorInnerHTML && <div dangerouslySetInnerHTML={{ __html: innerHTML }} />
         }
         </>
     );

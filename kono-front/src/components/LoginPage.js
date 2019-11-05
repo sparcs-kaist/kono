@@ -26,7 +26,7 @@ export default ({ location }) => {
     const dispatch = useDispatch();
     const [password, setPassword] = useState('');
     const [loginErrorMsg, setLoginErrorMsg] = useState(getInitialLoginErrorMsg(query));
-    const text = useLanguages(Text);
+    const [text] = useLanguages(Text);
 
     const onLogin = async () => {
         await login({ password })

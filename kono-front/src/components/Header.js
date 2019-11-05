@@ -14,7 +14,7 @@ export default withRouter(({ history }) => {
 
     const dispatch = useDispatch();
     const login = useSelector(state => state.auth.login, []);
-    const text = useLanguages(Text);
+    const [text] = useLanguages(Text);
 
     const onLogout = async () => await logout()
         .then(

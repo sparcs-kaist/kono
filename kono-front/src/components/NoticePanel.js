@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from '../styles/NoticePanel.module.scss';
 import PanelHeader from './PanelHeader';
@@ -22,41 +21,23 @@ export default () => {
     const [
         numNotices, 
         fetchNumNotices, 
-        NumNoticesErrorHandler,
-        showNumNoticesErrorHandler
-    ] = useFetch(
-        0,                      // initialValue
-        {                       // api
-            fn: PostAPI.count,
-            args: []
-        },
-        data => data.notice,    // dataProcessor
-    );
+        , // isLoading
+        isErrorNumNotices,
+        NumNoticesErrorHandler
+    ] = useFetch(0);
 
     const [
         notices,
         fetchNotices,
+        , // isLoading
+        isErrorNotices,
         NoticesErrorHandler,
-        showNoticesErrorHandler
-    ] = useFetch(
-        [],                     // initialValue
-        {                       // api
-            fn: PostAPI.list,
-            args: [{
-                params: {
-                    filter_type: 'notice',
-                    start_index: (currentPage - 1) * NOTICE_PAGINATION,
-                    max_size: NOTICE_PAGINATION
-                }
-            }]
-        }
-    );
+    ] = useFetch([]);
 
-    const text = useLanguages(Text);
-    const language = useSelector(state => state.config.language, []);
+    const [text, language] = useLanguages(Text);
     const numPages = Math.max(1, Math.ceil(numNotices / NOTICE_PAGINATION));
 
-    const titleMaxLength = useLanguages(NOTICE_TITLE_MAX_LENGTH);
+    const [titleMaxLength] = useLanguages(NOTICE_TITLE_MAX_LENGTH);
     const toTitleString = (title) => (
         title
             ? (title.length > titleMaxLength ? `${title.substring(0, titleMaxLength)}...` : title)
@@ -64,13 +45,19 @@ export default () => {
     );
 
     useEffect(() => {
-        fetchNumNotices();
-    }, []);
+        fetchNumNotices(PostAPI.count, [], data => data.notice);
+    }, [fetchNumNotices]);
 
     /* Fetch new page when currentPage updates */
     useEffect(() => {
-        fetchNotices();
-    }, [currentPage]);
+        fetchNotices(PostAPI.list, [{
+            params: {
+                filter_type: 'notice',
+                start_index: (currentPage - 1) * NOTICE_PAGINATION,
+                max_size: NOTICE_PAGINATION
+            }
+        }]);
+    }, [fetchNotices, currentPage]);
 
     return (
         <div className={styles.NoticePanel}>
@@ -79,7 +66,7 @@ export default () => {
                 <NoticesErrorHandler height={291} showErrorText showSpinner showBackground/>
             }
             {
-                !showNoticesErrorHandler && (
+                !isErrorNotices && (
                     <ul>
                         {
                             notices.map(({
@@ -118,7 +105,7 @@ export default () => {
                <NumNoticesErrorHandler height={64}/>
             }
             {
-                !showNumNoticesErrorHandler && (
+                !isErrorNumNotices && (
                     <PanelFooter 
                         currentPage={currentPage} 
                         numPages={numPages}

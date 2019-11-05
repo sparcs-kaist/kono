@@ -9,7 +9,7 @@ import Text from '../res/texts/ErrorHandlingPanel.text.json';
 
 export default ({ isLoading, errorCode, width, height, showErrorText, showSpinner, showBackground }) => {
     
-    const text = useLanguages(Text);
+    const [text] = useLanguages(Text);
 
     const showError = !isLoading && (errorCode !== errorCodes.ERROR_NONE);
     const showIcon = (errorCode !== errorCodes.ERROR_CONN);

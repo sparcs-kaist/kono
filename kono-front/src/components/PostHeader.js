@@ -31,10 +31,10 @@ export default (
 ) => {
 
     const showTitle = (title.kr || title.en);
-    const titleTranscripted = (title.kr && title.en)
+    const [titleTranscripted] = (title.kr && title.en)
         ? useLanguages(title)
         : (title.kr ? title.kr : title.en);
-    const text = useLanguages(Text);
+    const [text] = useLanguages(Text);
 
     return (
         <div className={styles.PostHeader}>

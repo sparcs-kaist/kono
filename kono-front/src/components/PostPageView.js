@@ -28,7 +28,7 @@ export default ({ post }) => {
         return null;
 
     const showContent = (content_kr || content_en);
-    const contentURL = (content_kr && content_en) 
+    const [contentURL] = (content_kr && content_en) 
         ? useLanguages({ kr: content_kr, en: content_en })
         : content_kr;
 
