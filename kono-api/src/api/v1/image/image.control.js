@@ -95,7 +95,6 @@ export const count = async (req, res) => {
 class MimetypeError extends Error {
     constructor(...params) {
         super(...params);
-        this.status = 400;
         this.message = 'Image file mimetype undefined or unsupported.';
     }
 }
@@ -113,22 +112,20 @@ const storage = multer.diskStorage({
     }
 });
 
-const uploadObj = multer({ 
+const uploadFiles = multer({ 
     storage: storage,
     limits: {
         fileSize: UPLOAD_MAX_FILE_SIZE
     }
-});
-
-const uploadFiles = uploadObj.array(UPLOAD_KEY, UPLOAD_MAX_NUM_FILES);
+}).array(UPLOAD_KEY, UPLOAD_MAX_NUM_FILES);
 
 export const upload = async (req, res) => {
     uploadFiles(req, res, (err) => {
         if (err) {
-            const status = err.status ? err.status : 500;
-            res.status(status);
+            res.status(400);
             res.send({ msg: err.toString() });
         } else if (!req.files) {
+            console.log('req.files undefined.');
             res.status(500);
             res.send({ msg: 'server error' });
         } else {
