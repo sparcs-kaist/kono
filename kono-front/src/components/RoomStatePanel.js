@@ -25,7 +25,7 @@ function state2path(state) {
 }
 
 function roomNumber2text(room_number) {
-    return String.fromCharCode('\u2776'.charCodeAt() + room_number - 1);
+    return String.fromCharCode('\u278A'.charCodeAt() + room_number - 1);
 }
 
 const ROOM_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
@@ -69,8 +69,8 @@ export default ({ rooms, highlight }) => {
                         isHovered && <text>
                             <tspan 
                                 x={state2path(state).pos[room_idx].x}
-                                y={state2path(state).pos[room_idx].y}
-                                fontSize="20"
+                                y={(state === 1)? state2path(state).pos[room_idx].y + 20 : state2path(state).pos[room_idx].y - 5}
+                                fontSize="16"
                             >
                                 {
                                     language === 'kr'
@@ -80,8 +80,8 @@ export default ({ rooms, highlight }) => {
                             </tspan>
                             <tspan
                                 x={state2path(state).pos[room_idx].x}
-                                y={state2path(state).pos[room_idx].y + 30}
-                                fontSize="14"
+                                y={(state === 1)? state2path(state).pos[room_idx].y + 43 : state2path(state).pos[room_idx].y + 18}
+                                fontSize="20"
                             >
                                 { text[stateType] }
                             </tspan>
