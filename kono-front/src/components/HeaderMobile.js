@@ -10,8 +10,8 @@ export default ({
     onToggleTheme, onToggleLanguage, onLogout
 }) => {
 
-    const [dropdown, setDropdown] = useState(false);
-    const onToggleDropdown = () => { setDropdown(e => !e); }
+    const [open, setOpen] = useState(false);
+    const onToggleOpen = () => { setOpen(e => !e); }
 
     return (
         <div className={styles.HeaderMobile}>
@@ -26,16 +26,21 @@ export default ({
                     className={classnames([
                         styles.HeaderMobile__common_menu
                     ])}
-                    onClick={onToggleDropdown}
+                    onClick={onToggleOpen}
                 >
                     <MaterialIcon>
                         {
-                            dropdown ? 'clear' : 'dehaze'
+                            open ? 'clear' : 'dehaze'
                         }
                     </MaterialIcon>
                 </div>
             </div>
-            <div className={styles.HeaderMobile__dropdown}>
+            <div 
+                className={classnames([
+                    styles.HeaderMobile__dropdown,
+                    open && styles.HeaderMobile__dropdown_open
+                ])}
+            >
                 <div className={styles.HeaderMobile__dropdown_group}>
                     <div className={styles.HeaderMobile__dropdown_item}>
                         <a href="https://docs.google.com/forms/d/1Wb33uCYDl4kAyg-_5lZ6n20ByJ-NhelUDOz_8_U5Y6w/edit">
