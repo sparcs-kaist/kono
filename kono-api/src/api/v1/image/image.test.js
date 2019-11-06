@@ -1,5 +1,6 @@
 import { request, expect } from 'chai';
 import { apiURL } from '../../../test/common';
+import { generateToken } from '../../../lib/token';
 import fs from 'fs';
 import path from 'path';
 
@@ -234,56 +235,51 @@ describe('Testing GET /api/v1/image/count ...', () => {
 
 describe('Testing POST /api/v1/image/upload ...', () => {
 
-    const testGeneralCase = () => (done) => {
-        request(apiURL)
+    const testGeneralCase = () => async () => {
+
+        const token = await generateToken({ sid: 0 });
+
+        const res = await request(apiURL)
             .post('/api/v1/image/upload')
             .attach('image', fs.readFileSync(path.join(__dirname, '../../../test/testdata/test.png')), 'test.png')
             .attach('image', fs.readFileSync(path.join(__dirname, '../../../test/testdata/test.jpg')), 'test.jpg')
-            .then(res => {
-                expect(res).to.have.status(200);
-                expect(res.body).to.be.a('array');
-                expect(res.body).to.be.length(2);
-                // For testing, the test server is an identical machine.
-                res.body.forEach(path => {
-                    fs.access(path, fs.F_OK, (err) => {
-                        // Remove file which is uploaded to test env upload dir.
-                        fs.unlinkSync(path);
-                        expect(err).to.be.equal(null);
-                    });
-                });
-                done();
-            })
-            .catch(err => {
-                done(err);
+            .set('Cookie', `access_token=${token}`);
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.be.length(2);
+        // For testing, the test server is an identical machine.
+        res.body.forEach(path => {
+            fs.access(path, fs.F_OK, (err) => {
+                // Remove file which is uploaded to test env upload dir.
+                fs.unlinkSync(path);
+                expect(err).to.be.equal(null);
             });
+        });
     };
 
-    const testUnsupportedType = () => (done) => {
-        request(apiURL)
+    const testUnsupportedType = () => async () => {
+        
+        const token = await generateToken({ sid: 0 });
+        
+        const res = await request(apiURL)
             .post('/api/v1/image/upload')
             .attach('image', fs.readFileSync(path.join(__dirname, '../../../test/testdata/test.txt')), 'test.txt')
-            .then(res => {
-                expect(res).to.have.status(400);
-                expect(res.body).to.have.key('msg');
-                done();
-            })
-            .catch(err => {
-                done(err);
-            });
+            .set('Cookie', `access_token=${token}`);
+
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.key('msg');
     };
 
-    const testUnexpectedField = () => (done) => {
-        request(apiURL)
+    const testUnexpectedField = () => async () => {
+        const token = await generateToken({ sid: 0 });
+
+        const res = await request(apiURL)
             .post('/api/v1/image/upload')
             .attach('asdf', fs.readFileSync(path.join(__dirname, '../../../test/testdata/test.jpg')), 'test.jpg')
-            .then(res => {
-                expect(res).to.have.status(400);
-                expect(res.body).to.have.key('msg');
-                done();
-            })
-            .catch(err => {
-                done(err);
-            });
+            .set('Cookie', `access_token=${token}`);
+
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.key('msg');
     };
 
     describe('General case.', () => {

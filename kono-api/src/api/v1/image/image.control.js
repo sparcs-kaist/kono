@@ -1,10 +1,12 @@
 import db from '../../../db';
 import multer from 'multer';
 import uniqueString from 'unique-string';
+import path from 'path';
+import fs from 'fs';
 
 const UPLOAD_MAX_NUM_FILES = 5;
-const UPLOAD_MAX_FILE_SIZE = 10 * 1024 * 1024;
-const UPLOAD_MIME_TYPES = ['image/png', 'image/jpeg'];
+const UPLOAD_MAX_FILE_SIZE = 5 * 1024 * 1024;
+const UPLOAD_EXT_NAMES = ['.png', '.jpg', '.jpeg'];
 const UPLOAD_KEY = 'image';
 
 export const list = async (req, res) => {
@@ -92,23 +94,31 @@ export const count = async (req, res) => {
 
 /* For post upload. */
 
-class MimetypeError extends Error {
+// `multer.MulterError` covers only, and most of the Clinet Bad Request errors.
+// (https://github.com/expressjs/multer/blob/master/lib/multer-error.js)
+// `UploadClientError` is for Client Bad Request errors uncovered by multer.MulterError.
+class UploadClientError extends Error {
     constructor(...params) {
         super(...params);
-        this.message = 'Image file mimetype undefined or unsupported.';
     }
 }
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, process.env.UPLOAD_DIR)
+        const UPLOAD_DIR = `${process.env.UPLOAD_DIR}/images`;
+        try {
+            fs.statSync(UPLOAD_DIR);
+        } catch (err) {
+            fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+        }
+        cb(null, UPLOAD_DIR);
     },
     filename: (req, file, cb) => {
-        if (!UPLOAD_MIME_TYPES.includes(file.mimetype)) {
-            return cb(new MimetypeError(), '');
+        const fileExtname = path.extname(file.originalname);
+        if (!UPLOAD_EXT_NAMES.includes(fileExtname)) {
+            return cb(new UploadClientError('File extension undefined or unsupported.'));
         }
-        const extension = file.mimetype.split('/').pop();
-        cb(null, `${uniqueString()}.${extension}`);
+        cb(null, `${uniqueString()}.${fileExtname}`);
     }
 });
 
@@ -120,12 +130,20 @@ const uploadFiles = multer({
 }).array(UPLOAD_KEY, UPLOAD_MAX_NUM_FILES);
 
 export const upload = async (req, res) => {
+
+    if (!req.admin) {
+        res.status(403);
+        res.send({ msg: 'login required' });
+        return;
+    }
+
     uploadFiles(req, res, (err) => {
-        if (err) {
+        // Refer to the comment above `UploadClientError`.
+        if (err && (err instanceof multer.MulterError || 
+                    err instanceof UploadClientError)) {
             res.status(400);
-            res.send({ msg: err.toString() });
-        } else if (!req.files) {
-            console.log('req.files undefined.');
+            res.send({ msg: err.toString() });   
+        } else if (err || !req.files) {
             res.status(500);
             res.send({ msg: 'server error' });
         } else {
