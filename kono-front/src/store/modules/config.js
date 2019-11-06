@@ -1,5 +1,5 @@
-import storage from '../../lib/browser/storage';
-import { userLanguage } from '../../lib/browser/navigator';
+import storage from 'lib/browser/storage';
+import { userLanguage } from 'lib/browser/navigator';
 
 /* Action Types. */
 const SET_THEME = 'config/SET_THEME';
