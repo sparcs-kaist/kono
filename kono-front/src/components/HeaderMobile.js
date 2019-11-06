@@ -15,20 +15,19 @@ export default ({
     const dispatch = useDispatch();
     const open = useSelector(store => store.layout.headerOpen);
     const onToggleOpen = () => { dispatch(LayoutActions.ToggleMobileHeader()); };
+    const onClickLink  = () => { dispatch(LayoutActions.CloseMobileHeader());  };
 
     return (
         <div className={styles.HeaderMobile}>
             <div className={styles.HeaderMobile__bar} />
             <div className={styles.HeaderMobile__content}>
                 <div className={styles.HeaderMobile__logo}>
-                    <Link to="/">
+                    <Link onClick={onClickLink} to="/">
                         <Logo />
                     </Link>
                 </div>
                 <div 
-                    className={classnames([
-                        styles.HeaderMobile__common_menu
-                    ])}
+                    className={styles.HeaderMobile__common_menu}
                     onClick={onToggleOpen}
                 >
                     <MaterialIcon>
@@ -52,7 +51,7 @@ export default ({
                             </a>
                         </div>
                         <div className={styles.HeaderMobile__dropdown_item}>
-                            <Link to="/credit">
+                            <Link onClick={onClickLink} to="/credit">
                                 { text.credit }
                             </Link>
                         </div>
@@ -81,7 +80,7 @@ export default ({
                     <div className={styles.HeaderMobile__dropdown_group}>
                         {
                             !login && <div className={styles.HeaderMobile__dropdown_item}>
-                                <Link to="/login">
+                                <Link onClick={onClickLink} to="/login">
                                     { text.admin_login }
                                 </Link>
                             </div>
@@ -92,7 +91,10 @@ export default ({
                                     <div className={styles.HeaderMobile__dropdown_item}>
                                         { text.admin_menu }
                                     </div>
-                                    <div className={styles.HeaderMobile__dropdown_item} onClick={onLogout}>
+                                    <div 
+                                        className={styles.HeaderMobile__dropdown_item} 
+                                        onClick={() => { onLogout(); onClickLink(); }}
+                                    >
                                         { text.admin_logout }
                                     </div>
                                 </>

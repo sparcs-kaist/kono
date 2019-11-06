@@ -5,6 +5,7 @@ import styles from '../styles/LoginPage.module.scss';
 import Button from './Button';
 import { login } from '../api/auth';
 import * as AuthActions from '../store/modules/auth';
+import * as LayoutActions from '../store/modules/layout';
 import Text from '../res/texts/LoginPage.text.json';
 import useLanguages from '../lib/hooks/useLanguages';
 
@@ -33,6 +34,7 @@ export default ({ location }) => {
             .then(
                 (res) => {
                     dispatch(AuthActions.SetLogin(true));
+                    dispatch(LayoutActions.CloseMobileHeader());
                 }
             )
             .catch(
