@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import queryString from 'query-string';
-import styles from 'styles/LoginPage.module.scss';
-import { Button } from 'components/common';
+import { LoginPageDesktop, LoginPageMobile } from 'components/page';
 import { login } from 'api/auth';
 import * as AuthActions from 'store/modules/auth';
 import * as LayoutActions from 'store/modules/layout';
 import Text from 'res/texts/LoginPage.text.json';
-import { useLanguages } from 'lib/hooks';
+import { useLanguages, useWindowDimension } from 'lib/hooks';
 
 const getInitialLoginErrorMsg = (query) => {
     switch (query.state) {
@@ -28,6 +27,9 @@ export default ({ location }) => {
     const [password, setPassword] = useState('');
     const [loginErrorMsg, setLoginErrorMsg] = useState(getInitialLoginErrorMsg(query));
     const [text] = useLanguages(Text);
+    const { width } = useWindowDimension();
+
+    const showDesktopPage = width >= 800;
 
     const onLogin = async () => {
         await login({ password })
@@ -64,23 +66,24 @@ export default ({ location }) => {
             );
     }
 
-    return (
-        <div className={styles.LoginPage}>
-            <div className={styles.LoginPage__header}> 
-                { text.header }
-            </div>
-            <input className={styles.LoginPage__input}
-                type="password"
-                placeholder={text.input_placeholder}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => { e.keyCode === 13 && onLogin(); }}
-            />
-            <span className={styles.LoginPage__input_error}>
-                { text[loginErrorMsg] }
-            </span>
-            <div className={styles.LoginPage__button}>
-                <Button onClick={onLogin} fillParent>{ text.button }</Button>
-            </div>
-        </div>
-    );
+    const onChangePassword = (e) => { setPassword(e.target.value); };
+    const onKeyDown = (e) => { e.keyCode === 13 && onLogin(); };
+
+    return showDesktopPage ? (
+        <LoginPageDesktop 
+            text={text}
+            loginErrorMsg={loginErrorMsg}
+            onChangePassword={onChangePassword}
+            onKeyDown={onKeyDown}
+            onLogin={onLogin}
+        />
+    ) : (
+        <LoginPageMobile 
+            text={text}
+            loginErrorMsg={loginErrorMsg}
+            onChangePassword={onChangePassword}
+            onKeyDown={onKeyDown}
+            onLogin={onLogin}
+        />
+    )
 }
