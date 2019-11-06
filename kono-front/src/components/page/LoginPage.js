@@ -29,7 +29,7 @@ export default ({ location }) => {
     const [text] = useLanguages(Text);
     const { width } = useWindowDimension();
 
-    const showDesktopPage = width >= 800;
+    const showDesktopPage = width >= 600;
 
     const onLogin = async () => {
         await login({ password })

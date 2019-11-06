@@ -2,6 +2,55 @@
 
 @include themed() {
     .LoginPageMobile {
-        
+
+        margin: auto 36px;
+        min-width: 256px;
+        max-width: 480px;
+        height: 200px;
+
+        @include flexbox(column, $center: false);
+
+        .LoginPageMobile__header {
+            color: t(text-primary);
+            font-size: 18px;
+            margin-bottom: 40px;
+            @include flexbox(row, $center: true);
+        }
+
+        input.LoginPageMobile__input {
+
+            background: transparent;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #AAAAAA;
+            color: #AAAAAA;
+            &::placeholder {
+                color: #AAAAAA;
+            }
+            &:focus {
+                color: t(theme-background);
+                border-bottom: 1px solid t(theme-background);
+            }
+            &:hover {
+                color: t(theme-background);
+                border-bottom: 1px solid t(theme-background);
+            }
+            padding: 6px 0 6px 0;
+            font-size: 14px;
+
+        }
+
+        .LoginPageMobile__input_error {
+            color: t(text-error);
+            font-size: .95rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .LoginPageMobile__button {
+
+            margin: auto 0 0 0;
+
+        }
     }
 }
