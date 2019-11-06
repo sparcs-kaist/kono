@@ -38,44 +38,32 @@
         }
         
         .HeaderMobile__dropdown {
-            
-            padding: 0 36px;
+            .HeaderMobile__dropdown_content {
+                margin: 24px 36px;
+                .HeaderMobile__dropdown_group {
+                    .HeaderMobile__dropdown_item {
+                        font-size: 14px;
+                        line-height: 18px;
+                        @include mobile_link;
+                        @include flexbox(row, $center: false);
+                    }
+                    .HeaderMobile__dropdown_item + .HeaderMobile__dropdown_item {
+                        padding-top: 18px;
+                    }
+                }
+                .HeaderMobile__dropdown_group + .HeaderMobile__dropdown_group {
+                    padding-top: 30px;
+                }
+            }
             color: t(text-primary);
 
-            border-bottom: .5px solid t(panel-background);
-
-            transition: 
-                max-height .5s ease-out,
-                padding-top .5s ease-out,
-                padding-bottom .5s ease-out;
+            transition: max-height .5s ease-out;
 
             max-height: 0;
             overflow: hidden;
             &.HeaderMobile__dropdown_open {
-                max-height: 256px;
-                padding-top: 24px;
-                padding-bottom: 24px;
+                max-height: 350px;
             }
-
-            .HeaderMobile__dropdown_group {
-
-                .HeaderMobile__dropdown_item {
-                    font-size: 14px;
-                    line-height: 18px;
-                    @include mobile_link;
-                    @include flexbox(row, $center: false);
-                }
-
-                .HeaderMobile__dropdown_item + .HeaderMobile__dropdown_item {
-                    padding-top: 18px;
-                }
-
-            }
-
-            .HeaderMobile__dropdown_group + .HeaderMobile__dropdown_group {
-                padding-top: 30px;
-            }
-
         }
 
     }
