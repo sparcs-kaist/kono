@@ -2,12 +2,12 @@ import storage from '../../lib/browser/storage';
 import { userLanguage } from '../../lib/browser/navigator';
 
 /* Action Types. */
-const SET_THEME = 'theme/SET_THEME';
-const TOGGLE_THEME = 'theme/TOGGLE_THEME';
-const SET_LANGUAGE = 'theme/SET_LANGUAGE';
-const TOGGLE_LANGUAGE = 'theme/TOGGLE_LANGUAGE';
-const SET_TO_LOCAL_STORAGE_THEME = 'theme/SET_TO_LOCAL_STORAGE_THEME';
-const SET_TO_LOCAL_STORAGE_LANGUAGE = 'theme/SET_TO_LOCAL_STORAGE_LANGUAGE';
+const SET_THEME = 'config/SET_THEME';
+const TOGGLE_THEME = 'config/TOGGLE_THEME';
+const SET_LANGUAGE = 'config/SET_LANGUAGE';
+const TOGGLE_LANGUAGE = 'config/TOGGLE_LANGUAGE';
+const SET_TO_LOCAL_STORAGE_THEME = 'config/SET_TO_LOCAL_STORAGE_THEME';
+const SET_TO_LOCAL_STORAGE_LANGUAGE = 'config/SET_TO_LOCAL_STORAGE_LANGUAGE';
 
 /* String Constants. */
 const THEME_DEFAULT = 'theme_default';

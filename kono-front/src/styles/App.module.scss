@@ -7,11 +7,4 @@
         position: relative;
         @include flexbox(column, $center: false);
     }
-
-    .App__wrapper {
-        position: absolute;
-        top: 50px;
-        left: 0;
-        width: 100%;
-    }
 }

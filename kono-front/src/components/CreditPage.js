@@ -3,6 +3,7 @@ import styles from '../styles/CreditPage.module.scss';
 import { ReactComponent as Logo } from '../res/icons/logo.svg';
 
 export default () => {
+
     return (
         <div className={styles.CreditPage}>
             <Logo width={100} height={100}/>
