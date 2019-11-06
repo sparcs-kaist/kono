@@ -1,7 +1,7 @@
 @import 'mixins/all';
 
 @include themed() {
-    .LoginPage {
+    .LoginPageDesktop {
 
         margin: auto;
         width: 500px;
@@ -13,13 +13,13 @@
 
         @include flexbox(column, $center: false);
 
-        .LoginPage__header {
+        .LoginPageDesktop__header {
             color: t(text-primary);
             font-size: 24px;
             margin-bottom: 40px;
         }
 
-        input.LoginPage__input {
+        input.LoginPageDesktop__input {
 
             background: transparent;
             border: none;
@@ -42,14 +42,14 @@
 
         }
 
-        .LoginPage__input_error {
+        .LoginPageDesktop__input_error {
             color: t(text-error);
             font-size: .95rem;
             margin-top: 0.5rem;
             margin-bottom: 0.5rem;
         }
 
-        .LoginPage__button {
+        .LoginPageDesktop__button {
 
             margin: auto 0 0 0;
 
