@@ -4,8 +4,8 @@
     .CreditPage {
 
         margin: auto;
-        width: 500px;
-
+        min-width: 200px;
+        padding: 100px 0;
         color: t(text-primary);
 
         @include flexbox(column, $center: true);
@@ -14,16 +14,33 @@
             @include flexbox(row, $center: true);
             span + span {
                 margin-left: 20px;
+                @include wide-screen {
+                    margin-left: 30px;
+                }
             }
         }
 
         p {
             color: t(text-secondary);
             font-size: 12px;
+            @include wide-screen {
+                font-size: 18px;
+            }
         }
 
         span {
+            font-size: 16px;
             margin: 10px 0;
+            @include wide-screen {
+                font-size: 24px;
+                margin: 15px 0;
+            }
+        }
+
+        h3 {
+            @include wide-screen {
+                font-size: 30px;
+            }
         }
 
         a {
