@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import ErrorHandlingPanel from '../../components/ErrorHandlingPanel';
+import { ErrorHandlingPanel } from 'components/common';
 
 export const ERROR_NONE = 'none';
 export const ERROR_CONN = 'connection_error';
