@@ -7,8 +7,4 @@
         position: relative;
         @include flexbox(column, $center: false);
     }
-
-    .App__wrapper {
-        width: 100%;
-    }
 }
