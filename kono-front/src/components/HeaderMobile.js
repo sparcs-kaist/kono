@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from '../styles/HeaderMobile.module.scss';
 import classnames from '../lib/classnames';
 import { ReactComponent as Logo } from '../res/icons/logo.svg';
 import MaterialIcon from './MaterialIcon';
+import * as LayoutActions from '../store/modules/layout';
 
 export default ({
     text, login, 
     onToggleTheme, onToggleLanguage, onLogout
 }) => {
 
-    const [open, setOpen] = useState(false);
-    const onToggleOpen = () => { setOpen(e => !e); }
+    const dispatch = useDispatch();
+    const open = useSelector(store => store.layout.headerOpen);
+    const onToggleOpen = () => { dispatch(LayoutActions.ToggleMobileHeader()); };
 
     return (
         <div className={styles.HeaderMobile}>

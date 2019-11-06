@@ -5,7 +5,7 @@ const CLOSE_MOBILE_HEADER = 'layout/CLOSE_MOBILE_HEADER';
 
 /* Initial States. */
 const initialState = {
-    headerOpen: true
+    headerOpen: false
 };
 
 /* Action Definitions. */
