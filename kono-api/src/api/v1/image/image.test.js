@@ -238,22 +238,31 @@ describe('Testing POST /api/v1/image/upload ...', () => {
     const testGeneralCase = () => async () => {
 
         const token = await generateToken({ sid: 0 });
+        const filenames = ['test.png', 'test.jpg'];
 
         const res = await request(apiURL)
             .post('/api/v1/image/upload')
-            .attach('image', fs.readFileSync(path.join(__dirname, '../../../test/testdata/test.png')), 'test.png')
-            .attach('image', fs.readFileSync(path.join(__dirname, '../../../test/testdata/test.jpg')), 'test.jpg')
+            .attach('image', fs.readFileSync(path.join(__dirname, `../../../test/testdata/${filenames[0]}`)), filenames[0])
+            .attach('image', fs.readFileSync(path.join(__dirname, `../../../test/testdata/${filenames[1]}`)), filenames[1])
             .set('Cookie', `access_token=${token}`);
         expect(res).to.have.status(200);
         expect(res.body).to.be.a('array');
         expect(res.body).to.be.length(2);
-        // For testing, the test server is an identical machine.
-        res.body.forEach(path => {
-            fs.access(path, fs.F_OK, (err) => {
-                // Remove file which is uploaded to test env upload dir.
-                fs.unlinkSync(path);
-                expect(err).to.be.equal(null);
-            });
+
+        res.body.forEach((filepath, index) => {
+            expect(path.extname(filepath)).to.be.equal(path.extname(filenames[index]));
+
+            // NOTE: Assertion here fails if the server machine and testing machine is not identical.
+            if (process.env.NODE_ENV == 'development') {
+                fs.access(filepath, fs.F_OK, (err) => {
+                    expect(err).to.be.equal(null);
+
+                    // Remove file which is uploaded to test env upload dir.
+                    // NOTE: If this the server machine and testing machine is not identical,
+                    // uploaded file due to this test remains undeleted in the server.
+                    try { fs.unlinkSync(filepath); } catch (e) {}
+                });
+            }
         });
     };
 
