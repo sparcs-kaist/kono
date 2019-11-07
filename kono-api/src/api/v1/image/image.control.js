@@ -118,7 +118,7 @@ const storage = multer.diskStorage({
         if (!UPLOAD_EXT_NAMES.includes(fileExtname)) {
             return cb(new UploadClientError('File extension undefined or unsupported.'));
         }
-        cb(null, `${uniqueString()}.${fileExtname}`);
+        cb(null, `${uniqueString()}${fileExtname}`);
     }
 });
 
@@ -144,6 +144,7 @@ export const upload = async (req, res) => {
             res.status(400);
             res.send({ msg: err.toString() });   
         } else if (err || !req.files) {
+            console.log(err ? err : 'req.files undefined');
             res.status(500);
             res.send({ msg: 'server error' });
         } else {
