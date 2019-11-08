@@ -1,4 +1,14 @@
 import db from '../../../db';
+import multer from 'multer';
+import uniqueString from 'unique-string';
+import path from 'path';
+import fs from 'fs';
+
+const UPLOAD_MAX_NUM_FILES = 5;
+const UPLOAD_MAX_FILE_SIZE = 5 * 1024 * 1024;
+const UPLOAD_EXT_NAMES = ['.png', '.jpg', '.jpeg'];
+const UPLOAD_KEY = 'image';
+const UPLOAD_SUBDIR = 'images';
 
 export const list = async (req, res) => {
 
@@ -82,3 +92,67 @@ export const count = async (req, res) => {
     }
 
 }
+
+/* For post upload. */
+
+// `multer.MulterError` covers only, and most of the Clinet Bad Request errors.
+// (https://github.com/expressjs/multer/blob/master/lib/multer-error.js)
+// `UploadClientError` is for Client Bad Request errors uncovered by multer.MulterError.
+class UploadClientError extends Error {
+    constructor(...params) {
+        super(...params);
+    }
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadDir = path.join(process.env.UPLOAD_DIR, UPLOAD_SUBDIR);
+        try {
+            fs.statSync(uploadDir);
+        } catch (err) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const fileExtname = path.extname(file.originalname);
+        if (!UPLOAD_EXT_NAMES.includes(fileExtname)) {
+            return cb(new UploadClientError('File extension undefined or unsupported.'));
+        }
+        cb(null, `${uniqueString()}${fileExtname}`);
+    }
+});
+
+const uploadFiles = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: UPLOAD_MAX_FILE_SIZE
+    }
+}).array(UPLOAD_KEY, UPLOAD_MAX_NUM_FILES);
+
+export const upload = async (req, res) => {
+
+    if (!req.admin) {
+        res.status(403);
+        res.send({ msg: 'login required' });
+        return;
+    }
+
+    uploadFiles(req, res, (err) => {
+        // Refer to the comment above `UploadClientError`.
+        if (err && (err instanceof multer.MulterError || err instanceof UploadClientError)
+            || !req.files) {
+            res.status(400);
+            res.send({
+                msg: err ? err.toString() : 'File upload failed since request is invalid.'
+            });   
+        } else if (err) {
+            console.log(err);
+            res.status(500);
+            res.send({ msg: 'server error' });
+        } else {
+            res.status(200);
+            res.send(req.files.map(file => path.join(UPLOAD_SUBDIR, file.filename)));
+        }
+    });
+};
