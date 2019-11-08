@@ -18,5 +18,21 @@
     "toggle_theme": {
         "kr": "테마 변경",
         "en": "Alter Theme"
+    },
+    "credit": {
+        "kr": "만든 사람들",
+        "en": "Credit"
+    },
+    "license": {
+        "kr": "라이선스",
+        "en": "License"
+    },
+    "admin_login": {
+        "kr": "관리자 로그인",
+        "en": "Administrator"
+    },
+    "contact": {
+        "kr": "피드백 / 버그 제보",
+        "en": "Feedbacks & Bug Reports"
     }
 }

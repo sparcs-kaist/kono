@@ -1,0 +1,59 @@
+@import 'mixins/all';
+
+@include themed() {
+    .LoginPageDesktop {
+
+        margin: auto;
+        width: 500px;
+        height: 200px;
+
+        background-color: t(panel-background);
+
+        padding: 36px;
+
+        @include flexbox(column, $center: false);
+
+        .LoginPageDesktop__header {
+            color: t(text-primary);
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+
+        input.LoginPageDesktop__input {
+
+            background: transparent;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #AAAAAA;
+            color: #AAAAAA;
+            &::placeholder {
+                color: #AAAAAA;
+            }
+            &:focus {
+                color: t(theme-background);
+                border-bottom: 1px solid t(theme-background);
+            }
+            &:hover {
+                color: t(theme-background);
+                border-bottom: 1px solid t(theme-background);
+            }
+            padding: 6px 0 6px 0;
+            font-size: 18px;
+
+        }
+
+        .LoginPageDesktop__input_error {
+            color: t(text-error);
+            font-size: .95rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .LoginPageDesktop__button {
+
+            margin: auto 0 0 0;
+
+        }
+
+    }
+}

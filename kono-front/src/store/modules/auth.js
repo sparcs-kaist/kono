@@ -1,4 +1,4 @@
-import { check as checkAPI } from '../../api/auth';
+import { check as checkAPI } from 'api/auth';
 
 /* Action Types. */
 
