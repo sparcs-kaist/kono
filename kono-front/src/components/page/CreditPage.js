@@ -18,15 +18,14 @@ export default () => {
                 <span>김태원</span>
             </div>
             <div className={styles.CreditPage__row}>
-                <span>나선일</span>
                 <span>안병서</span>
-            </div>
-            <div className={styles.CreditPage__row}>
                 <span>한우현</span>
-                <span>황동욱</span>
             </div>
             <h3>Designers</h3>
-            <span>임현정</span>
+            <div className={styles.CreditPage__row}>
+                <span>나선일</span>
+                <span>임현정</span>
+            </div>
             <h3>Special Thanks To:</h3>
             <div className={styles.CreditPage__row}>
                 <span>이택경</span>
