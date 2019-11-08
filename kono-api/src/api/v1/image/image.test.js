@@ -251,16 +251,18 @@ describe('Testing POST /api/v1/image/upload ...', () => {
 
         res.body.forEach((filepath, index) => {
             expect(path.extname(filepath)).to.be.equal(path.extname(filenames[index]));
-
             // NOTE: Assertion here fails if the server machine and testing machine is not identical.
             if (process.env.NODE_ENV == 'development') {
-                fs.access(filepath, fs.F_OK, (err) => {
+                const fullFilepath = path.join(process.env.UPLOAD_DIR_TEST, filepath);
+                fs.access(fullFilepath, fs.F_OK, (err) => {
                     expect(err).to.be.equal(null);
 
                     // Remove file which is uploaded to test env upload dir.
                     // NOTE: If this the server machine and testing machine is not identical,
                     // uploaded file due to this test remains undeleted in the server.
-                    try { fs.unlinkSync(filepath); } catch (e) {}
+                    // UPLOAD_DIR_TEST in .env.test.devlopment has to be set identical to
+                    // UPLOAD_DIR in .env file.
+                    try { fs.unlinkSync(fullFilepath); } catch (e) {}
                 });
             }
         });

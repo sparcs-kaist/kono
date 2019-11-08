@@ -8,6 +8,7 @@ const UPLOAD_MAX_NUM_FILES = 5;
 const UPLOAD_MAX_FILE_SIZE = 5 * 1024 * 1024;
 const UPLOAD_EXT_NAMES = ['.png', '.jpg', '.jpeg'];
 const UPLOAD_KEY = 'image';
+const UPLOAD_SUBDIR = 'images';
 
 export const list = async (req, res) => {
 
@@ -105,13 +106,13 @@ class UploadClientError extends Error {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const UPLOAD_DIR = `${process.env.UPLOAD_DIR}/images`;
+        const uploadDir = path.join(process.env.UPLOAD_DIR, UPLOAD_SUBDIR);
         try {
-            fs.statSync(UPLOAD_DIR);
+            fs.statSync(uploadDir);
         } catch (err) {
-            fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+            fs.mkdirSync(uploadDir, { recursive: true });
         }
-        cb(null, UPLOAD_DIR);
+        cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
         const fileExtname = path.extname(file.originalname);
@@ -139,17 +140,19 @@ export const upload = async (req, res) => {
 
     uploadFiles(req, res, (err) => {
         // Refer to the comment above `UploadClientError`.
-        if (err && (err instanceof multer.MulterError || 
-                    err instanceof UploadClientError)) {
+        if (err && (err instanceof multer.MulterError || err instanceof UploadClientError)
+            || !req.files) {
             res.status(400);
-            res.send({ msg: err.toString() });   
-        } else if (err || !req.files) {
-            console.log(err ? err : 'req.files undefined');
+            res.send({
+                msg: err ? err.toString() : 'File upload failed since request is invalid.'
+            });   
+        } else if (err) {
+            console.log(err);
             res.status(500);
             res.send({ msg: 'server error' });
         } else {
             res.status(200);
-            res.send(req.files.map(file => file.path));
+            res.send(req.files.map(file => path.join(UPLOAD_SUBDIR, file.filename)));
         }
     });
 };
