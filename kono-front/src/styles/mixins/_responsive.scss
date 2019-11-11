@@ -2,4 +2,10 @@
     @media (min-width: 1280px) {
         @content
     }
-}
+};
+
+@mixin mobile-screen {
+    @media (max-width: 800px) {
+        @content
+    }
+};

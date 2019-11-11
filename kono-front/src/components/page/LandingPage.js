@@ -6,12 +6,16 @@ export default () => {
 
     return (
         <div className={styles.LandingPage}>
-            <div className={styles.LandingPage__room}>
+            <div className={styles.LandingPage__container}>
                 <RoomPanel />
             </div>
-            <div className={styles.LandingPage__post}>
-                <NoticePanel />
-                <LostFoundPanel />
+            <div className={styles.LandingPage__container}>
+                <div className={styles.LandingPage__item}>
+                    <NoticePanel />
+                </div>
+                <div className={styles.LandingPage__item}>
+                    <LostFoundPanel />
+                </div>
             </div>
         </div>
     );

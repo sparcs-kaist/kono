@@ -3,7 +3,9 @@
 .RoomPanel {
 
     position: relative;
-    width: 600px;
-    min-height: calc(100vh - 180px);
+
+    @include mobile-screen {
+        height: 700px;
+    }
 
 }
