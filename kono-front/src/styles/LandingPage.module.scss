@@ -25,8 +25,9 @@
             height: 100%;
             padding: 0 32px;
             @include mobile-screen {
-                width: 100%;
-                padding: 32px 0;
+                width: calc(100% - 66px);
+                max-width: none;
+                padding: 32px 33px;
             }
             @include flexbox(column, $center: true);
         }
