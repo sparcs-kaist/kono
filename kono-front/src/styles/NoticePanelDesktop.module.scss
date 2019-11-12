@@ -1,0 +1,42 @@
+@import 'mixins/all';
+
+@include themed() {
+    .NoticePanelDesktop {
+
+        width: 100%;
+        min-height: 432px;
+        @include flexbox(column, $center: true);
+
+        ul {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 287px;
+            list-style-type: none;
+            li {
+                font-size: 10px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .item {
+
+            @include flexbox(row, $center: false);
+
+            .item_title {
+                font-size: 15px;
+                line-height: 18px;
+                @include link;
+            }
+
+            .item_date {
+                margin-left: auto;
+                font-size: 15px;
+                line-height: 18px;
+                color: t(text-secondary);
+            }
+
+        }
+
+    }
+}
