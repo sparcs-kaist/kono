@@ -1,0 +1,8 @@
+@import 'mixins/all';
+
+@include themed() {
+    .NoticePanelMobile {
+        width: 100%;
+        @include flexbox(column, $center: true);
+    }
+}

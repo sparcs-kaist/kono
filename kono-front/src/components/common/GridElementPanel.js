@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import styles from 'styles/ImageThumbnailPanel.module.scss';
+import styles from 'styles/GridElementPanel.module.scss';
 import { Spinner } from 'components/common';
 import * as FullscreenActions from 'store/modules/fullscreen';
 
@@ -10,7 +10,7 @@ export default ({
     imageIndex,
     imageWidth, imageHeight,
     imageURL, imageLink,
-    showOverlapPanel, overlapText,
+    showOverlapPanel, OverlapPanel,
     useOnClick
 }) => {
 
@@ -58,7 +58,7 @@ export default ({
 
     return (
         <div 
-            className={styles.ImageThumbnailPanel}
+            className={styles.GridElementPanel}
             style={imageContainerStyle}
             onClick={useOnClick ? onClick : null}>
             {
@@ -76,11 +76,9 @@ export default ({
                 ) : null
             }
             {
-                showOverlapPanel ? (
-                    <div className={styles.ImageThumbnailPanel__overlap}>
-                        <span>{ overlapText }</span>
-                    </div>
-                ) : null
+                showOverlapPanel && <div className={styles.overlap}>
+                    <OverlapPanel />
+                </div>
             }
         </div>
     )

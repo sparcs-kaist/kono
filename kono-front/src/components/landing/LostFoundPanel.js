@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from 'styles/LostFoundPanel.module.scss';
 import { PanelHeader, PanelFooter } from 'components/landing';
-import { ImageGridPanel } from 'components/common';
+import { GridPanel } from 'components/common';
 import * as ImageAPI from 'api/image';
 import Text from 'res/texts/LostFoundPanel.text.json';
 import { useWindowDimension, useLanguages, useFetch } from 'lib/hooks'
@@ -67,7 +67,7 @@ export default () => {
             }
             {
                 !isErrorImages && (
-                    <ImageGridPanel 
+                    <GridPanel 
                         gridNumRows={GRID_ROWS}
                         gridNumColumns={gridColumns}
                         totalWidthPixels={panelWidth}

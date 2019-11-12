@@ -1,7 +1,7 @@
 @import 'mixins/all';
 
 @include themed() {
-    .ImageThumbnailPanel {
+    .GridElementPanel {
         
         border-radius: 5px;
         overflow: hidden;
@@ -20,7 +20,7 @@
 
         position: relative;
 
-        .ImageThumbnailPanel__overlap {
+        .overlap {
             position: absolute;
             top: 0;
             bottom: 0;

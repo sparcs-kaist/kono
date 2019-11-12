@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from 'styles/ImageGridPanel.module.scss';
-import { ImageThumbnailPanel } from 'components/common';
+import styles from 'styles/GridPanel.module.scss';
+import { GridElementPanel } from 'components/common';
 
 function getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColumns) {
 
@@ -86,7 +86,7 @@ export default ({
         const { gridRows, gridRowSizes, gridColumns, gridColumnSizes, imageWidthCoeffs, imageHeightCoeffs } = gridConfigs;
 
         return (
-            <div className={styles.ImageGridPanel}>
+            <div className={styles.GridPanel}>
             {
                 [...Array(gridNumCells).keys()].map(idx => {
 
@@ -96,8 +96,8 @@ export default ({
                     const overlapText = showOverlapPanel && `+ ${numMoreImages}`;
 
                     return (
-                        <ImageThumbnailPanel
-                            key={`thumbnail-${idx}`}
+                        <GridElementPanel
+                            key={`element-${idx}`}
                             gridRow={gridRows[idx]}
                             gridRowSize={gridRowSizes[idx]}
                             gridColumn={gridColumns[idx]}
@@ -107,7 +107,7 @@ export default ({
                             imageHeight={gridCellSize * imageHeightCoeffs[idx] + gridGapPixels * (imageHeightCoeffs[idx] - 1)}
                             imageURL={imageURLs[idx]}
                             showOverlapPanel={showOverlapPanel}
-                            overlapText={overlapText} 
+                            OverlapPanel={() => <span>{ overlapText }</span>}
                             useOnClick={useOnClick && (idx < numImages)} />
                     );
                 })
@@ -123,7 +123,7 @@ export default ({
 
     return (
         <div 
-            className={styles.ImageGridPanel}
+            className={styles.GridPanel}
             style={style}>
             {
                 [...Array(gridNumCells).keys()].map(idx => {
@@ -132,7 +132,7 @@ export default ({
                     const gridColumn = idx % gridNumColumns + 1;
 
                     return (
-                        <ImageThumbnailPanel
+                        <GridElementPanel
                             gridRow={gridRow}
                             gridColumn={gridColumn}
                             imageIndex={idx}
@@ -140,7 +140,7 @@ export default ({
                             imageHeight={gridCellSize}
                             imageURL={imageURLs ? imageURLs[idx] : null}
                             imageLink={imageLinks[idx]}
-                            key={`thumbnail-${idx}`}
+                            key={`element-${idx}`}
                             useOnClick={useOnClick} />
                     );
                 })

@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FullScreen from 'react-full-screen';
 import style from 'styles/PostPageView.module.scss';
-import { StaticContent, Button, MaterialIcon, ImageGridPanel } from 'components/common';
+import { StaticContent, Button, MaterialIcon, GridPanel } from 'components/common';
 import { PostHeader, FullScreenPanel } from 'components/post';
 import * as FullscreenActions from 'store/modules/fullscreen';
 import { useLanguages } from 'lib/hooks';
@@ -49,7 +49,7 @@ export default ({ post }) => {
                 {
                     showImageThumbnails && (
                         <div className={style.PostPageView__thumbnails}>
-                            <ImageGridPanel
+                            <GridPanel
                                 gridNumRows={1}
                                 gridNumColumns={3}
                                 totalWidthPixels={800}
