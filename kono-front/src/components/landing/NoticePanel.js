@@ -71,17 +71,7 @@ export default () => {
         />
     ) : (
         <NoticePanelMobile
-            notices={[
-                {"sid":1,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
-                {"sid":2,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
-                {"sid":3,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
-                {"sid":4,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
-                {"sid":5,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
-                {"sid":6,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
-                {"sid":7,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
-                {"sid":8,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
-                {"sid":9,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"}
-            ]}
+            notices={notices}
             numPages={numPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

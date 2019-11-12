@@ -60,7 +60,7 @@ export default ({
         <div 
             className={styles.GridElementPanel}
             style={imageContainerStyle}
-            onClick={useOnClick ? onClick : null}>
+            onClick={useOnClick ? onClick : undefined}>
             {
                 isLoading && <Spinner />
             }
@@ -68,17 +68,20 @@ export default ({
                 imageURL ? (
                     <a href={imageLink}>
                         <img
-                        src={imageURL} 
-                        alt={imageURL}
-                        style={imageStyle}
-                        onLoad={onLoad} />
+                            src={imageURL} 
+                            alt={imageURL}
+                            style={imageStyle}
+                            onLoad={onLoad}
+                        />
                     </a>
                 ) : null
             }
             {
-                showOverlapPanel && <div className={styles.overlap}>
-                    <OverlapPanel />
-                </div>
+                showOverlapPanel && (
+                    <div className={styles.overlap}>
+                        <OverlapPanel />
+                    </div>
+                )
             }
         </div>
     )

@@ -31,8 +31,8 @@ export default (
 ) => {
 
     const showTitle = (title.kr || title.en);
-    const [titleTranscripted] = (title.kr && title.en)
-        ? useLanguages(title)
+    const titleTranscripted = (title.kr && title.en)
+        ? useLanguages(title)[0]
         : (title.kr ? title.kr : title.en);
     const [text] = useLanguages(Text);
 

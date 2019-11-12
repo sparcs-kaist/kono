@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styles from 'styles/NoticePanelMobile.module.scss';
 import { PanelHeader } from 'components/landing';
 import { GridPanel } from 'components/common';
@@ -9,7 +8,8 @@ const GAP_SIZE = 7;
 
 export default ({
     notices,
-    text
+    text,
+    isError, ErrorHandler
 }) => {
 
     const numColumns = notices.length;
@@ -18,14 +18,21 @@ export default ({
     return (
         <div className={styles.NoticePanelMobile}>
             <PanelHeader title={text.title}/>
-            <div className={styles.grid_wrapper}>
-                <GridPanel
-                    gridNumRows={1}
-                    gridNumColumns={numColumns}
-                    totalWidthPixels={panelWidth}
-                    gridGapPixels={GAP_SIZE}
-                />
-            </div>
+            {
+                !isError && (
+                    <div className={styles.grid_wrapper}>
+                        <GridPanel
+                            gridNumRows={1}
+                            gridNumColumns={numColumns}
+                            totalWidthPixels={panelWidth}
+                            gridGapPixels={GAP_SIZE}
+                        />
+                    </div>
+                )
+            }
+            {
+                <ErrorHandler height={203} showErrorText showSpinner showBackground />
+            }
         </div>
     )
 

@@ -5,7 +5,6 @@
         
         border-radius: 5px;
         overflow: hidden;
-        background-color: t(panel-background);
 
         @include flexbox(row, $center: true);
 

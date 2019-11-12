@@ -1,12 +1,12 @@
 import React from 'react';
-import style from 'styles/ErrorHandlingPanel.module.scss';
+import styles from 'styles/ErrorHandlingPanel.module.scss';
 import { MaterialIcon, Spinner } from 'components/common';
 import classnames from 'lib/classnames';
 import { useLanguages } from 'lib/hooks';
 import * as errorCodes from 'lib/hooks/useFetch';
 import Text from 'res/texts/ErrorHandlingPanel.text.json';
 
-export default ({ isLoading, errorCode, showErrorText, showSpinner, showBackground }) => {
+export default ({ isLoading, errorCode, width, height, showErrorText, showSpinner, showBackground }) => {
     
     const [text] = useLanguages(Text);
 
@@ -14,15 +14,17 @@ export default ({ isLoading, errorCode, showErrorText, showSpinner, showBackgrou
     const showIcon = (errorCode !== errorCodes.ERROR_CONN);
 
     const useBackground = showBackground && !isLoading && (showErrorText || showSpinner);
+    const style = { width, height };
 
     return (
         <div 
             className={
                 classnames([
-                    style.ErrorHandlingPanel,
-                    useBackground && style.ErrorHandlingPanel__use_background
+                    styles.ErrorHandlingPanel,
+                    useBackground && styles.ErrorHandlingPanel__use_background
                 ])
             }
+            style={style}
         >
             {
                 isLoading && (
