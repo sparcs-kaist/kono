@@ -6,7 +6,7 @@ import { useLanguages } from 'lib/hooks';
 import * as errorCodes from 'lib/hooks/useFetch';
 import Text from 'res/texts/ErrorHandlingPanel.text.json';
 
-export default ({ isLoading, errorCode, width, height, showErrorText, showSpinner, showBackground }) => {
+export default ({ isLoading, errorCode, showErrorText, showSpinner, showBackground }) => {
     
     const [text] = useLanguages(Text);
 
@@ -23,7 +23,6 @@ export default ({ isLoading, errorCode, width, height, showErrorText, showSpinne
                     useBackground && style.ErrorHandlingPanel__use_background
                 ])
             }
-            style={{ width, height }}
         >
             {
                 isLoading && (

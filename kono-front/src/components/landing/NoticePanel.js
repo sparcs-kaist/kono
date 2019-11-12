@@ -18,7 +18,7 @@ export default () => {
         fetchNumNotices, 
         , // isLoading
         isErrorNumNotices,
-        NumNoticesErrorHandler
+        ,
     ] = useFetch(0);
 
     const [
@@ -27,6 +27,14 @@ export default () => {
         , // isLoading
         isErrorNotices,
         NoticesErrorHandler,
+    ] = useFetch([]);
+
+    const [
+        noticeImages,
+        fetchNoticeImages,
+        , // isLoading
+        isErrorNoticeImages,
+        ,
     ] = useFetch([]);
 
     const [text] = useLanguages(Text);
@@ -48,28 +56,37 @@ export default () => {
 
     const numPages = Math.max(1, numNotices / NOTICE_PAGINATION);
 
+    const isError = isErrorNumNotices || isErrorNotices || isErrorNoticeImages;
+    const ErrorHandlerComponent = NoticesErrorHandler;
+
     return showDesktopLayout ? (
         <NoticePanelDesktop
             notices={notices}
             numPages={numPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            isErrorNotices={isErrorNotices}
-            isErrorNumNotices={isErrorNumNotices}
-            NoticesErrorHandler={NoticesErrorHandler}
-            NumNoticesErrorHandler={NumNoticesErrorHandler}
+            isError={isError}
+            ErrorHandler={ErrorHandlerComponent}
             text={text}
         />
     ) : (
         <NoticePanelMobile
-            notices={notices}
+            notices={[
+                {"sid":1,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
+                {"sid":2,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
+                {"sid":3,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
+                {"sid":4,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
+                {"sid":5,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
+                {"sid":6,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
+                {"sid":7,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
+                {"sid":8,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"},
+                {"sid":9,"type":"notice","title_kr":"POST","title_en":"POST","created_time":"2019-11-05T09:48:23.000Z"}
+            ]}
             numPages={numPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            isErrorNotices={isErrorNotices}
-            isErrorNumNotices={isErrorNumNotices}
-            NoticesErrorHandler={NoticesErrorHandler}
-            NumNoticesErrorHandler={NumNoticesErrorHandler}
+            isError={isError}
+            ErrorHandler={ErrorHandlerComponent}
             text={text}
         />
     )

@@ -4,6 +4,9 @@
 
     .ErrorHandlingPanel {
 
+        width: 100%;
+        height: 100%;
+
         &.ErrorHandlingPanel__use_background {
             background: t(panel-background);
         }

@@ -7,8 +7,7 @@ import { useLanguages } from 'lib/hooks';
 export default ({
     notices,
     numPages, currentPage, setCurrentPage,
-    isErrorNumNotices, isErrorNotices,
-    NumNoticesErrorHandler, NoticesErrorHandler,
+    isError, ErrorHandler,
     text
 }) => {
 
@@ -45,26 +44,21 @@ export default ({
         <div className={styles.NoticePanelDesktop}>
             <PanelHeader title={text.title}/>
             {
-                <NoticesErrorHandler height={291} showErrorText showSpinner showBackground />
-            }
-            {
-                !isErrorNotices && (
-                    <ul>
-                        { notices.map(NoticeComponent) }
-                    </ul>
+                !isError && (
+                    <>
+                        <ul>
+                            { notices.map(NoticeComponent) }
+                        </ul>
+                        <PanelFooter
+                            currentPage={currentPage}
+                            numPages={numPages}
+                            onClickPage={(page) => { setCurrentPage(page) }}
+                        />
+                    </>
                 )
             }
             {
-                <NumNoticesErrorHandler height={64} />
-            }
-            {
-                !isErrorNumNotices && (
-                    <PanelFooter
-                        currentPage={currentPage}
-                        numPages={numPages}
-                        onClickPage={(page) => { setCurrentPage(page) }}
-                    />
-                )
+                <ErrorHandler showErrorText showSpinner showBackground />
             }
         </div>
     );
