@@ -1,8 +1,10 @@
+@import 'mixins/all';
+
 .LostFoundPanel {
 
-    width: 440px;
+    width: 100%;
+    min-height: 432px;
 
-    margin-left: 93px;
-    margin-bottom: 64px;
+    @include flexbox(column, $center: true);
 
 }

@@ -4,17 +4,25 @@ import styles from 'styles/NoticePanel.module.scss';
 import { PanelHeader, PanelFooter } from 'components/landing';
 import * as PostAPI from 'api/post';
 import Text from 'res/texts/NoticePanel.text.json';
-import { useLanguages, useFetch } from 'lib/hooks';
+import { useWindowDimension, useLanguages, useFetch } from 'lib/hooks';
 
 const NOTICE_PAGINATION = 8;
 const NOTICE_TITLE_MAX_LENGTH = {
     kr: 24,
-    en: 42
+    en: 32
+};
+const NOTICE_TITLE_MAX_LENGTH_NARROW = {
+    kr: 16,
+    en: 24
 };
 
 export default () => {
 
     const [currentPage, setCurrentPage] = useState(1);
+    const { width } = useWindowDimension();
+
+    const showNarrowLayout = width < 1080;
+    const noticeTitleMaxLength = showNarrowLayout ? NOTICE_TITLE_MAX_LENGTH_NARROW : NOTICE_TITLE_MAX_LENGTH;
 
     const [
         numNotices, 
@@ -35,7 +43,7 @@ export default () => {
     const [text, language] = useLanguages(Text);
     const numPages = Math.max(1, Math.ceil(numNotices / NOTICE_PAGINATION));
 
-    const [titleMaxLength] = useLanguages(NOTICE_TITLE_MAX_LENGTH);
+    const [titleMaxLength] = useLanguages(noticeTitleMaxLength);
     const toTitleString = (title) => (
         title
             ? (title.length > titleMaxLength ? `${title.substring(0, titleMaxLength)}...` : title)
