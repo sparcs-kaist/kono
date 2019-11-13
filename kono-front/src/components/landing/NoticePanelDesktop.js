@@ -13,7 +13,9 @@ export default ({
 
     const NoticeComponent = ({ sid, title_kr, title_en, created_time }) => {
         
-        const [title] = useLanguages({ kr: title_kr, en: title_en });
+        const titleKR = title_kr || text.null_title;
+        const titleEN = title_en || titleKR || text.null_title;
+        const [title] = useLanguages({ kr: titleKR, en: titleEN });
         const date = new Date(created_time);
 
         const titleString = title;
@@ -43,23 +45,17 @@ export default ({
     return (
         <div className={styles.NoticePanelDesktop}>
             <PanelHeader title={text.title}/>
-            {
-                !isError && (
-                    <>
-                        <ul>
-                            { notices.map(NoticeComponent) }
-                        </ul>
-                        <PanelFooter
-                            currentPage={currentPage}
-                            numPages={numPages}
-                            onClickPage={(page) => { setCurrentPage(page) }}
-                        />
-                    </>
-                )
-            }
-            {
-                <ErrorHandler showErrorText showSpinner showBackground />
-            }
+            <ul>
+                { !isError && notices.map(NoticeComponent) }
+                {
+                    <ErrorHandler showErrorText showSpinner showBackground />
+                }
+            </ul>
+            <PanelFooter
+                currentPage={currentPage}
+                numPages={numPages}
+                onClickPage={(page) => { setCurrentPage(page) }}
+            />
         </div>
     );
 

@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { PanelHeader } from 'components/landing';
 import { GridPanel } from 'components/common';
 import { useLanguages } from 'lib/hooks';
+import { ReactComponent as Background1 } from 'res/icons/notice_mobile_1.svg';
+import { ReactComponent as Background2 } from 'res/icons/notice_mobile_2.svg';
 
 const CELL_SIZE = 203;
 const GAP_SIZE = 7;
@@ -19,7 +21,9 @@ export default ({
 
     const NoticeComponent = ({ sid, title_kr, title_en, created_time }) => {
 
-        const [title] = useLanguages({ kr: title_kr, en: title_en });
+        const titleKR = title_kr || text.null_title;
+        const titleEN = title_en || titleKR || text.null_title;
+        const [title] = useLanguages({ kr: titleKR, en: titleEN });
         const date = new Date(created_time);
 
         const titleString = title;
@@ -32,6 +36,11 @@ export default ({
         return (
             <div className={styles.grid_item}>
                 <Link to={`/post/${sid}`}>
+                    {
+                        (sid % 2 === 0)
+                            ? <Background1 />
+                            : <Background2 />
+                    }
                     <div className={styles.grid_item_date}>{ dateString }</div>
                     <div className={styles.grid_item_title}>{ titleString }</div>
                 </Link>
