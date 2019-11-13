@@ -67,6 +67,7 @@ export default ({
     gridGapPixels = 7, 
     imageURLs=[],
     imageLinks=[],
+    contentPanels=[],
     useDynamicPositioning,
     useOnClick
 }) => {
@@ -82,8 +83,11 @@ export default ({
             return null;
         
         const numImages = imageURLs.length;
-        const gridConfigs = getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColumns);
-        const { gridRows, gridRowSizes, gridColumns, gridColumnSizes, imageWidthCoeffs, imageHeightCoeffs } = gridConfigs;
+        const {
+            gridRows, gridRowSizes, 
+            gridColumns, gridColumnSizes, 
+            imageWidthCoeffs, imageHeightCoeffs 
+        } = getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColumns);
 
         return (
             <div className={styles.GridPanel}>
@@ -94,6 +98,9 @@ export default ({
                     const numMoreImages = numImages - gridNumCells;
                     const showOverlapPanel = isLastGrid && (numMoreImages > 0);
                     const overlapText = showOverlapPanel && `+ ${numMoreImages}`;
+                    const OverlapPanel = showOverlapPanel
+                        ? ( <span>{ overlapText }</span> )
+                        : null;
 
                     return (
                         <GridElementPanel
@@ -106,8 +113,7 @@ export default ({
                             imageWidth={gridCellSize * imageWidthCoeffs[idx] + gridGapPixels * (imageWidthCoeffs[idx] - 1)}
                             imageHeight={gridCellSize * imageHeightCoeffs[idx] + gridGapPixels * (imageHeightCoeffs[idx] - 1)}
                             imageURL={imageURLs[idx]}
-                            showOverlapPanel={showOverlapPanel}
-                            OverlapPanel={() => <span>{ overlapText }</span>}
+                            OverlapPanel={OverlapPanel}
                             useOnClick={useOnClick && (idx < numImages)} />
                     );
                 })
@@ -141,6 +147,7 @@ export default ({
                             imageURL={imageURLs ? imageURLs[idx] : null}
                             imageLink={imageLinks[idx]}
                             key={`element-${idx}`}
+                            OverlapPanel={contentPanels[idx]}
                             useOnClick={useOnClick} />
                     );
                 })

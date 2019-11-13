@@ -29,14 +29,6 @@ export default () => {
         NoticesErrorHandler,
     ] = useFetch([]);
 
-    const [
-        noticeImages,
-        fetchNoticeImages,
-        , // isLoading
-        isErrorNoticeImages,
-        ,
-    ] = useFetch([]);
-
     const [text] = useLanguages(Text);
 
     useEffect(() => {
@@ -56,7 +48,7 @@ export default () => {
 
     const numPages = Math.max(1, numNotices / NOTICE_PAGINATION);
 
-    const isError = isErrorNumNotices || isErrorNotices || isErrorNoticeImages;
+    const isError = isErrorNumNotices || isErrorNotices;
     const ErrorHandlerComponent = NoticesErrorHandler;
 
     return showDesktopLayout ? (

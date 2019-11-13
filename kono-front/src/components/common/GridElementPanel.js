@@ -10,7 +10,7 @@ export default ({
     imageIndex,
     imageWidth, imageHeight,
     imageURL, imageLink,
-    showOverlapPanel, OverlapPanel,
+    OverlapPanel,
     useOnClick
 }) => {
 
@@ -77,9 +77,9 @@ export default ({
                 ) : null
             }
             {
-                showOverlapPanel && (
+                OverlapPanel && (
                     <div className={styles.overlap}>
-                        <OverlapPanel />
+                        { OverlapPanel }
                     </div>
                 )
             }
