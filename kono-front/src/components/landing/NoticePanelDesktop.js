@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from 'styles/NoticePanelDesktop.module.scss';
 import { PanelHeader, PanelFooter } from 'components/landing';
-import { useLanguages } from 'lib/hooks';
 
 export default ({
     notices,
@@ -11,11 +10,8 @@ export default ({
     text
 }) => {
 
-    const NoticeComponent = ({ sid, title_kr, title_en, created_time }) => {
+    const NoticeComponent = ({ sid, title, created_time }) => {
         
-        const titleKR = title_kr || text.null_title;
-        const titleEN = title_en || titleKR || text.null_title;
-        const [title] = useLanguages({ kr: titleKR, en: titleEN });
         const date = new Date(created_time);
 
         const titleString = title;

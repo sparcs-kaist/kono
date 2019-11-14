@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from 'styles/GridPanel.module.scss';
 import { GridElementPanel } from 'components/common';
-import config from 'store/modules/config';
 
 function getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColumns) {
 

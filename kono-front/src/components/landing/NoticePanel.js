@@ -4,7 +4,7 @@ import * as PostAPI from 'api/post';
 import Text from 'res/texts/NoticePanel.text.json';
 import { useLanguages, useFetch, useWindowDimension } from 'lib/hooks';
 
-const NOTICE_PAGINATION = 20;
+const NOTICE_PAGINATION = 8;
 
 export default () => {
 
@@ -28,23 +28,43 @@ export default () => {
         isErrorNotices,
         NoticesErrorHandler,
     ] = useFetch([]);
+    const [noticeList, setNoticeList] = useState([]);
 
-    const [text] = useLanguages(Text);
+    const [text, language] = useLanguages(Text);
 
     useEffect(() => {
         fetchNumNotices(PostAPI.count, [], data => data.notice);
     }, [fetchNumNotices]);
 
-    /* Fetch new page when currentPage updates */
+    /* Fetch new page when currentPage updates
+     * In desktop layout, new notices replaces the old notices.
+     * In mobile layout, new notices are appended to old notices.
+     */
     useEffect(() => {
-        fetchNotices(PostAPI.list, [{
-            params: {
-                filter_type: 'notice',
-                start_index: (currentPage - 1) * NOTICE_PAGINATION,
-                max_size: NOTICE_PAGINATION
-            }
-        }]);
+        fetchNotices(
+            PostAPI.list, 
+            [{
+                params: {
+                    filter_type: 'notice',
+                    start_index: (currentPage - 1) * NOTICE_PAGINATION,
+                    max_size: NOTICE_PAGINATION
+                }
+            }]
+        );
     }, [fetchNotices, currentPage]);
+
+    useEffect(() => {
+        if (showDesktopLayout)
+            setNoticeList(notices);
+        else
+            setNoticeList(noticeList => noticeList.concat(notices));
+    }, [showDesktopLayout, notices]);
+
+    const transcriptNotice = ({ title_kr, title_en, ...rest }) => ({
+        title: (title_kr && title_en) ? (language === 'kr' ? title_kr : title_en) : (title_kr || text.null_title),
+        ...rest
+    });
+    const transcriptedNoticeList = noticeList.map(transcriptNotice);
 
     const numPages = Math.max(1, numNotices / NOTICE_PAGINATION);
 
@@ -53,7 +73,7 @@ export default () => {
 
     return showDesktopLayout ? (
         <NoticePanelDesktop
-            notices={notices}
+            notices={transcriptedNoticeList}
             numPages={numPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -63,7 +83,7 @@ export default () => {
         />
     ) : (
         <NoticePanelMobile
-            notices={notices}
+            notices={transcriptedNoticeList}
             numPages={numPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

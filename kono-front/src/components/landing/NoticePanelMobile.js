@@ -3,13 +3,13 @@ import styles from 'styles/NoticePanelMobile.module.scss';
 import { Link } from 'react-router-dom';
 import { PanelHeader } from 'components/landing';
 import { GridPanel } from 'components/common';
-import { useLanguages } from 'lib/hooks';
 
 const CELL_SIZE = 203;
 const GAP_SIZE = 7;
 
 export default ({
     notices,
+    setCurrentPage,
     text,
     isError, ErrorHandler
 }) => {
@@ -17,11 +17,8 @@ export default ({
     const numColumns = notices.length;
     const panelWidth = CELL_SIZE * numColumns + GAP_SIZE * (numColumns - 1);
 
-    const NoticeComponent = ({ sid, title_kr, title_en, created_time, thumbnail }) => {
+    const NoticeComponent = ({ sid, title, created_time }) => {
 
-        const titleKR = title_kr || text.null_title;
-        const titleEN = title_en || titleKR || text.null_title;
-        const [title] = useLanguages({ kr: titleKR, en: titleEN });
         const date = new Date(created_time);
 
         const titleString = title;
@@ -63,6 +60,9 @@ export default ({
             }
             {
                 <ErrorHandler height={203} showErrorText showSpinner showBackground />
+            }
+            {
+                <div onClick={() => { setCurrentPage(pg => pg + 1); }}>APPEND!</div>
             }
         </div>
     )
