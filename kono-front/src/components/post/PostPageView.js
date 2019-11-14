@@ -55,7 +55,8 @@ export default ({ post }) => {
                                 totalWidthPixels={800}
                                 imageURLs={content_img} 
                                 useDynamicPositioning 
-                                useOnClick />
+                                useOnClick
+                                useOverlapFilter/>
                         </div>
                     )
                 }

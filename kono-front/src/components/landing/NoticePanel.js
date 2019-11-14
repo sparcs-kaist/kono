@@ -4,7 +4,7 @@ import * as PostAPI from 'api/post';
 import Text from 'res/texts/NoticePanel.text.json';
 import { useLanguages, useFetch, useWindowDimension } from 'lib/hooks';
 
-const NOTICE_PAGINATION = 8;
+const NOTICE_PAGINATION = 20;
 
 export default () => {
 

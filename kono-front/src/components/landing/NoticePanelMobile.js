@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import { PanelHeader } from 'components/landing';
 import { GridPanel } from 'components/common';
 import { useLanguages } from 'lib/hooks';
-import { ReactComponent as Background1 } from 'res/icons/notice_mobile_1.svg';
-import { ReactComponent as Background2 } from 'res/icons/notice_mobile_2.svg';
 
 const CELL_SIZE = 203;
 const GAP_SIZE = 7;
@@ -19,7 +17,7 @@ export default ({
     const numColumns = notices.length;
     const panelWidth = CELL_SIZE * numColumns + GAP_SIZE * (numColumns - 1);
 
-    const NoticeComponent = ({ sid, title_kr, title_en, created_time }) => {
+    const NoticeComponent = ({ sid, title_kr, title_en, created_time, thumbnail }) => {
 
         const titleKR = title_kr || text.null_title;
         const titleEN = title_en || titleKR || text.null_title;
@@ -36,11 +34,6 @@ export default ({
         return (
             <div className={styles.grid_item}>
                 <Link to={`/post/${sid}`}>
-                    {
-                        (sid % 2 === 0)
-                            ? <Background1 />
-                            : <Background2 />
-                    }
                     <div className={styles.grid_item_date}>{ dateString }</div>
                     <div className={styles.grid_item_title}>{ titleString }</div>
                 </Link>
@@ -60,7 +53,10 @@ export default ({
                             gridNumColumns={numColumns}
                             totalWidthPixels={panelWidth}
                             gridGapPixels={GAP_SIZE}
+                            imageURLs={notices.map(notice => notice.thumbnail)}
                             contentPanels={notices.map(NoticeComponent)}
+                            useDefaultBackground
+                            useBackgroundImageBlur
                         />
                     </div>
                 )

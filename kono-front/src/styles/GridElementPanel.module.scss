@@ -3,10 +3,24 @@
 @include themed() {
     .GridElementPanel {
         
+        /* 
+         * border-radius not working with blur filter on images is a known bug in Chrome!
+         * https://bugs.chromium.org/p/chromium/issues/detail?id=547937
+         */
         border-radius: 5px;
         overflow: hidden;
 
         @include flexbox(row, $center: true);
+
+        &.default_background {
+            background: linear-gradient(180deg, #373751 0%, #485AB7 100%);
+        }
+
+        &.blur {
+            img {
+                filter: blur(8px);
+            }
+        }
 
         img {
             opacity: 1;
@@ -25,11 +39,13 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: rgba(0, 0, 0, 0.6);
             cursor: pointer;
 
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.4);
+            &.overlap_filter {
+                background-color: rgba(0, 0, 0, 0.6);
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.4);
+                }
             }
 
             color: white;

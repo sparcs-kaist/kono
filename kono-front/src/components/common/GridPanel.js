@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from 'styles/GridPanel.module.scss';
 import { GridElementPanel } from 'components/common';
+import config from 'store/modules/config';
 
 function getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColumns) {
 
@@ -69,7 +70,8 @@ export default ({
     imageLinks=[],
     contentPanels=[],
     useDynamicPositioning,
-    useOnClick
+    useOnClick,
+    ...rest
 }) => {
 
     if (!gridNumRows || !gridNumColumns || !totalWidthPixels)
@@ -114,7 +116,9 @@ export default ({
                             imageHeight={gridCellSize * imageHeightCoeffs[idx] + gridGapPixels * (imageHeightCoeffs[idx] - 1)}
                             imageURL={imageURLs[idx]}
                             OverlapPanel={OverlapPanel}
-                            useOnClick={useOnClick && (idx < numImages)} />
+                            useOnClick={useOnClick && (idx < numImages)}
+                            { ...rest }
+                        />
                     );
                 })
             }
@@ -148,7 +152,9 @@ export default ({
                             imageLink={imageLinks[idx]}
                             key={`element-${idx}`}
                             OverlapPanel={contentPanels[idx]}
-                            useOnClick={useOnClick} />
+                            useOnClick={useOnClick} 
+                            { ...rest }
+                        />
                     );
                 })
             }
