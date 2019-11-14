@@ -36,10 +36,11 @@ export default () => {
         fetchNumNotices(PostAPI.count, [], data => data.notice);
     }, [fetchNumNotices]);
 
-    /* Fetch new page when currentPage updates
+    /* Fetch new page when currentPage updates.
      * In desktop layout, new notices replaces the old notices.
      * In mobile layout, new notices are appended to old notices.
      */
+
     useEffect(() => {
         fetchNotices(
             PostAPI.list, 

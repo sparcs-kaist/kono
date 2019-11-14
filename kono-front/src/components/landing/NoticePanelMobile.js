@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styles from 'styles/NoticePanelMobile.module.scss';
 import { Link } from 'react-router-dom';
 import { PanelHeader } from 'components/landing';
@@ -9,13 +9,24 @@ const GAP_SIZE = 7;
 
 export default ({
     notices,
-    setCurrentPage,
+    numPages, currentPage, setCurrentPage,
     text,
-    isError, ErrorHandler
+    ErrorHandler
 }) => {
 
     const numColumns = notices.length;
     const panelWidth = CELL_SIZE * numColumns + GAP_SIZE * (numColumns - 1);
+    const contentPanel = useRef();
+
+    const onScrollLimit = () => {
+        if (currentPage < numPages)
+            setCurrentPage(currentPage + 1);
+    };
+    const onScroll = () => {
+        const { scrollLeft, scrollWidth, offsetWidth } = contentPanel.current;
+        if (scrollLeft + offsetWidth >= scrollWidth)
+            onScrollLimit();
+    };
 
     const NoticeComponent = ({ sid, title, created_time }) => {
 
@@ -43,8 +54,10 @@ export default ({
         <div className={styles.NoticePanelMobile}>
             <PanelHeader title={text.title}/>
             {
-                !isError && (
-                    <div className={styles.grid_wrapper}>
+                (
+                    <div className={styles.grid_wrapper}
+                        onScroll={onScroll}
+                        ref={contentPanel}>
                         <GridPanel
                             gridNumRows={1}
                             gridNumColumns={numColumns}
@@ -55,14 +68,9 @@ export default ({
                             useDefaultBackground
                             useBackgroundImageBlur
                         />
+                        <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner showBackground />
                     </div>
                 )
-            }
-            {
-                <ErrorHandler height={203} showErrorText showSpinner showBackground />
-            }
-            {
-                <div onClick={() => { setCurrentPage(pg => pg + 1); }}>APPEND!</div>
             }
         </div>
     )
