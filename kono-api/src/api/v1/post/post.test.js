@@ -13,14 +13,15 @@ describe('Testing GET /api/v1/post ...', () => {
                 expect(res.body).to.be.a('array');
                 expect(res.body).to.have.lengthOf.most(max_size);
                 res.body.forEach(post => {
-                    expect(post).to.have.keys(['sid', 'title_kr', 'title_en', 'created_time', 'type']);
-                    const { sid, type, title_kr, title_en, created_time } = post;
+                    expect(post).to.have.keys(['sid', 'title_kr', 'title_en', 'created_time', 'type', 'thumbnail']);
+                    const { sid, type, title_kr, title_en, created_time, thumbnail } = post;
                     expect(sid).to.be.a('number');
                     expect(sid).to.be.least(0);
                     expect(type).to.be.oneOf(['notice', 'lostfound']);
                     expect(title_kr).to.satisfy(e => (e === null) || (typeof e === 'string'));
                     expect(title_en).to.satisfy(e => (e === null) || (typeof e === 'string'));
                     expect(created_time).to.satisfy(e => !isNaN(Date.parse(e)));
+                    expect(thumbnail).to.satisfy(e => (e === null) || (typeof e === 'string'));
                 });
                 done();
             })
@@ -39,14 +40,15 @@ describe('Testing GET /api/v1/post ...', () => {
                 expect(res.body).to.be.a('array');
                 expect(res.body).to.have.lengthOf.most(max_size);
                 res.body.forEach(post => {
-                    expect(post).to.have.keys(['sid', 'title_kr', 'title_en', 'created_time', 'type']);
-                    const { sid, type, title_kr, title_en, created_time } = post;
+                    expect(post).to.have.keys(['sid', 'title_kr', 'title_en', 'created_time', 'type', 'thumbnail']);
+                    const { sid, type, title_kr, title_en, created_time, thumbnail } = post;
                     expect(sid).to.be.a('number');
                     expect(sid).to.be.least(0);
                     expect(type).to.equal(filter_type);
                     expect(title_kr).to.satisfy(e => (e === null) || (typeof e === 'string'));
                     expect(title_en).to.satisfy(e => (e === null) || (typeof e === 'string'));
                     expect(created_time).to.satisfy(e => !isNaN(Date.parse(e)));
+                    expect(thumbnail).to.satisfy(e => (e === null) || (typeof e === 'string'));
                 });
                 done();
             })

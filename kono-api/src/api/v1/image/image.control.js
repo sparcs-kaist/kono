@@ -12,7 +12,7 @@ const UPLOAD_SUBDIR = 'images';
 
 export const list = async (req, res) => {
 
-    const { filter_type = '*', start_index = 0, max_size } = req.query;
+    const { filter_type = '%', start_index = 0, max_size } = req.query;
 
     /* Query validity check. */
     if (max_size === undefined) {
@@ -22,7 +22,7 @@ export const list = async (req, res) => {
     }
 
     const FILTER_TYPE = filter_type;
-    if (FILTER_TYPE !== '*' && FILTER_TYPE !== 'notice' && FILTER_TYPE !== 'lostfound') {
+    if (FILTER_TYPE !== '%' && FILTER_TYPE !== 'notice' && FILTER_TYPE !== 'lostfound') {
         res.status(400);
         res.send({ msg: 'invalid filter_type' });
         return;
@@ -49,7 +49,8 @@ export const list = async (req, res) => {
             .select('image.sid', 'image.url', 'image.post_sid')
             .from('post')
             .innerJoin('image', 'image.post_sid', 'post.sid')
-            .where({ 'post.deleted': 0, 'post.type': FILTER_TYPE })
+            .where('post.deleted', 0)
+            .where('post.type', 'like', FILTER_TYPE)
             .orderBy('post.created_time', 'desc')
             .limit(MAX_SIZE)
             .offset(START_INDEX);
