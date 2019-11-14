@@ -28,6 +28,7 @@ export default () => {
         isErrorNotices,
         NoticesErrorHandler,
     ] = useFetch([]);
+
     const [noticeList, setNoticeList] = useState([]);
 
     const [text, language] = useLanguages(Text);
@@ -36,35 +37,48 @@ export default () => {
         fetchNumNotices(PostAPI.count, [], data => data.notice);
     }, [fetchNumNotices]);
 
-    /* Fetch new page when currentPage updates.
-     * In desktop layout, new notices replaces the old notices.
-     * In mobile layout, new notices are appended to old notices.
-     */
-
-    useEffect(() => {
+    const setCurrentPageWithSideEffect = (value) => {
+        setCurrentPage(value);
         fetchNotices(
             PostAPI.list, 
             [{
                 params: {
                     filter_type: 'notice',
-                    start_index: (currentPage - 1) * NOTICE_PAGINATION,
+                    start_index: (value - 1) * NOTICE_PAGINATION,
                     max_size: NOTICE_PAGINATION
                 }
             }]
         );
-    }, [fetchNotices, currentPage]);
+    };
 
     useEffect(() => {
-        if (showDesktopLayout)
-            setNoticeList(notices);
-        else
-            setNoticeList(noticeList => noticeList.concat(notices));
-    }, [showDesktopLayout, notices]);
+        const fetchInitialNotices = () => {
+            setCurrentPage(1);
+            fetchNotices(
+                PostAPI.list, 
+                [{
+                    params: {
+                        filter_type: 'notice',
+                        max_size: NOTICE_PAGINATION
+                    }
+                }]
+            );
+        };
+        setNoticeList([]);
+        fetchInitialNotices();
+    }, [showDesktopLayout, fetchNotices])
+
+    useEffect(() => {
+        setNoticeList(noticeList => noticeList.concat(notices));
+    }, [notices])
 
     const transcriptNotice = ({ title_kr, title_en, ...rest }) => ({
-        title: (title_kr && title_en) ? (language === 'kr' ? title_kr : title_en) : (title_kr || text.null_title),
+        title: (title_kr && title_en) 
+            ? (language === 'kr' ? title_kr : title_en) 
+            : (title_kr || text.null_title),
         ...rest
     });
+    const transcriptedNotices = notices.map(transcriptNotice);
     const transcriptedNoticeList = noticeList.map(transcriptNotice);
 
     const numPages = Math.max(1, numNotices / NOTICE_PAGINATION);
@@ -74,10 +88,10 @@ export default () => {
 
     return showDesktopLayout ? (
         <NoticePanelDesktop
-            notices={transcriptedNoticeList}
+            notices={transcriptedNotices}
             numPages={numPages}
             currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
+            setCurrentPage={setCurrentPageWithSideEffect}
             isError={isError}
             ErrorHandler={ErrorHandlerComponent}
             text={text}
@@ -87,7 +101,7 @@ export default () => {
             notices={transcriptedNoticeList}
             numPages={numPages}
             currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
+            setCurrentPage={setCurrentPageWithSideEffect}
             isError={isError}
             ErrorHandler={ErrorHandlerComponent}
             text={text}

@@ -22,7 +22,7 @@ export default ({
         });
 
         return (
-            <li key={`notice-${sid}`}>
+            <li key={`notice-desktop-${sid}`}>
                 <div className={styles.item}>
                     <span className={styles.item_title}>
                         <Link to={`/post/${sid}`}>

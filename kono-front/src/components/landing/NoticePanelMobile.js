@@ -6,6 +6,7 @@ import { GridPanel } from 'components/common';
 
 const CELL_SIZE = 203;
 const GAP_SIZE = 7;
+const SCROLL_LIMIT_THRESHOLD = 50;
 
 export default ({
     notices,
@@ -24,7 +25,7 @@ export default ({
     };
     const onScroll = () => {
         const { scrollLeft, scrollWidth, offsetWidth } = contentPanel.current;
-        if (scrollLeft + offsetWidth >= scrollWidth)
+        if (scrollLeft + offsetWidth + SCROLL_LIMIT_THRESHOLD >= scrollWidth)
             onScrollLimit();
     };
 
@@ -40,7 +41,9 @@ export default ({
         });
 
         return (
-            <div className={styles.grid_item}>
+            <div
+                className={styles.grid_item}
+                key={`notice-mobile-${sid}`}>
                 <Link to={`/post/${sid}`}>
                     <div className={styles.grid_item_date}>{ dateString }</div>
                     <div className={styles.grid_item_title}>{ titleString }</div>

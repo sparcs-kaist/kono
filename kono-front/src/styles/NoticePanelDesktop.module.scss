@@ -24,7 +24,7 @@
             @include flexbox(row, $center: false);
 
             .item_title {
-                width: calc(100% - 105px);
+                width: calc(100% - 120px);
                 font-size: 15px;
                 line-height: 18px;
                 @include link;
@@ -37,7 +37,7 @@
 
             .item_date {
                 width: 90px;
-                margin-left: 15px;
+                margin-left: auto;
                 font-size: 15px;
                 line-height: 18px;
                 color: t(text-secondary);
