@@ -43,9 +43,7 @@ export default ({
             <PanelHeader title={text.title}/>
             <ul>
                 { !isError && notices.map(NoticeComponent) }
-                {
-                    <ErrorHandler showErrorText showSpinner showBackground />
-                }
+                <ErrorHandler showErrorText showSpinner showBackground />
             </ul>
             <PanelFooter
                 currentPage={currentPage}
