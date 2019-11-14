@@ -62,9 +62,15 @@ export const list = async (req, res) => {
     try {
 
         const posts = await db.instance
-            .select('post.sid', 'type', 'title_kr', 'title_en', 'created_time', 'url as thumbnail')
+            .select('sid', 'type', 'title_kr', 'title_en', 'created_time', 
+                db.instance
+                    .select('url')
+                    .from('image')
+                    .whereRaw('image.post_sid = post.sid')
+                    .orderBy('sid')
+                    .limit(1)
+                    .as('thumbnail'))
             .from('post')
-            .leftJoin('image', 'post.sid', 'image.post_sid')
             .where('deleted', 0)
             .where('type', 'like', FILTER_TYPE)
             .orderBy('created_time', 'desc')
