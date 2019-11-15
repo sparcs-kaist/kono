@@ -19,6 +19,12 @@
                 border-radius: 10px;
                 width: 20px;
                 height: 20px;
+                @include flexbox(row, $center: true);
+                @include wide-screen {
+                    border-radius: 15px;
+                    width: 30px;
+                    height: 30px;
+                }
                 &.RoomLegendPanel__empty {
                     background-color: t(panel-background);
                 }
@@ -34,6 +40,11 @@
                 line-height: 15px;
                 font-size: 13px;
                 padding-left: 13px;
+                @include wide-screen {
+                    line-height: 23px;
+                    font-size: 20px;
+                    padding-left: 20px;
+                }
             }
             .RoomLegendPanel__label:hover {
                 color: t(text-highlight-on);

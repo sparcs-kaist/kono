@@ -9,6 +9,11 @@ body {
     margin: 0;
     display: flex;
     font-family: 'Roboto', sans-serif;
+
+    font-size: 16px;
+    @include wide-screen {
+        font-size: 24px;
+    }
 }
 
 #root {
