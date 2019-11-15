@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import styles from 'styles/LostFoundPanelMobile.module.scss';
-import { PanelHeader } from 'components/landing';
-import { GridPanel } from 'components/common';
+import { GridPanel, PanelHeader } from 'components/common';
 
 const CELL_SIZE = 203;
 const GAP_SIZE = 7;

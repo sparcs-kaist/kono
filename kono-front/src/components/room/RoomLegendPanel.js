@@ -1,18 +1,16 @@
 import React from 'react';
 import styles from 'styles/RoomLegendPanel.module.scss';
 import classnames from 'lib/classnames';
-import { MaterialIcon, Spinner } from 'components/common';
+import { RoomRefreshButton } from 'components/room';
 import Text from 'res/texts/RoomLegendPanel.text.json';
 import { useLanguages } from 'lib/hooks';
 
 export default ({ setHighlight, isLoadingRooms, refreshRooms, lastUpdatedTime }) => {
 
-    const [text, language] = useLanguages(Text);
+    const [text] = useLanguages(Text);
 
     const onMouseEnter = (legend) => () => setHighlight(legend);
     const onMouseLeave = () => setHighlight('none');
-    const showRefreshButton = !isLoadingRooms;
-    const showLoadingBanner = isLoadingRooms;
 
     const LegendLabel = ({ labelName }) => (
         <div className={styles.RoomLegendPanel__row}
@@ -37,38 +35,11 @@ export default ({ setHighlight, isLoadingRooms, refreshRooms, lastUpdatedTime })
             <LegendLabel labelName="filled" />
             <LegendLabel labelName="empty"  />
             <LegendLabel labelName="null"   />
-            {
-                showRefreshButton && (
-                    <div className={classnames([
-                            styles.RoomLegendPanel__row,
-                            styles.RoomLegendPanel__refresh
-                        ])}
-                        onClick={refreshRooms}
-                    >
-                        <div className={styles.RoomLegendPanel__square}>
-                            <MaterialIcon md24>refresh</MaterialIcon>
-                        </div>
-                        <div className={styles.RoomLegendPanel__text}>
-                            { text.refresh }: { new Date(lastUpdatedTime).toLocaleTimeString(language) }
-                        </div>
-                    </div>
-                )
-            }
-            {
-                showLoadingBanner && (
-                    <div className={classnames([
-                            styles.RoomLegendPanel__row
-                        ])}
-                    >
-                        <div className={styles.RoomLegendPanel__square}>
-                            <Spinner small primary/>
-                        </div>
-                        <div className={styles.RoomLegendPanel__text}>
-                            { text.loading }
-                        </div>
-                    </div>
-                )
-            }
+            <RoomRefreshButton
+                isLoading={isLoadingRooms}
+                onClickRefresh={refreshRooms}
+                lastUpdatedTime={lastUpdatedTime}
+            />
         </div>
     )
 }

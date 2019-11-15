@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import styles from 'styles/RoomStatePanel.module.scss';
+import styles from 'styles/RoomStatePanelDesktop.module.scss';
 import { RoomDiscoBall } from 'components/room';
 import SVGPathsEmpty from 'res/icons/room-empty.json';
 import SVGPathsFilled from 'res/icons/room-filled.json';
@@ -52,10 +52,10 @@ export default ({ rooms, highlight }) => {
             <Fragment key={`room-fragment-${room_idx}`}>
                 <svg
                     className={classnames([
-                        styles.RoomStatePanel__room_svg,
-                        styles[`RoomStatePanel__room_${stateType}`],
-                        showHighlight && styles.RoomStatePanel__room_highlight,
-                        showAnimation && styles.RoomStatePanel__room_filled_animation
+                        styles.room_svg,
+                        styles[`room_${stateType}`],
+                        showHighlight && styles.room_highlight,
+                        showAnimation && styles.room_filled_animation
                     ])} 
                 >
                     <path
@@ -100,7 +100,7 @@ export default ({ rooms, highlight }) => {
 
     return (
         <div 
-            className={styles.RoomStatePanel}
+            className={styles.RoomStatePanelDesktop}
         >
             {
                 ROOM_NUMBERS.map(i => roomComponents(i))

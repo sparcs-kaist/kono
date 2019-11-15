@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styles from 'styles/RoomPanel.module.scss';
-import { RoomStatePanel, RoomLegendPanel } from 'components/room';
-import { useFetch } from 'lib/hooks';
+import { PanelHeader } from 'components/common';
+import { RoomStatePanelDesktop, RoomLegendPanel } from 'components/room';
+import { useFetch, useLanguages, useWindowDimension } from 'lib/hooks';
 import * as RoomAPI from 'api/room';
+import Text from 'res/texts/RoomPanel.text.json';
 
 export default () => {
 
@@ -13,8 +15,14 @@ export default () => {
         , // isError
         RoomsErrorHandler,
     ] = useFetch([]);
+
     const [highlight, setHighlight] = useState('none');
     const [lastUpdatedTime, setLastUpdatedTime] = useState(Date.now());
+
+    const { width } = useWindowDimension();
+    const showDesktopLayout = width >= 800;
+
+    const [text] = useLanguages(Text);
 
     const refreshRooms = () => {
         fetchRooms(RoomAPI.recentList, []); 
@@ -23,23 +31,31 @@ export default () => {
 
     useEffect(refreshRooms, [fetchRooms]);
 
-    const width = 600;
-    const height = 600;
-    const containerStyle = { width, height };
+    const panelWidth = 600;
+    const panelHeight = 600;
+    const containerStyle = showDesktopLayout ? {
+        width: panelWidth, 
+        height: panelHeight
+    } : {};
 
     return (
         <div className={styles.RoomPanel}
             style={containerStyle}>
             {
-                <RoomStatePanel rooms={rooms} highlight={highlight}/>
+                !showDesktopLayout && <PanelHeader title={text.title}/>
             }
             {
-                <RoomLegendPanel 
-                    isLoadingRooms={isLoadingRooms}
-                    lastUpdatedTime={lastUpdatedTime}
-                    refreshRooms={refreshRooms}
-                    setHighlight={setHighlight}
-                />
+                showDesktopLayout && (
+                    <>
+                        <RoomStatePanelDesktop rooms={rooms} highlight={highlight}/>
+                        <RoomLegendPanel 
+                            isLoadingRooms={isLoadingRooms}
+                            lastUpdatedTime={lastUpdatedTime}
+                            refreshRooms={refreshRooms}
+                            setHighlight={setHighlight}
+                        />
+                    </>
+                )
             }
             {
                 <RoomsErrorHandler
