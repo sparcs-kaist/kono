@@ -8,7 +8,7 @@
     min-height: 600px;
     margin: 50px;
 
-    @include flexbox(column, $center: true);
+    // @include flexbox(column, $center: true);
 
     @include mobile-screen {
         height: auto;
