@@ -56,25 +56,21 @@ export default ({
     return (
         <div className={styles.NoticePanelMobile}>
             <PanelHeader title={text.title}/>
-            {
-                (
-                    <div className={styles.grid_wrapper}
-                        onScroll={onScroll}
-                        ref={contentPanel}>
-                        <GridPanel
-                            gridNumRows={1}
-                            gridNumColumns={numColumns}
-                            totalWidthPixels={panelWidth}
-                            gridGapPixels={GAP_SIZE}
-                            imageURLs={notices.map(notice => notice.thumbnail)}
-                            contentPanels={notices.map(NoticeComponent)}
-                            useDefaultBackground
-                            useBackgroundImageBlur
-                        />
-                        <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner showBackground />
-                    </div>
-                )
-            }
+            <div className={styles.grid_wrapper}
+                onScroll={onScroll}
+                ref={contentPanel}>
+                <GridPanel
+                    gridNumRows={1}
+                    gridNumColumns={numColumns}
+                    totalWidthPixels={panelWidth}
+                    gridGapPixels={GAP_SIZE}
+                    imageURLs={notices.map(notice => notice.thumbnail)}
+                    contentPanels={notices.map(NoticeComponent)}
+                    useDefaultBackground
+                    useBackgroundImageBlur
+                />
+                <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner showBackground />
+            </div>
         </div>
     )
 

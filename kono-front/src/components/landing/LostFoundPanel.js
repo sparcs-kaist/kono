@@ -80,7 +80,7 @@ export default () => {
         };
         setImageList([]);
         fetchInitialImages();
-    }, [showDesktopLayout, fetchImages, pagination]);
+    }, [fetchImages, pagination]);
 
     useEffect(() => {
         setImageList(imageList => imageList.concat(images));

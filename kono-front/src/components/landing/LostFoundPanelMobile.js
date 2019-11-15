@@ -1,10 +1,56 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import styles from 'styles/LostFoundPanelMobile.module.scss';
+import { PanelHeader } from 'components/landing';
+import { GridPanel } from 'components/common';
 
-export default () => {
+const CELL_SIZE = 203;
+const GAP_SIZE = 7;
+const SCROLL_LIMIT_THRESHOLD = 50;
+const MOBILE_PAGINATION = 8;
+
+export default ({
+    imageURLs, imageLinks,
+    numPages,
+    currentPage, setCurrentPage,
+    ErrorHandler,
+    text,
+    setPagination
+}) => {
+
+    const numColumns = imageURLs.length;
+    const panelWidth = CELL_SIZE * numColumns + GAP_SIZE * (numColumns - 1);
+    const contentPanel = useRef();
+
+    const onScrollLimit = () => {
+        if (currentPage < numPages)
+            setCurrentPage(currentPage + 1);
+    };
+    const onScroll = () => {
+        const { scrollLeft, scrollWidth, offsetWidth } = contentPanel.current;
+        if (scrollLeft + offsetWidth + SCROLL_LIMIT_THRESHOLD >= scrollWidth)
+            onScrollLimit();
+    };
+
+    useEffect(() => {
+        setPagination(MOBILE_PAGINATION);
+    }, [setPagination]);
 
     return (
-        <div>
-
+        <div className={styles.LostFoundPanelMobile}>
+            <PanelHeader title={text.title}/>
+            <div className={styles.grid_wrapper}
+                onScroll={onScroll}
+                ref={contentPanel}>
+                <GridPanel
+                    gridNumRows={1}
+                    gridNumColumns={numColumns}
+                    totalWidthPixels={panelWidth}
+                    gridGapPixels={GAP_SIZE}
+                    imageURLs={imageURLs}
+                    imageLinks={imageLinks}
+                />
+                <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner showBackground />
+            </div>
         </div>
     );
 
