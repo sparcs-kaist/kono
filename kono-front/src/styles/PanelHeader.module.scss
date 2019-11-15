@@ -5,6 +5,9 @@
 
         width: 100%;
         margin-bottom: 46px;
+        @include mobile-screen {
+            margin-bottom: 15px;
+        }
 
         color: t(text-primary);
 

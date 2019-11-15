@@ -1,35 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styles from 'styles/NoticePanel.module.scss';
-import { PanelHeader, PanelFooter } from 'components/landing';
+import { NoticePanelDesktop, NoticePanelMobile } from 'components/landing';
 import * as PostAPI from 'api/post';
 import Text from 'res/texts/NoticePanel.text.json';
-import { useWindowDimension, useLanguages, useFetch } from 'lib/hooks';
+import { useLanguages, useFetch, useWindowDimension } from 'lib/hooks';
 
 const NOTICE_PAGINATION = 8;
-const NOTICE_TITLE_MAX_LENGTH = {
-    kr: 24,
-    en: 32
-};
-const NOTICE_TITLE_MAX_LENGTH_NARROW = {
-    kr: 16,
-    en: 24
-};
 
 export default () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const { width } = useWindowDimension();
 
-    const showNarrowLayout = width < 1080;
-    const noticeTitleMaxLength = showNarrowLayout ? NOTICE_TITLE_MAX_LENGTH_NARROW : NOTICE_TITLE_MAX_LENGTH;
+    const showDesktopLayout = width >= 800;
 
     const [
         numNotices, 
         fetchNumNotices, 
         , // isLoading
         isErrorNumNotices,
-        NumNoticesErrorHandler
+        ,
     ] = useFetch(0);
 
     const [
@@ -40,85 +29,82 @@ export default () => {
         NoticesErrorHandler,
     ] = useFetch([]);
 
-    const [text, language] = useLanguages(Text);
-    const numPages = Math.max(1, Math.ceil(numNotices / NOTICE_PAGINATION));
+    const [noticeList, setNoticeList] = useState([]);
 
-    const [titleMaxLength] = useLanguages(noticeTitleMaxLength);
-    const toTitleString = (title) => (
-        title
-            ? (title.length > titleMaxLength ? `${title.substring(0, titleMaxLength)}...` : title)
-            : text.null_title
-    );
+    const [text, language] = useLanguages(Text);
 
     useEffect(() => {
         fetchNumNotices(PostAPI.count, [], data => data.notice);
     }, [fetchNumNotices]);
 
-    /* Fetch new page when currentPage updates */
+    const setCurrentPageWithSideEffect = (value) => {
+        setCurrentPage(value);
+        fetchNotices(
+            PostAPI.list, 
+            [{
+                params: {
+                    filter_type: 'notice',
+                    start_index: (value - 1) * NOTICE_PAGINATION,
+                    max_size: NOTICE_PAGINATION
+                }
+            }]
+        );
+    };
+
     useEffect(() => {
-        fetchNotices(PostAPI.list, [{
-            params: {
-                filter_type: 'notice',
-                start_index: (currentPage - 1) * NOTICE_PAGINATION,
-                max_size: NOTICE_PAGINATION
-            }
-        }]);
-    }, [fetchNotices, currentPage]);
+        const fetchInitialNotices = () => {
+            setCurrentPage(1);
+            fetchNotices(
+                PostAPI.list, 
+                [{
+                    params: {
+                        filter_type: 'notice',
+                        max_size: NOTICE_PAGINATION
+                    }
+                }]
+            );
+        };
+        setNoticeList([]);
+        fetchInitialNotices();
+    }, [showDesktopLayout, fetchNotices])
 
-    return (
-        <div className={styles.NoticePanel}>
-            <PanelHeader title={text.title} link="/notice"/>
-            {
-                <NoticesErrorHandler height={291} showErrorText showSpinner showBackground/>
-            }
-            {
-                !isErrorNotices && (
-                    <ul>
-                        {
-                            notices.map(({
-                                sid, title_kr, title_en, created_time
-                            }) => {
-                                
-                                const title = language === 'kr' ? title_kr : title_en; // cannot use useLangauge Hook: overlapping hooks
-                                const date = new Date(created_time);
+    useEffect(() => {
+        setNoticeList(noticeList => noticeList.concat(notices));
+    }, [notices])
 
-                                return (
-                                    <li key={`notice-${sid}`}>
-                                        <div className={styles.NoticePanel__item}>
-                                            <span className={styles.NoticePanel__item_title}>
-                                                <Link to={`/post/${sid}`}>
-                                                    { toTitleString(title) }
-                                                </Link>
-                                            </span>
-                                            <span className={styles.NoticePanel__item_date}>
-                                                { 
-                                                    date.toLocaleString('default', {
-                                                        year:  'numeric',
-                                                        month: '2-digit',
-                                                        day:   '2-digit'
-                                                    })
-                                                }
-                                            </span>
-                                        </div>
-                                    </li>
-                                );
-                            })
-                        }
-                    </ul>
-                )
-            }
-            {
-               <NumNoticesErrorHandler height={64}/>
-            }
-            {
-                !isErrorNumNotices && (
-                    <PanelFooter 
-                        currentPage={currentPage} 
-                        numPages={numPages}
-                        onClickPage={page => setCurrentPage(page)}
-                    />
-                )
-            }
-        </div>
-    );
+    const transcriptNotice = ({ title_kr, title_en, ...rest }) => ({
+        title: (title_kr && title_en) 
+            ? (language === 'kr' ? title_kr : title_en) 
+            : (title_kr || text.null_title),
+        ...rest
+    });
+    const transcriptedNotices = notices.map(transcriptNotice);
+    const transcriptedNoticeList = noticeList.map(transcriptNotice);
+
+    const numPages = Math.max(1, numNotices / NOTICE_PAGINATION);
+
+    const isError = isErrorNumNotices || isErrorNotices;
+    const ErrorHandlerComponent = NoticesErrorHandler;
+
+    return showDesktopLayout ? (
+        <NoticePanelDesktop
+            notices={transcriptedNotices}
+            numPages={numPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPageWithSideEffect}
+            isError={isError}
+            ErrorHandler={ErrorHandlerComponent}
+            text={text}
+        />
+    ) : (
+        <NoticePanelMobile
+            notices={transcriptedNoticeList}
+            numPages={numPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPageWithSideEffect}
+            isError={isError}
+            ErrorHandler={ErrorHandlerComponent}
+            text={text}
+        />
+    )
 }

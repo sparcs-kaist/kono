@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FullScreen from 'react-full-screen';
 import style from 'styles/PostPageView.module.scss';
-import { StaticContent, Button, MaterialIcon, ImageGridPanel } from 'components/common';
+import { StaticContent, Button, MaterialIcon, GridPanel } from 'components/common';
 import { PostHeader, FullScreenPanel } from 'components/post';
 import * as FullscreenActions from 'store/modules/fullscreen';
 import { useLanguages } from 'lib/hooks';
@@ -24,8 +24,8 @@ export default ({ post }) => {
         return null;
 
     const showContent = (content_kr || content_en);
-    const [contentURL] = (content_kr && content_en) 
-        ? useLanguages({ kr: content_kr, en: content_en })
+    const contentURL = (content_kr && content_en) 
+        ? useLanguages({ kr: content_kr, en: content_en })[0]
         : content_kr;
 
     const dispatch = useDispatch();
@@ -49,13 +49,14 @@ export default ({ post }) => {
                 {
                     showImageThumbnails && (
                         <div className={style.PostPageView__thumbnails}>
-                            <ImageGridPanel
+                            <GridPanel
                                 gridNumRows={1}
                                 gridNumColumns={3}
                                 totalWidthPixels={800}
                                 imageURLs={content_img} 
                                 useDynamicPositioning 
-                                useOnClick />
+                                useOnClick
+                                useOverlapFilter/>
                         </div>
                     )
                 }

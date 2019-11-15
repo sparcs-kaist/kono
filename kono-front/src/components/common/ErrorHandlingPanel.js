@@ -1,5 +1,5 @@
 import React from 'react';
-import style from 'styles/ErrorHandlingPanel.module.scss';
+import styles from 'styles/ErrorHandlingPanel.module.scss';
 import { MaterialIcon, Spinner } from 'components/common';
 import classnames from 'lib/classnames';
 import { useLanguages } from 'lib/hooks';
@@ -14,16 +14,17 @@ export default ({ isLoading, errorCode, width, height, showErrorText, showSpinne
     const showIcon = (errorCode !== errorCodes.ERROR_CONN);
 
     const useBackground = showBackground && !isLoading && (showErrorText || showSpinner);
+    const style = { width, height };
 
     return (
         <div 
             className={
                 classnames([
-                    style.ErrorHandlingPanel,
-                    useBackground && style.ErrorHandlingPanel__use_background
+                    styles.ErrorHandlingPanel,
+                    useBackground && styles.ErrorHandlingPanel__use_background
                 ])
             }
-            style={{ width, height }}
+            style={style}
         >
             {
                 isLoading && (

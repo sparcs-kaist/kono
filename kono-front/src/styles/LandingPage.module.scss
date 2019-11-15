@@ -12,10 +12,11 @@
 
     .LandingPage__container {
         width: 100%;
-        height: calc(100vh - 100px);
+        min-height: calc(100vh - 100px);
         @include flexbox(row, $center: true);
         @include mobile-screen {
             height: auto;
+            min-height: 0;
             @include flexbox(column, $center: true);
         }
 

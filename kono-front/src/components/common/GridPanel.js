@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from 'styles/ImageGridPanel.module.scss';
-import { ImageThumbnailPanel } from 'components/common';
+import styles from 'styles/GridPanel.module.scss';
+import { GridElementPanel } from 'components/common';
 
 function getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColumns) {
 
@@ -67,8 +67,10 @@ export default ({
     gridGapPixels = 7, 
     imageURLs=[],
     imageLinks=[],
+    contentPanels=[],
     useDynamicPositioning,
-    useOnClick
+    useOnClick,
+    ...rest
 }) => {
 
     if (!gridNumRows || !gridNumColumns || !totalWidthPixels)
@@ -82,11 +84,14 @@ export default ({
             return null;
         
         const numImages = imageURLs.length;
-        const gridConfigs = getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColumns);
-        const { gridRows, gridRowSizes, gridColumns, gridColumnSizes, imageWidthCoeffs, imageHeightCoeffs } = gridConfigs;
+        const {
+            gridRows, gridRowSizes, 
+            gridColumns, gridColumnSizes, 
+            imageWidthCoeffs, imageHeightCoeffs 
+        } = getDynamicGridConfigs(numImages, gridNumCells, gridNumRows, gridNumColumns);
 
         return (
-            <div className={styles.ImageGridPanel}>
+            <div className={styles.GridPanel}>
             {
                 [...Array(gridNumCells).keys()].map(idx => {
 
@@ -94,10 +99,13 @@ export default ({
                     const numMoreImages = numImages - gridNumCells;
                     const showOverlapPanel = isLastGrid && (numMoreImages > 0);
                     const overlapText = showOverlapPanel && `+ ${numMoreImages}`;
+                    const OverlapPanel = showOverlapPanel
+                        ? ( <span>{ overlapText }</span> )
+                        : null;
 
                     return (
-                        <ImageThumbnailPanel
-                            key={`thumbnail-${idx}`}
+                        <GridElementPanel
+                            key={`element-${idx}`}
                             gridRow={gridRows[idx]}
                             gridRowSize={gridRowSizes[idx]}
                             gridColumn={gridColumns[idx]}
@@ -106,9 +114,10 @@ export default ({
                             imageWidth={gridCellSize * imageWidthCoeffs[idx] + gridGapPixels * (imageWidthCoeffs[idx] - 1)}
                             imageHeight={gridCellSize * imageHeightCoeffs[idx] + gridGapPixels * (imageHeightCoeffs[idx] - 1)}
                             imageURL={imageURLs[idx]}
-                            showOverlapPanel={showOverlapPanel}
-                            overlapText={overlapText} 
-                            useOnClick={useOnClick && (idx < numImages)} />
+                            OverlapPanel={OverlapPanel}
+                            useOnClick={useOnClick && (idx < numImages)}
+                            { ...rest }
+                        />
                     );
                 })
             }
@@ -123,7 +132,7 @@ export default ({
 
     return (
         <div 
-            className={styles.ImageGridPanel}
+            className={styles.GridPanel}
             style={style}>
             {
                 [...Array(gridNumCells).keys()].map(idx => {
@@ -132,7 +141,7 @@ export default ({
                     const gridColumn = idx % gridNumColumns + 1;
 
                     return (
-                        <ImageThumbnailPanel
+                        <GridElementPanel
                             gridRow={gridRow}
                             gridColumn={gridColumn}
                             imageIndex={idx}
@@ -140,8 +149,11 @@ export default ({
                             imageHeight={gridCellSize}
                             imageURL={imageURLs ? imageURLs[idx] : null}
                             imageLink={imageLinks[idx]}
-                            key={`thumbnail-${idx}`}
-                            useOnClick={useOnClick} />
+                            key={`element-${idx}`}
+                            OverlapPanel={contentPanels[idx]}
+                            useOnClick={useOnClick} 
+                            { ...rest }
+                        />
                     );
                 })
             }
