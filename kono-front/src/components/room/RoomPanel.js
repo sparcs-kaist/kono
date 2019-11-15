@@ -23,8 +23,13 @@ export default () => {
 
     useEffect(refreshRooms, [fetchRooms]);
 
+    const width = 600;
+    const height = 600;
+    const containerStyle = { width, height };
+
     return (
-        <div className={styles.RoomPanel}>
+        <div className={styles.RoomPanel}
+            style={containerStyle}>
             {
                 <RoomStatePanel rooms={rooms} highlight={highlight}/>
             }

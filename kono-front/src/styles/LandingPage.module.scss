@@ -25,7 +25,7 @@
             height: 100%;
             padding: 0 32px;
             &.LandingPage__item_single {
-                width: 100%;
+                width: calc(100% - 64px);
             }
             @include mobile-screen {
                 width: calc(100% - 66px);
@@ -36,8 +36,15 @@
         }
     }
 
+    @include mobile-screen {
+        .LandingPage__container {
+            margin-top: 55px;
+            margin-bottom: 50px;
+        }
+    }
+
     .LandingPage__container + .LandingPage__container {
-        margin-top: 50px;
+        margin-top: 0;
     }
 
 }

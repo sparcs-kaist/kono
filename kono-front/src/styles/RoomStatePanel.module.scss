@@ -18,9 +18,8 @@
 
     .RoomStatePanel {
         overflow: visible;
-        position: absolute;
-        top: 0;
-        left: 30px;
+        width: 100%;
+        height: 100%;
 
         .RoomStatePanel__room_empty {
             fill: t(panel-background);
@@ -46,9 +45,10 @@
         .RoomStatePanel__room_svg {
 
             position: absolute;
-            width: 545px;
-            height: 604px;
+            overflow: visible;
             pointer-events: none;
+            width: 100%;
+            height: 100%;
 
             path {
                 pointer-events: auto;

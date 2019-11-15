@@ -8,10 +8,13 @@ export default () => {
 
     return (
         <div className={styles.LandingPage}>
-            <div className={styles.LandingPage__container}>
+            <div className={classnames([
+                styles.LandingPage__container
+            ])}>
                 <div className={classnames([
                     styles.LandingPage__item,
-                    styles.LandingPage__item_single])}>
+                    styles.LandingPage__item_single
+                ])}>
                     <RoomPanel />
                 </div>
             </div>

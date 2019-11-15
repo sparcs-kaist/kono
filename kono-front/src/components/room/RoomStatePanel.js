@@ -99,18 +99,12 @@ export default ({ rooms, highlight }) => {
     };
 
     return (
-        <div>
-            <div 
-                className={styles.RoomStatePanel} 
-                width="545"
-                height="604" 
-                viewBox="0 0 545 604" 
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                {
-                    ROOM_NUMBERS.map(i => roomComponents(i))
-                }
-            </div>
+        <div 
+            className={styles.RoomStatePanel}
+        >
+            {
+                ROOM_NUMBERS.map(i => roomComponents(i))
+            }
         </div>
     );
 
