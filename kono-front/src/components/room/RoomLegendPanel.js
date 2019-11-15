@@ -30,6 +30,13 @@ export default ({ setHighlight, isLoadingRooms, refreshRooms, lastUpdatedTime })
         </div>
     )
 
+    const stylesRefreshButton = {
+        wrapper: styles.RoomLegendPanel__row,
+        interactable: styles.RoomLegendPanel__refresh,
+        icon: styles.RoomLegendPanel__square,
+        text: styles.RoomLegendPanel__text
+    };
+
     return (
         <div className={styles.RoomLegendPanel}>
             <LegendLabel labelName="filled" />
@@ -39,6 +46,7 @@ export default ({ setHighlight, isLoadingRooms, refreshRooms, lastUpdatedTime })
                 isLoading={isLoadingRooms}
                 onClickRefresh={refreshRooms}
                 lastUpdatedTime={lastUpdatedTime}
+                styles={stylesRefreshButton}
             />
         </div>
     )

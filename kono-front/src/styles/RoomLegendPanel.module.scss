@@ -25,6 +25,7 @@
                     width: 30px;
                     height: 30px;
                 }
+                color: t(text-highlight);
                 &.RoomLegendPanel__empty {
                     background-color: t(panel-background);
                 }
@@ -48,6 +49,10 @@
             }
             .RoomLegendPanel__label:hover {
                 color: t(text-highlight-on);
+            }
+
+            &.RoomLegendPanel__refresh {
+                cursor: pointer;
             }
         }
 

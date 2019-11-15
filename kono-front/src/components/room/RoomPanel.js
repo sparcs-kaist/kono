@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from 'styles/RoomPanel.module.scss';
 import { PanelHeader } from 'components/common';
-import { RoomStatePanelDesktop, RoomLegendPanel } from 'components/room';
+import { RoomStatePanelDesktop, RoomLegendPanel, RoomRefreshButton } from 'components/room';
 import { useFetch, useLanguages, useWindowDimension } from 'lib/hooks';
 import * as RoomAPI from 'api/room';
 import Text from 'res/texts/RoomPanel.text.json';
@@ -37,12 +37,26 @@ export default () => {
         width: panelWidth, 
         height: panelHeight
     } : {};
+    const mobileRefreshButtonStyles = {
+        wrapper: styles.mobile_common_menu,
+        icon: styles.icon,
+        text: styles.text
+    };
 
     return (
         <div className={styles.RoomPanel}
             style={containerStyle}>
             {
-                !showDesktopLayout && <PanelHeader title={text.title}/>
+                !showDesktopLayout && (
+                    <PanelHeader title={text.title}>
+                        <RoomRefreshButton 
+                            isLoading={isLoadingRooms}
+                            onClickRefresh={refreshRooms}
+                            lastUpdatedTime={lastUpdatedTime}
+                            styles={mobileRefreshButtonStyles}
+                        />
+                    </PanelHeader>
+                )
             }
             {
                 showDesktopLayout && (

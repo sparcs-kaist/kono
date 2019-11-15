@@ -8,6 +8,7 @@
         @include mobile-screen {
             margin-bottom: 15px;
         }
+        @include flexbox(row, $center: false);
 
         color: t(text-primary);
 
@@ -20,6 +21,12 @@
                 font-size: 18px;
                 line-height: 21px;
             }
+        }
+
+        .common_menu {
+            margin-left: auto;
+            font-style: normal;
+            font-weight: 500;
         }
 
     }

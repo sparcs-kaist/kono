@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from 'styles/RoomRefreshButton.module.scss';
 import classnames from 'lib/classnames';
 import { MaterialIcon, Spinner } from 'components/common';
 import { useLanguages } from 'lib/hooks';
@@ -8,7 +7,8 @@ import Text from 'res/texts/RoomRefreshButton.text.json';
 export default ({ 
     isLoading, 
     onClickRefresh, 
-    lastUpdatedTime 
+    lastUpdatedTime,
+    styles
 }) => {
 
     const showRefresh = !isLoading;
@@ -16,21 +16,25 @@ export default ({
 
     const [text, language] = useLanguages(Text);
 
+    const {
+        wrapper: styleWrapper,
+        interactable: styleInteractable,
+        icon: styleIcon,
+        text: styleText
+    } = styles || {};
+
     return (
         <>
             {
                 showRefresh && (
                     <div 
-                        className={classnames([
-                            styles.wrapper,
-                            styles.interactable
-                        ])}
+                        className={classnames([styleWrapper, styleInteractable])}
                         onClick={onClickRefresh}
                     >
-                        <div className={styles.icon}>
+                        <div className={styleIcon}>
                             <MaterialIcon md24>refresh</MaterialIcon>
                         </div>
-                        <div className={styles.text}>
+                        <div className={styleText}>
                             { text.refresh }: { new Date(lastUpdatedTime).toLocaleTimeString(language) }
                         </div>
                     </div>
@@ -38,11 +42,11 @@ export default ({
             }
             {
                 showLoading && (
-                    <div className={styles.wrapper}>
-                        <div className={styles.icon}>
+                    <div className={styleWrapper}>
+                        <div className={styleIcon}>
                             <Spinner small primary />
                         </div>
-                        <div className={styles.text}>
+                        <div className={styleText}>
                             { text.loading }
                         </div>
                     </div>
