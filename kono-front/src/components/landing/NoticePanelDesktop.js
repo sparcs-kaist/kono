@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from 'styles/NoticePanelDesktop.module.scss';
-import { PanelHeader, PanelFooter } from 'components/landing';
+import { PanelHeader, PanelFooter } from 'components/common';
 
 export default ({
     notices,

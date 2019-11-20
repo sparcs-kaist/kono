@@ -26,7 +26,7 @@ export default ({
                         className={styles.PanelFooter__link}
                         onClick={() => onClickPage(currentPage - 1)}
                     >
-                        <MaterialIcon>keyboard_arrow_left</MaterialIcon>
+                        <MaterialIcon md20>keyboard_arrow_left</MaterialIcon>
                     </div>
                 ) : null
             }
@@ -51,7 +51,7 @@ export default ({
                         className={styles.PanelFooter__link}
                         onClick={() => onClickPage(currentPage + 1)}
                     >
-                        <MaterialIcon>keyboard_arrow_right</MaterialIcon>
+                        <MaterialIcon md20>keyboard_arrow_right</MaterialIcon>
                     </div>
                 ) : null
             }

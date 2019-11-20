@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import styles from 'styles/NoticePanelMobile.module.scss';
 import { Link } from 'react-router-dom';
-import { PanelHeader } from 'components/landing';
-import { GridPanel } from 'components/common';
+import { PanelHeader, GridPanel } from 'components/common';
 
 const CELL_SIZE = 203;
 const GAP_SIZE = 7;
@@ -69,7 +68,7 @@ export default ({
                     useDefaultBackground
                     useBackgroundImageBlur
                 />
-                <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner showBackground />
+                <ErrorHandler width={'100%'} height={CELL_SIZE} showErrorText showSpinner showBackground />
             </div>
         </div>
     )

@@ -16,39 +16,40 @@
 
 @include themed() {
 
-    .RoomStatePanel {
+    .RoomStatePanelDesktop {
         overflow: visible;
         position: absolute;
         top: 0;
         left: 30px;
 
-        .RoomStatePanel__room_empty {
+        .room_empty {
             fill: t(panel-background);
         }
 
-        .RoomStatePanel__room_filled {
+        .room_filled {
             fill: t(theme-background);
         }
 
-        .RoomStatePanel__room_null {
+        .room_null {
             fill: t(inactive-background);
         }
 
-        .RoomStatePanel__room_highlight {
+        .room_highlight {
             filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2)) brightness(0.9);         
         }
 
-        .RoomStatePanel__room_filled_animation {
+        .room_filled_animation {
             animation: fillColorChange 2s infinite;
             filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2));
         }
 
-        .RoomStatePanel__room_svg {
+        .room_svg {
 
             position: absolute;
+            overflow: visible;
+            pointer-events: none;
             width: 545px;
             height: 604px;
-            pointer-events: none;
 
             path {
                 pointer-events: auto;

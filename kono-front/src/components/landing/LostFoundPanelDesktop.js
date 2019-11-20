@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import styles from 'styles/LostFoundPanelDesktop.module.scss';
-import { PanelHeader, PanelFooter } from 'components/landing';
-import { GridPanel } from 'components/common';
+import { GridPanel, PanelHeader, PanelFooter } from 'components/common';
 
 const PANEL_WIDTH = 440;
 const PANEL_NARROW_WIDTH = 291;

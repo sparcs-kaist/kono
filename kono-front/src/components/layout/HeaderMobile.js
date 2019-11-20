@@ -30,7 +30,7 @@ export default ({
                     className={styles.HeaderMobile__common_menu}
                     onClick={onToggleOpen}
                 >
-                    <MaterialIcon>
+                    <MaterialIcon md20>
                         {
                             open ? 'clear' : 'dehaze'
                         }
@@ -66,14 +66,14 @@ export default ({
                             className={styles.HeaderMobile__dropdown_item}
                             onClick={onToggleTheme}
                         >
-                            <MaterialIcon style={{ padding: '0 5px' }}>brightness_4</MaterialIcon>
+                            <MaterialIcon style={{ padding: '0 5px' }} md20>brightness_4</MaterialIcon>
                             <div>{ text.toggle_theme }</div>
                         </div>
                         <div 
                             className={styles.HeaderMobile__dropdown_item}
                             onClick={onToggleLanguage}
                         >
-                            <MaterialIcon style={{ padding: '0 5px' }}>language</MaterialIcon>
+                            <MaterialIcon style={{ padding: '0 5px' }} md20>language</MaterialIcon>
                             <div>{ text.toggle_language }</div>
                         </div>
                     </div>
