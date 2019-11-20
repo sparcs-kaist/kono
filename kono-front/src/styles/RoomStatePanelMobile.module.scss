@@ -1,5 +1,19 @@
 @import 'mixins/all';
 
+@keyframes backgroundColorChange {
+    
+    0%      {background-color: #6078F5; transform: scale(1);}
+    12%     {background-color: #4C82A2; transform: scale(1.03);}
+    25%     {background-color: #47D2B1; transform: scale(1);}
+    37%     {background-color: #FFF4E8; transform: scale(1.03);}
+    50%     {background-color: #FFE44B; transform: scale(1);}
+    62%     {background-color: #FF2369; transform: scale(1.03);}
+    75%     {background-color: #A01789; transform: scale(1);}
+    87%     {background-color: #6430B8; transform: scale(1.03);}
+    100%    {background-color: #1B2272; transform: scale(1);}
+
+}
+
 @include themed() {
     .RoomStatePanelMobile {
 
@@ -29,6 +43,22 @@
                 border-radius: 5px;
                 @include flexbox(column, $center: true);
                 color: t(text-primary);
+
+                .selected_content {
+                    @include flexbox(column, $center: true);
+                    .selected_number {
+                        font-size: 11px;
+                    }
+                    .selected_state {
+                        font-size: 13px;
+                    }
+                }
+                &.selected {
+                    filter: brightness(0.9);
+                }
+                &.animation {
+                    animation: backgroundColorChange 2s infinite;
+                }
             }
 
             .item_1 {

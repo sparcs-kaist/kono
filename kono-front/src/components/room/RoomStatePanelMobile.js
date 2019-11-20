@@ -41,19 +41,22 @@ export default ({ rooms }) => {
         const { state } = room || {};
         const stateType = formatState(state);
 
+        const isSelected = (selected === room_idx);
+        const showAnimation = isSelected && (state == 1);
+
         const onClick = () => { setSelected(room_idx); };
 
-        const content = (selected === room_idx)
+        const content = isSelected
             ? (
-                <div>
-                    <span>
+                <div className={styles.selected_content}>
+                    <span className={styles.selected_number}>
                         {
                             language === 'kr'
                                 ? `${roomNumber2text(room_idx)}번 방`
                                 : `Room ${roomNumber2text(room_idx)}`
                         }
                     </span>
-                    <span>
+                    <span className={styles.selected_state}>
                         { text[stateType] }
                     </span>
                 </div>
@@ -69,7 +72,9 @@ export default ({ rooms }) => {
                 className={classnames([
                     styles.item,
                     styles[`room_${stateType}`],
-                    styles[`item_${room_idx}`]
+                    styles[`item_${room_idx}`],
+                    isSelected && styles.selected,
+                    showAnimation && styles.animation
                 ])}
                 onClick={onClick}
                 key={`room_mobile_${room_idx}`}
