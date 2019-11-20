@@ -42,7 +42,7 @@ export default ({ rooms }) => {
         const stateType = formatState(state);
 
         const isSelected = (selected === room_idx);
-        const showAnimation = isSelected && (state == 1);
+        const showAnimation = isSelected && (state === 1);
 
         const onClick = () => { setSelected(room_idx); };
 

@@ -12,7 +12,7 @@ export default () => {
         rooms,
         fetchRooms,
         isLoadingRooms,
-        , // isError
+        isErrorRooms,
         RoomsErrorHandler,
     ] = useFetch([]);
 
@@ -31,8 +31,8 @@ export default () => {
 
     useEffect(refreshRooms, [fetchRooms]);
 
-    const panelWidth = 600;
-    const panelHeight = 600;
+    const panelWidth = showDesktopLayout ? 600 : 'calc(100vw - 64px)';
+    const panelHeight = showDesktopLayout ? 600 : 'calc(100vw - 64px)';
     const containerStyle = showDesktopLayout ? {
         width: panelWidth, 
         height: panelHeight
@@ -57,7 +57,11 @@ export default () => {
                                 styles={mobileRefreshButtonStyles}
                             />
                         </PanelHeader>
-                        <RoomStatePanelMobile rooms={rooms} />
+                        {
+                            !isErrorRooms && (
+                                <RoomStatePanelMobile rooms={rooms} />
+                            )
+                        }
                     </>
                 )
             }
@@ -71,15 +75,16 @@ export default () => {
                             refreshRooms={refreshRooms}
                             setHighlight={setHighlight}
                         />
-                        <RoomsErrorHandler
-                            width={600}
-                            height={'calc(100vh - 180px)'}
-                            showSpinner
-                            showErrorText
-                        />
                     </>
                 )
             }
+            <RoomsErrorHandler
+                width={panelWidth}
+                height={panelHeight}
+                showSpinner
+                showErrorText
+                showBackground={!showDesktopLayout}
+            />
         </div>
     );
 }

@@ -48,7 +48,7 @@ export default ({
                     imageURLs={imageURLs}
                     imageLinks={imageLinks}
                 />
-                <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner showBackground />
+                <ErrorHandler width={'100%'} height={CELL_SIZE} showErrorText showSpinner showBackground />
             </div>
         </div>
     );
