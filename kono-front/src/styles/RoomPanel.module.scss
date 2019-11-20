@@ -18,13 +18,14 @@
 
         .mobile_common_menu {
             @include flexbox(row, $center: false);
+            line-height: 13px;
+            font-size: 11px;
+            margin-top: auto;
             .icon {
                 color: t(text-highlight);
             }
             .text {
                 color: t(text-highlight);
-                line-height: 13px;
-                font-size: 11px;
             }
         }
 

@@ -24,6 +24,7 @@
         }
 
         .common_menu {
+            @include flexbox(column, $center: false);
             margin-left: auto;
             font-style: normal;
             font-weight: 500;

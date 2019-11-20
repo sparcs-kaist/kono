@@ -71,13 +71,13 @@ export default ({ post }) => {
             <div className={style.PostPageView__footer}>
                 <a href="/">
                     <Button round>
-                        <MaterialIcon>arrow_back</MaterialIcon>
+                        <MaterialIcon md20>arrow_back</MaterialIcon>
                     </Button>
                 </a>
                 {
                     showEditButton && (
                         <Button round>
-                            <MaterialIcon>edit</MaterialIcon>
+                            <MaterialIcon md20>edit</MaterialIcon>
                         </Button>
                     )
                 }

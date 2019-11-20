@@ -68,16 +68,14 @@ export default () => {
                             refreshRooms={refreshRooms}
                             setHighlight={setHighlight}
                         />
+                        <RoomsErrorHandler
+                            width={600}
+                            height={'calc(100vh - 180px)'}
+                            showSpinner
+                            showErrorText
+                        />
                     </>
                 )
-            }
-            {
-                <RoomsErrorHandler
-                    width={600}
-                    height={'calc(100vh - 180px)'}
-                    showSpinner
-                    showErrorText
-                />
             }
         </div>
     );
