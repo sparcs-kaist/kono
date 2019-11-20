@@ -13,10 +13,21 @@
             grid-template-columns: repeat(3, calc(33.3vw - 21px - 0.2em));
             gap: 0.3em;
 
+            .room_empty {
+                background-color: t(panel-background);
+            }
+    
+            .room_filled {
+                background-color: t(theme-background);
+            }
+    
+            .room_null {
+                background-color: t(inactive-background);
+            }
+
             .item {
                 border-radius: 5px;
                 @include flexbox(column, $center: true);
-                background-color: t(panel-background);
                 color: t(text-primary);
             }
 

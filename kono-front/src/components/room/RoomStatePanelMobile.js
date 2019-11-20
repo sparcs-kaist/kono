@@ -4,39 +4,42 @@ import Text from 'res/texts/RoomStatePanel.text.json';
 import classnames from 'lib/classnames';
 import { useLanguages } from 'lib/hooks';
 
+const ROOM_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
+
+function formatState(state) {
+    if (state === 0)
+        return 'empty';
+    if (state === 1)
+        return 'filled';
+    return 'null';
+}
+
 export default ({ rooms }) => {
+
+    const roomComponents = (room_idx) => {
+
+        const room = rooms.find(e => e.room_number === room_idx);
+        const { state } = room || {};
+        const stateType = formatState(state);
+
+        return (
+            <div className={classnames([
+                styles.item,
+                styles[`room_${stateType}`],
+                styles[`item_${room_idx}`]
+            ])}>
+                { room_idx }
+            </div>
+        )
+
+    }
 
     return (
         <div className={styles.RoomStatePanelMobile}>
             <div className={styles.grid}>
-                <div className={classnames([
-                    styles.item,
-                    styles.item_1
-                ])}>1</div>
-                <div className={classnames([
-                    styles.item,
-                    styles.item_2
-                ])}>2</div>
-                <div className={classnames([
-                    styles.item,
-                    styles.item_3
-                ])}>3</div>
-                <div className={classnames([
-                    styles.item,
-                    styles.item_4
-                ])}>4</div>
-                <div className={classnames([
-                    styles.item,
-                    styles.item_5
-                ])}>5</div>
-                <div className={classnames([
-                    styles.item,
-                    styles.item_6
-                ])}>6</div>
-                <div className={classnames([
-                    styles.item,
-                    styles.item_7
-                ])}>7</div>
+                {
+                    ROOM_NUMBERS.map(i => roomComponents(i))
+                }
             </div>
         </div>
     )
