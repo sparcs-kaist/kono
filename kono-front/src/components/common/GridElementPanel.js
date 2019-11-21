@@ -6,6 +6,10 @@ import * as FullscreenActions from 'store/modules/fullscreen';
 import classnames from 'lib/classnames';
 import { ReactComponent as Background1 } from 'res/icons/grid_element_1.svg';
 import { ReactComponent as Background2 } from 'res/icons/grid_element_2.svg';
+import { ReactComponent as Background3 } from 'res/icons/grid_element_3.svg';
+import { ReactComponent as Background4 } from 'res/icons/grid_element_4.svg';
+import { ReactComponent as Background5 } from 'res/icons/grid_element_5.svg';
+import { ReactComponent as Background6 } from 'res/icons/grid_element_6.svg';
 
 export default ({
     gridRow, gridRowSize=1, 
@@ -103,9 +107,17 @@ export default ({
                 )
             } 
             {   showDefaultBackground && (
-                    (gridRow + gridColumn) & 1 
+                    (gridRow + gridColumn) % 6 == 0
                         ? <Background1 />
-                        : <Background2 />
+                        : (gridRow + gridColumn) % 6 == 1
+                            ? <Background2 />
+                            : (gridRow + gridColumn) % 6 == 2
+                                ? <Background3 />
+                                : (gridRow + gridColumn) % 6 == 3
+                                    ? <Background4 />
+                                    : (gridRow + gridColumn) % 6 == 4
+                                        ? <Background5 />
+                                        : <Background6 />
                 )
             }
             {
