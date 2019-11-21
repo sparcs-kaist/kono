@@ -8,7 +8,7 @@
         width: 100vw;
         z-index: 50;
         @include flexbox(column, $center: false);
-        box-shadow: 0 5px 15px t(panel-background);
+        box-shadow: 0 0 10px rgba(t(inactive-background), 0.6);
         background-color: t(background);
 
         .HeaderMobile__bar {
@@ -57,7 +57,7 @@
             }
             color: t(text-primary);
 
-            transition: max-height .5s ease-out;
+            transition: max-height .5s ease;
 
             max-height: 0;
             overflow: hidden;

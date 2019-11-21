@@ -6,6 +6,10 @@ import * as FullscreenActions from 'store/modules/fullscreen';
 import classnames from 'lib/classnames';
 import { ReactComponent as Background1 } from 'res/icons/grid_element_1.svg';
 import { ReactComponent as Background2 } from 'res/icons/grid_element_2.svg';
+import { ReactComponent as Background3 } from 'res/icons/grid_element_3.svg';
+import { ReactComponent as Background4 } from 'res/icons/grid_element_4.svg';
+import { ReactComponent as Background5 } from 'res/icons/grid_element_5.svg';
+import { ReactComponent as Background6 } from 'res/icons/grid_element_6.svg';
 
 export default ({
     gridRow, gridRowSize=1, 
@@ -54,6 +58,22 @@ export default ({
     const showDefaultBackground = !imageURL && useDefaultBackground;
     const showBlurredBackground = useBackgroundImageBlur && !showDefaultBackground;
     const showOverlapFilter = useOverlapFilter && !showDefaultBackground;
+    const showRandomBackground = (num) => {
+        switch(num) {
+            case 0:
+                return <Background1 />
+            case 1:
+                return <Background2 />
+            case 2:
+                return <Background3 />
+            case 3:
+                return <Background4 />
+            case 4:
+                return <Background5 />
+            default:
+                return <Background6 />
+        }
+    }
 
     const imageStyle = {
         display: isLoading ? 'none' : 'block', // do not show blank div if not loaded
@@ -102,11 +122,8 @@ export default ({
                     )
                 )
             } 
-            {   showDefaultBackground && (
-                    (gridRow + gridColumn) & 1 
-                        ? <Background1 />
-                        : <Background2 />
-                )
+            {   
+                showDefaultBackground && showRandomBackground((gridRow + gridColumn) % 6)
             }
             {
                 OverlapPanel && (
