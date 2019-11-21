@@ -30,8 +30,9 @@
                 .grid_item_date {
                     line-height: 18px;
                     font-size: 15px;
-                    color: #000;
+                    color: #FFF;
                     z-index: 1;
+                    text-shadow: 0 0 15px #000;
                 }
                 .grid_item_title {
                     margin-top: 10px;
@@ -39,6 +40,8 @@
                     font-size: 20px;
                     color: #FFF;
                     z-index: 1;
+                    text-shadow: 0 0 20px #000;
+                    word-break: keep-all;
                 }
             }
         }
