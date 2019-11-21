@@ -58,6 +58,22 @@ export default ({
     const showDefaultBackground = !imageURL && useDefaultBackground;
     const showBlurredBackground = useBackgroundImageBlur && !showDefaultBackground;
     const showOverlapFilter = useOverlapFilter && !showDefaultBackground;
+    const showRandomBackground = (num) => {
+        switch(num) {
+            case 0:
+                return <Background1 />
+            case 1:
+                return <Background2 />
+            case 2:
+                return <Background3 />
+            case 3:
+                return <Background4 />
+            case 4:
+                return <Background5 />
+            default:
+                return <Background6 />
+        }
+    }
 
     const imageStyle = {
         display: isLoading ? 'none' : 'block', // do not show blank div if not loaded
@@ -106,19 +122,8 @@ export default ({
                     )
                 )
             } 
-            {   showDefaultBackground && (
-                    (gridRow + gridColumn) % 6 == 0
-                        ? <Background1 />
-                        : (gridRow + gridColumn) % 6 == 1
-                            ? <Background2 />
-                            : (gridRow + gridColumn) % 6 == 2
-                                ? <Background3 />
-                                : (gridRow + gridColumn) % 6 == 3
-                                    ? <Background4 />
-                                    : (gridRow + gridColumn) % 6 == 4
-                                        ? <Background5 />
-                                        : <Background6 />
-                )
+            {   
+                showDefaultBackground && showRandomBackground((gridRow + gridColumn) % 6)
             }
             {
                 OverlapPanel && (
