@@ -36,20 +36,24 @@ export default ({
 
     return (
         <div className={styles.LostFoundPanelMobile}>
-            <PanelHeader title={text.title}/>
+            <div className={styles.header_wrapper}>
+                <PanelHeader title={text.title}/>
+            </div>
             <div className={styles.grid_wrapper}
                 onScroll={onScroll}
                 ref={contentPanel}>
-                <GridPanel
-                    gridNumRows={1}
-                    gridNumColumns={numColumns}
-                    totalWidthPixels={panelWidth}
-                    gridGapPixels={GAP_SIZE}
-                    imageURLs={imageURLs}
-                    imageLinks={imageLinks}
-                />
-                <ErrorHandler width={'100%'} height={CELL_SIZE} showErrorText showSpinner showBackground />
+                <div className={styles.grid_content}>
+                    <GridPanel
+                        gridNumRows={1}
+                        gridNumColumns={numColumns}
+                        totalWidthPixels={panelWidth}
+                        gridGapPixels={GAP_SIZE}
+                        imageURLs={imageURLs}
+                        imageLinks={imageLinks}
+                    />
+                </div>
             </div>
+            <ErrorHandler width={'100%'} height={CELL_SIZE} showErrorText showSpinner showBackground />
         </div>
     );
 
