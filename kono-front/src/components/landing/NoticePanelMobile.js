@@ -15,7 +15,6 @@ export default ({
 }) => {
 
     const numColumns = notices.length;
-    const panelWidth = CELL_SIZE * numColumns + GAP_SIZE * (numColumns - 1) + 66;
     const contentPanel = useRef();
 
     const onScrollLimit = () => {
@@ -64,7 +63,7 @@ export default ({
                     <GridPanel
                         gridNumRows={1}
                         gridNumColumns={numColumns}
-                        totalWidthPixels={panelWidth}
+                        gridFixedCellSize={CELL_SIZE}
                         gridGapPixels={GAP_SIZE}
                         imageURLs={notices.map(notice => notice.thumbnail)}
                         contentPanels={notices.map(NoticeComponent)}
@@ -72,8 +71,8 @@ export default ({
                         useBackgroundImageBlur
                     />
                 </div>
+                <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner />
             </div>
-            <ErrorHandler width={'100%'} height={CELL_SIZE} showErrorText showSpinner showBackground />
         </div>
     )
 

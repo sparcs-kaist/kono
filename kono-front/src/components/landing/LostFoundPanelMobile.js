@@ -17,7 +17,6 @@ export default ({
 }) => {
 
     const numColumns = imageURLs.length;
-    const panelWidth = CELL_SIZE * numColumns + GAP_SIZE * (numColumns - 1);
     const contentPanel = useRef();
 
     const onScrollLimit = () => {
@@ -46,14 +45,14 @@ export default ({
                     <GridPanel
                         gridNumRows={1}
                         gridNumColumns={numColumns}
-                        totalWidthPixels={panelWidth}
+                        gridFixedCellSize={CELL_SIZE}
                         gridGapPixels={GAP_SIZE}
                         imageURLs={imageURLs}
                         imageLinks={imageLinks}
                     />
                 </div>
+                <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner />
             </div>
-            <ErrorHandler width={'100%'} height={CELL_SIZE} showErrorText showSpinner showBackground />
         </div>
     );
 
