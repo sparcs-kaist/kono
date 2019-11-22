@@ -15,7 +15,6 @@ export default ({
 }) => {
 
     const numColumns = notices.length;
-    const panelWidth = CELL_SIZE * numColumns + GAP_SIZE * (numColumns - 1);
     const contentPanel = useRef();
 
     const onScrollLimit = () => {
@@ -54,21 +53,25 @@ export default ({
 
     return (
         <div className={styles.NoticePanelMobile}>
-            <PanelHeader title={text.title}/>
+            <div className={styles.header_wrapper}>
+                <PanelHeader title={text.title}/>
+            </div>
             <div className={styles.grid_wrapper}
                 onScroll={onScroll}
                 ref={contentPanel}>
-                <GridPanel
-                    gridNumRows={1}
-                    gridNumColumns={numColumns}
-                    totalWidthPixels={panelWidth}
-                    gridGapPixels={GAP_SIZE}
-                    imageURLs={notices.map(notice => notice.thumbnail)}
-                    contentPanels={notices.map(NoticeComponent)}
-                    useDefaultBackground
-                    useBackgroundImageBlur
-                />
-                <ErrorHandler width={'100%'} height={CELL_SIZE} showErrorText showSpinner showBackground />
+                <div className={styles.grid_content}>
+                    <GridPanel
+                        gridNumRows={1}
+                        gridNumColumns={numColumns}
+                        gridFixedCellSize={CELL_SIZE}
+                        gridGapPixels={GAP_SIZE}
+                        imageURLs={notices.map(notice => notice.thumbnail)}
+                        contentPanels={notices.map(NoticeComponent)}
+                        useDefaultBackground
+                        useBackgroundImageBlur
+                    />
+                </div>
+                <ErrorHandler width={CELL_SIZE} height={CELL_SIZE} showErrorText showSpinner />
             </div>
         </div>
     )

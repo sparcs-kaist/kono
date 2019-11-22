@@ -64,6 +64,7 @@ export default ({
     gridNumRows, 
     gridNumColumns, 
     totalWidthPixels,
+    gridFixedCellSize,
     gridGapPixels = 7, 
     imageURLs=[],
     imageLinks=[],
@@ -73,11 +74,18 @@ export default ({
     ...rest
 }) => {
 
-    if (!gridNumRows || !gridNumColumns || !totalWidthPixels)
+    if (!gridNumRows || !gridNumColumns || (!totalWidthPixels && !gridFixedCellSize))
         return null;
 
     const gridNumCells = gridNumRows * gridNumColumns;
-    const gridCellSize = (totalWidthPixels - gridGapPixels * (gridNumColumns - 1)) / gridNumColumns;
+
+    /* Determine cell size
+     *   Fixed cell size: use gridFixedCellSize option
+     *   Dynamic cell size (determined by container): use totalWidthPixels option 
+     */
+    const gridCellSize = gridFixedCellSize
+        ? gridFixedCellSize
+        : (totalWidthPixels - gridGapPixels * (gridNumColumns - 1)) / gridNumColumns;
         
     if (useDynamicPositioning) {
         if (!imageURLs || imageURLs.length === 0)
