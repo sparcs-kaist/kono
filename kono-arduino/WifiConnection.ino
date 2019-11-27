@@ -50,7 +50,7 @@ void setup() {
   wifi_station_clear_enterprise_new_password();
   wifi_station_set_wpa2_enterprise_auth(1);
   
-  wifi_set_opmode(STATION_MODE); // Set ESP to STATION mode only, not SOFTAP mode
+  wifi_set_opmode(STATION_MODE); 
   struct station_config wifi_config;
   memset(&wifi_config, 0, sizeof(wifi_config));
   strncpy((char *)wifi_config.ssid, ssid, strlen(ssid));
@@ -63,9 +63,9 @@ void setup() {
   Serial.println("Configuring WPA2 Connection Done.");
   Serial.println("");
   delay(500);
-  /* End WPA2 Connection Configuration. */
+  
   wifi_station_connect();
-  /* Wait for Connection and IP Address from DHCP. */
+ 
   Serial.println("Waiting for connection and IP Address from DHCP...");
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print("Wi-Fi Status: ");
@@ -89,8 +89,7 @@ void loop() {
   uint32_t now = millis();
   if (now - last_time > 100) {
 #if 0
-    //see the derivative of a specific channel when you're adjusting the threshold
-    //open the Serial Plotter
+  
     Serial.print(detector.getDerivativeOfIR1());
     Serial.print(" ");
     Serial.print(detector.getDerivativeOfIR2());
@@ -111,10 +110,10 @@ void loop() {
   Serial.print("Wi-Fi Status: ");
   Serial.println(WiFi.status());
   
-  if(WiFi.status()==3){
+  if(WiFi.status()==3){//when wifi connected, led light is on
 
     //admin login
-    StaticJsonBuffer<300> JSONbuffer;   //Declaring static JSON buffer
+    StaticJsonBuffer<300> JSONbuffer;   
     JsonObject& JSONencoder = JSONbuffer.createObject();
     const char * headerkeys[] = {"Set-Cookie"} ;
     String setheader;
@@ -124,44 +123,44 @@ void loop() {
     JSONencoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
 
     
-    HTTPClient http;    //Declare object of class HTTPClient
+    HTTPClient http;    
   
-    http.begin("http://ssal.sparcs.org:32778/api/v1/auth/login");      //Specify request destination
-    http.addHeader("Content-Type", "application/json");  //Specify content-type header
+    http.begin("http://ssal.sparcs.org:32778/api/v1/auth/login");//adminlogin api
+    http.addHeader("Content-Type", "application/json"); 
     http.collectHeaders(headerkeys,headerkeyssize);
-    int httpCode = http.POST(JSONmessageBuffer);   //Send the request 
-    String payload = http.getString();                                        //Get the response payload
-    Serial.println(httpCode);   //Print HTTP return code
-    Serial.println(payload);
+    int httpCode = http.POST(JSONmessageBuffer);   
+    String payload = http.getString();//return message of adminlogin                                       
+    Serial.println(httpCode);//print http code of adminlogin
+    Serial.println(payload);//print message of adminlogin
     int s=0;
-    setheader=http.header(s);
+    setheader=http.header(s);//setheader is set to contents of setcookie
     for (int i=0; i < http.headers(); i++) {
       Serial.printf("%s = %s\r\n", http.headerName(i).c_str(), http.header(i).c_str());
     }
-    http.end();  //Close connection
+    http.end();//end connection
 
     Serial.println("\n");
     Serial.println("\n");
     Serial.println("\n");
-    Serial.println("start");
+    Serial.println("start");//start of update process
     //updating objects
     StaticJsonBuffer<300> JSONbufferroom;   //Declaring static JSON buffer
     JsonObject& JSONencoderroom = JSONbufferroom.createObject();;
     char JSONmessageBufferroom[300];
     JSONencoderroom.prettyPrintTo(JSONmessageBufferroom, sizeof(JSONmessageBufferroom));
-    Serial.println(currstate);
-    if(currstate=="0"){
+    Serial.println(currstate);//check if the currstate set by sensor is ok
+    if(currstate=="0"){//when there is no person
       http.begin("http://konoserver/api/v1/room?room_number=4&state=0");
       http.addHeader("Cookie", setheader);
-    }else{
+    }else{//when there is person
       http.begin("http://konoserver/api/v1/room?room_number=4&state=1");
       http.addHeader("Cookie", setheader);
     }
-    Serial.println(setheader);
+    Serial.println(setheader);//check if cookie is correctly set
     int httpCode2=http.POST(JSONmessageBufferroom);
     String payload2 = http.getString();
-    Serial.println(httpCode2);
-    Serial.println(payload2);
+    Serial.println(httpCode2);//http code of update room process
+    Serial.println(payload2);//ret message of update room process
     http.end();
 
     Serial.println("end");
@@ -173,7 +172,7 @@ void loop() {
   
     
   }else{
-    digitalWrite(D8,LOW);
+    digitalWrite(D8,LOW);//when no connection, led light is off
   }
   delay(5000);
   
