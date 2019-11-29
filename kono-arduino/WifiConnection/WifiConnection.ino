@@ -86,9 +86,16 @@ void setup() {
   
 }
 void loop() {
+  
+  //Checking wifi status with serial.print
+  Serial.print("Wi-Fi Status: ");
+  Serial.println(WiFi.status());
+
+  
+  //Presence sensor setting currstate
   detector.loop();
-  String currstate;
   uint32_t now = millis();
+  String currstate;
   if (now - last_time > 100) {
 #if 0
     //see the derivative of a specific channel when you're adjusting the threshold
@@ -109,15 +116,16 @@ void loop() {
 #endif
     last_time = now;
   }
-  
-  Serial.print("Wi-Fi Status: ");
-  Serial.println(WiFi.status());
-  HTTPClient http;
-  
-  if(WiFi.status()==3){//if connected
 
-    if(setheader!=""){
-      //updating objects
+  HTTPClient http;
+  int firstelem=0;
+  int httpCode;
+  String payload;
+  if(WiFi.status()==3){//if connected
+    
+    if ( setheader!="" ) {//If setheader(cookie) is not defined
+      
+      //setup
       StaticJsonBuffer<300> JSONbufferroom;   //Declaring static JSON buffer
       JsonObject& JSONencoderroom = JSONbufferroom.createObject();
       const char * headerkeys[] = {"Set-Cookie"} ;
@@ -125,24 +133,29 @@ void loop() {
       char JSONmessageBufferroom[300];
       JSONencoderroom.prettyPrintTo(JSONmessageBufferroom, sizeof(JSONmessageBufferroom));
       Serial.println(currstate);
-      //sprintf
+
+      //making connections
       http.begin("http://ssal.sparcs.org:32778/api/v1/room?room_number=4&state="+currstate);
       http.addHeader("Cookie", setheader);
       http.collectHeaders(headerkeys,headerkeyssize);
-      int s=0;
-      tempheader=http.header(s);
-      Serial.println(tempheader);
+      httpCode=http.POST(JSONmessageBufferroom);
+
+      //updating cookie if header exists
+      tempheader=http.header(firstelem);
       if(tempheader!=""){//update setheader containing setcookie
         setheader=tempheader;
         tempheader="";
       }
-      int httpCode2=http.POST(JSONmessageBufferroom);
-      String payload2 = http.getString();
-      Serial.println(httpCode2);
-      Serial.println(payload2);
+
+      //result of connections and end of connection
+      payload = http.getString();
+      Serial.println(httpCode);
+      Serial.println(payload);
       http.end();
-    }else{
-      //re-login
+      
+    } else {
+      
+      //setup
       StaticJsonBuffer<300> JSONbuffer;   //Declaring static JSON buffer
       JsonObject& JSONencoder = JSONbuffer.createObject();
       const char * headerkeys[] = {"Set-Cookie"} ;
@@ -150,19 +163,20 @@ void loop() {
       JSONencoder["password"] = "inhibitor";
       char JSONmessageBuffer[300];
       JSONencoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
-    
+
+      //making connections
       http.begin("http://ssal.sparcs.org:32778/api/v1/auth/login");      //Specify request destination
       http.addHeader("Content-Type", "application/json");  //Specify content-type header
-      http.collectHeaders(headerkeys,headerkeyssize);
-      int httpCode = http.POST(JSONmessageBuffer);   //Send the request 
-      String payload = http.getString();         //Get the response payload
+      http.collectHeaders(headerkeys,headerkeyssize); //Get headers
+      httpCode = http.POST(JSONmessageBuffer);   //Send the request 
+      
+      //updating cookie
+      setheader=http.header(firstelem);setheader=http.header(firstelem);
+      
+      //print result and set *setheader with the login result
+      payload = http.getString();         //Get the response payload
       Serial.println(httpCode);   //Print HTTP return code
       Serial.println(payload);
-      int s=0;
-      setheader=http.header(s);
-      for (int i=0; i < http.headers(); i++) {
-        Serial.printf("%s = %s\r\n", http.headerName(i).c_str(), http.header(i).c_str());
-      }
       http.end();  //Close connection
     }
     
