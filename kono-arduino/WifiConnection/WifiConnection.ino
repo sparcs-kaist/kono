@@ -3,10 +3,6 @@
 #include <ESP8266HTTPClient.h>
 #include "Grove_Human_Presence_Sensor.h"
 
-#include <Wire.h>
-
-#include "Grove_Human_Presence_Sensor.h" 
-
 AK9753 movementSensor;
 
 // need to adjust these sensitivities lower if you want to detect more far
@@ -96,6 +92,7 @@ void loop() {
   detector.loop();
   uint32_t now = millis();
   String currstate;
+  String roomnumber="4";
   if (now - last_time > 100) {
 #if 0
     //see the derivative of a specific channel when you're adjusting the threshold
@@ -118,30 +115,30 @@ void loop() {
   }
 
   HTTPClient http;
-  int firstelem=0;
+  const int FIRST_ELEM=0;
   int httpCode;
   String payload;
+  const char * headerkeys[] = {"Set-Cookie"} ;
   if(WiFi.status()==3){//if connected
     
-    if ( setheader!="" ) {//If setheader(cookie) is not defined
+    if ( setheader!="" ) {//If setheader(cookie) is defined
       
       //setup
       StaticJsonBuffer<300> JSONbufferroom;   //Declaring static JSON buffer
       JsonObject& JSONencoderroom = JSONbufferroom.createObject();
-      const char * headerkeys[] = {"Set-Cookie"} ;
       size_t headerkeyssize = sizeof(headerkeys)/sizeof(char*);
       char JSONmessageBufferroom[300];
       JSONencoderroom.prettyPrintTo(JSONmessageBufferroom, sizeof(JSONmessageBufferroom));
       Serial.println(currstate);
 
       //making connections
-      http.begin("http://ssal.sparcs.org:32778/api/v1/room?room_number=4&state="+currstate);
+      http.begin("http://ssal.sparcs.org:32778/api/v1/room?room_number="+roomnumber+"&state="+currstate);
       http.addHeader("Cookie", setheader);
       http.collectHeaders(headerkeys,headerkeyssize);
       httpCode=http.POST(JSONmessageBufferroom);
 
       //updating cookie if header exists
-      tempheader=http.header(firstelem);
+      tempheader=http.header(FIRST_ELEM);
       if(tempheader!=""){//update setheader containing setcookie
         setheader=tempheader;
         tempheader="";
@@ -152,15 +149,15 @@ void loop() {
       Serial.println(httpCode);
       Serial.println(payload);
       http.end();
+      JSONbufferroom.clear();
       
     } else {
       
       //setup
       StaticJsonBuffer<300> JSONbuffer;   //Declaring static JSON buffer
       JsonObject& JSONencoder = JSONbuffer.createObject();
-      const char * headerkeys[] = {"Set-Cookie"} ;
       size_t headerkeyssize = sizeof(headerkeys)/sizeof(char*);
-      JSONencoder["password"] = "inhibitor";
+      JSONencoder["password"] = "";
       char JSONmessageBuffer[300];
       JSONencoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
 
@@ -171,13 +168,14 @@ void loop() {
       httpCode = http.POST(JSONmessageBuffer);   //Send the request 
       
       //updating cookie
-      setheader=http.header(firstelem);setheader=http.header(firstelem);
+      setheader=http.header(FIRST_ELEM);
       
       //print result and set *setheader with the login result
       payload = http.getString();         //Get the response payload
       Serial.println(httpCode);   //Print HTTP return code
       Serial.println(payload);
       http.end();  //Close connection
+      JSONbuffer.clear();
     }
     
   }else{//if not connected
