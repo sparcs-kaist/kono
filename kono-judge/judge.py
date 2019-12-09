@@ -6,17 +6,31 @@ from dotenv import load_dotenv
 load_dotenv()
 PORT = os.getenv('PORT')
 
-async def hello(websocket, path):
-    name = await websocket.recv()
-    print(f"< {name}")
+COLLECTORS = set()
+QUEUE = []
 
-    greeting = f"Hello {name}!"
+async def register(websocket):
+    COLLECTORS.add(websocket)
+    print(COLLECTORS)
 
-    await websocket.send(greeting)
-    print(f"> {greeting}")
+async def unregister(websocket):
+    COLLECTORS.remove(websocket)
+    print(COLLECTORS)
+
+async def notify_collector(websocket):
+    await websocket.send('tt')
+
+async def routine(websocket, path):
+    await register(websocket)
+    try:
+        async for message in websocket:
+            print(f"message: {message}")
+            await notify_collector(websocket)
+    finally:
+        await unregister(websocket)
 
 def main():
-    start_server = websockets.serve(hello, 'localhost', PORT)
+    start_server = websockets.serve(routine, '0.0.0.0', PORT)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
 
