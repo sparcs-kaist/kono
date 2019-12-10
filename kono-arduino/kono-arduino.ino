@@ -10,10 +10,10 @@ extern "C"
 #define __DEBUG__
 
 /* Configurations for network connection. */
-static char *SSID     = "Welcome_KAIST";
-static char *USERNAME = "inhibitor";
-static char *PASSWORD = "21crobit!!";
-static char *WEBSOCKET_HOST = "143.248.192.45";
+static char *SSID     = "";
+static char *USERNAME = "";
+static char *PASSWORD = "";
+static char *WEBSOCKET_HOST = "";
 static char *WEBSOCKET_PATH = "";
 static int   WEBSOCKET_PORT = 7077;
 
