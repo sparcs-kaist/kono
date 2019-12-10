@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketClient.h>
+#include "confidentials.h"
 
 extern "C"
 {
@@ -10,12 +11,12 @@ extern "C"
 #define __DEBUG__
 
 /* Configurations for network connection. */
-static char *SSID     = "Welcome_KAIST";
-static char *USERNAME = "inhibitor";
-static char *PASSWORD = "21crobit!!";
-static char *WEBSOCKET_HOST = "143.248.192.45";
-static char *WEBSOCKET_PATH = "";
-static int   WEBSOCKET_PORT = 7077;
+extern const char *SSID;
+extern const char *USERNAME;
+extern const char *PASSWORD;
+extern const char *WEBSOCKET_HOST;
+extern const char *WEBSOCKET_PATH;
+extern const int   WEBSOCKET_PORT;
 
 /* Global variables. */
 static bool g_error = false;
@@ -111,8 +112,8 @@ void setup()
     }
 
     /* Setup WebSocket connection settings. */
-    g_websocket_client.host = WEBSOCKET_HOST;
-    g_websocket_client.path = WEBSOCKET_PATH;
+    g_websocket_client.host = (char *) WEBSOCKET_HOST;
+    g_websocket_client.path = (char *) WEBSOCKET_PATH;
     if (g_websocket_client.handshake(g_wifi_client))
     {
 #ifdef __DEBUG__
@@ -134,7 +135,7 @@ void loop()
 {
 
     String websocket_recv_data;
-
+    
     if (g_error)
     {
         return;
@@ -154,13 +155,14 @@ void loop()
             }
           
             g_websocket_client.sendData("inhibitor");
-            delay(3000);
+            delay(500);
         }
         else
         {
 #ifdef __DEBUG__
             Serial.println("Disconnected from WebSocket server.");
-#endif
+            Serial.println(g_wifi_client.status());
+#endif  
             g_error = true;
             return;
         }
