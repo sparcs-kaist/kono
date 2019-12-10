@@ -19,9 +19,49 @@ extern const char *WEBSOCKET_PATH;
 extern const int   WEBSOCKET_PORT;
 
 /* Global variables. */
-static bool g_error = false;
+static bool            g_error = false;
 static WiFiClient      g_wifi_client;
 static WebSocketClient g_websocket_client;
+
+void connect_websocket()
+{
+    /* TCP Connection to websocket server. */
+    if (g_wifi_client.connect(WEBSOCKET_HOST, WEBSOCKET_PORT))
+    {
+#ifdef __DEBUG__
+        Serial.print("Connected to WebSocket server: ");
+        Serial.print(WEBSOCKET_HOST);
+        Serial.print(":");
+        Serial.println(WEBSOCKET_PORT);
+#endif
+    }
+    else
+    {
+#ifdef __DEBUG__
+        Serial.println("Connection failed to WebSocket server.");
+#endif
+        delay(5000);
+        return;
+    }
+
+    /* Setup WebSocket connection settings. */
+    g_websocket_client.host = (char *) WEBSOCKET_HOST;
+    g_websocket_client.path = (char *) WEBSOCKET_PATH;
+    if (g_websocket_client.handshake(g_wifi_client))
+    {
+#ifdef __DEBUG__
+        Serial.println("Handshake successful");
+#endif
+    }
+    else
+    {
+#ifdef __DEBUG__
+        Serial.println("Handshake failed.");
+#endif
+        delay(5000);
+        return;
+    }
+}
 
 void setup()
 {
@@ -92,42 +132,7 @@ void setup()
     Serial.println(WiFi.localIP());
 #endif
 
-    /* TCP Connection to websocket server. */
-    if (g_wifi_client.connect(WEBSOCKET_HOST, WEBSOCKET_PORT))
-    {
-#ifdef __DEBUG__
-        Serial.print("Connected to WebSocket server: ");
-        Serial.print(WEBSOCKET_HOST);
-        Serial.print(":");
-        Serial.println(WEBSOCKET_PORT);
-#endif
-    }
-    else
-    {
-#ifdef __DEBUG__
-        Serial.println("Connection failed to WebSocket server.");
-#endif
-        g_error = true;
-        return;
-    }
-
-    /* Setup WebSocket connection settings. */
-    g_websocket_client.host = (char *) WEBSOCKET_HOST;
-    g_websocket_client.path = (char *) WEBSOCKET_PATH;
-    if (g_websocket_client.handshake(g_wifi_client))
-    {
-#ifdef __DEBUG__
-        Serial.println("Handshake successful");
-#endif
-    }
-    else
-    {
-#ifdef __DEBUG__
-        Serial.println("Handshake failed.");
-#endif
-        g_error = true;
-        return;
-    }
+    connect_websocket();
 
 }
 
@@ -146,24 +151,14 @@ void loop()
     {
         if (g_wifi_client.connected())
         {
-            g_websocket_client.getData(websocket_recv_data);
-            if (websocket_recv_data.length() > 0)
-            {
-#ifdef __DEBUG__
-                Serial.println(websocket_recv_data);
-#endif
-            }
-          
-            g_websocket_client.sendData("inhibitor");
-            delay(500);
+            // do something
         }
         else
         {
 #ifdef __DEBUG__
-            Serial.println("Disconnected from WebSocket server.");
-            Serial.println(g_wifi_client.status());
+            Serial.println("Disconnected from WebSocket server. Attepting to reconnect...");
 #endif  
-            g_error = true;
+            connect_websocket();
             return;
         }
     }
@@ -173,7 +168,7 @@ void loop()
         Serial.println("Disconnected from Wi-Fi. Attempting to reconnect...");
 #endif
         wifi_station_connect();
-        delay(1000);
+        delay(5000);
     }
     
     
