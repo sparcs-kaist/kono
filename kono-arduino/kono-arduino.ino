@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 #include "confidentials.h"
+#include "StreamingQueue.h"
 
 extern "C"
 {
@@ -32,20 +33,19 @@ void websocket_event(WStype_t type, uint8_t *payload, size_t len)
             break;
         case WStype_CONNECTED:
 #ifdef __DEBUG__
-            Serial.print("[WSc] Connected to url: ");
-            Serial.println((char *)payload);
+            Serial.print("[WSc] Connected to host: ");
+            Serial.println((char *) payload);
 #endif
-            g_websocket_client.sendTXT("Connected");
             break;
         case WStype_TEXT:
 #ifdef __DEBUG__
-            Serial.print("[WSc] get text: ");
+            Serial.print("[WSc] Received text: ");
             Serial.println((char *)payload);
 #endif
             break;
         case WStype_BIN:
 #ifdef __DEBUG__
-            Serial.print("[WSc] get binary length: ");
+            Serial.print("[WSc] Received binary length: ");
             Serial.println(len);
             hexdump(payload, len);
 #endif
@@ -121,6 +121,8 @@ void setup()
 
     g_websocket_client.begin(WEBSOCKET_HOST, WEBSOCKET_PORT);
     g_websocket_client.onEvent(websocket_event);
+
+    Serial.println(sizeof(Packet));
 
 }
 
