@@ -21,6 +21,10 @@ extern const uint16_t WEBSOCKET_PORT;
 /* Global variables. */
 static bool             g_error = false;
 static WebSocketsClient g_websocket_client;
+static StreamingQueue  *g_queue;
+
+// test
+float data[] = { 0, 1, 2, 3, 4, 5, 6 };
 
 void websocket_event(WStype_t type, uint8_t *payload, size_t len)
 {
@@ -122,7 +126,10 @@ void setup()
     g_websocket_client.begin(WEBSOCKET_HOST, WEBSOCKET_PORT);
     g_websocket_client.onEvent(websocket_event);
 
-    Serial.println(sizeof(Packet));
+    g_queue = new StreamingQueue(g_websocket_client);
+
+    // test
+    g_queue->push(Packet(millis(), data));
 
 }
 
@@ -141,6 +148,7 @@ void loop()
     if (WiFi.status() == WL_CONNECTED)
     {
         g_websocket_client.loop();
+        g_queue->loop();
     }
     else
     {
@@ -150,6 +158,7 @@ void loop()
         wifi_station_connect();
         delay(5000);
     }
-    
+
+    delay(500);
     
 }

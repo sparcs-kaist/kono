@@ -1,27 +1,113 @@
 /* StreamingQueue.cpp */
 
 #include "StreamingQueue.h"
+#include <stdlib.h>
+#include <Arduino.h>
 
 #define QUEUE_SIZE 8192 // 8KB Queue
+#define QUEUE_CAP  (QUEUE_SIZE / sizeof(Packet))
 
-StreamingQueue::StreamingQueue()
+/* Comment the following line on release. */
+#define __DEBUG__
+
+StreamingQueue::StreamingQueue(WebSocketsClient client)
 {
+    _mem  = reinterpret_cast<PACKET_T>( calloc(1, QUEUE_SIZE) );
+    _head = _tail = _wait = _mem;
     
+    _empty      = true;
+    _full       = false;
+    _wait_empty = true;
+    
+    _client     = client;
 }
 
-void StreamingQueue::push(Packet pakcet)
+StreamingQueue::~StreamingQueue()
 {
-    
+    free(_mem);
+}
+
+void StreamingQueue::push(Packet packet)
+{
+    noInterrupts(); // disable interrupt: entry of critical code
+  
+    if (_empty)
+        _empty = false;
+
+    if (_full)
+    {
+        /* If queue is already full, discard the oldest packet in the waiting list. */
+#ifdef __DEBUG__
+        Serial.print("[StQ] discarding data on timestamp: ");
+        Serial.println(_tail->timestamp);
+#endif
+        if (_wait_empty)
+            _wait = _incr(_wait);
+        _tail = _incr(_tail);
+    }
+
+    /* Fill data at the space next to _head and proceed _head */
+    memcpy(_head, &packet, sizeof(packet));
+    _head = _incr(_head);
+
+    if (_head == _tail)
+        _full = true;
+
+    interrupts(); // enable interrupt again
 }
 
 void StreamingQueue::loop()
 {
-    
+  
+    noInterrupts(); // disable interrupt: entry of critical code
+
+    for ( ; _wait != _head; _wait = _incr(_wait))
+    {
+      
+        /* Send packet at _wait through WebSocket. */
+        if (_client.sendBIN(reinterpret_cast<uint8_t *>(_wait), sizeof(Packet)))
+        {
+#ifdef __DEBUG__
+            Serial.print("[StQ] data sent: ");
+            Serial.println(_wait->timestamp);
+#endif
+            _wait_empty = false;
+        }
+        else
+        {
+#ifdef __DEBUG__
+            Serial.println("[StQ] data send failed!");
+#endif
+            break;
+        }
+    }
+
+    interrupts(); // enable interrupt again
+
 }
 
 bool StreamingQueue::pop(uint32_t timestamp)
 {
-    return true;   
+    bool success;
+    
+    noInterrupts(); // disable interrupt: entry of critical code
+
+    if (_empty)
+        success = false;
+    else
+    {
+        success = (_tail->timestamp == timestamp);
+        if (success)
+        {
+            _tail = _incr(_tail);
+            if (_tail == _wait)
+                _wait_empty = true;
+        }
+    }
+
+    interrupts(); // enable interrupt again
+  
+    return success;   
 }
 
 bool StreamingQueue::empty()
@@ -34,7 +120,18 @@ bool StreamingQueue::full()
     return _full;
 }
 
-void StreamingQueue::_send_packet()
+uint16_t StreamingQueue::size()
 {
-    
+    if (_empty)
+        return 0;
+
+    if (_full)
+        return QUEUE_CAP;
+
+    return (_head > _tail) ? (_head - _tail) : (QUEUE_CAP + _head - _tail);
+}
+
+PACKET_T StreamingQueue::_incr(PACKET_T ptr)
+{
+    return (ptr - _mem) < QUEUE_CAP ? (ptr + 1) : _mem;
 }
