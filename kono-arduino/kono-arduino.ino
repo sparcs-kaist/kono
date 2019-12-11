@@ -1,5 +1,5 @@
 #include <ESP8266WiFi.h>
-#include <WebSocketClient.h>
+#include <WebSocketsClient.h>
 #include "confidentials.h"
 
 extern "C"
@@ -11,56 +11,47 @@ extern "C"
 #define __DEBUG__
 
 /* Configurations for network connection. */
-extern const char *SSID;
-extern const char *USERNAME;
-extern const char *PASSWORD;
-extern const char *WEBSOCKET_HOST;
-extern const char *WEBSOCKET_PATH;
-extern const int   WEBSOCKET_PORT;
+extern const char    *SSID;
+extern const char    *USERNAME;
+extern const char    *PASSWORD;
+extern const String   WEBSOCKET_HOST;
+extern const uint16_t WEBSOCKET_PORT;
 
 /* Global variables. */
-static bool            g_error = false;
-static WiFiClient      g_wifi_client;
-static WebSocketClient g_websocket_client;
+static bool             g_error = false;
+static WebSocketsClient g_websocket_client;
 
-void connect_websocket()
+void websocket_event(WStype_t type, uint8_t *payload, size_t len)
 {
-    /* TCP Connection to websocket server. */
-    if (g_wifi_client.connect(WEBSOCKET_HOST, WEBSOCKET_PORT))
-    {
+  
+    switch(type) {
+        case WStype_DISCONNECTED:
 #ifdef __DEBUG__
-        Serial.print("Connected to WebSocket server: ");
-        Serial.print(WEBSOCKET_HOST);
-        Serial.print(":");
-        Serial.println(WEBSOCKET_PORT);
+            Serial.println("[WSc] Disconnected!");
 #endif
-    }
-    else
-    {
+            break;
+        case WStype_CONNECTED:
 #ifdef __DEBUG__
-        Serial.println("Connection failed to WebSocket server.");
+            Serial.print("[WSc] Connected to url: ");
+            Serial.println((char *)payload);
 #endif
-        delay(5000);
-        return;
-    }
-
-    /* Setup WebSocket connection settings. */
-    g_websocket_client.host = (char *) WEBSOCKET_HOST;
-    g_websocket_client.path = (char *) WEBSOCKET_PATH;
-    if (g_websocket_client.handshake(g_wifi_client))
-    {
+            g_websocket_client.sendTXT("Connected");
+            break;
+        case WStype_TEXT:
 #ifdef __DEBUG__
-        Serial.println("Handshake successful");
+            Serial.print("[WSc] get text: ");
+            Serial.println((char *)payload);
 #endif
-    }
-    else
-    {
+            break;
+        case WStype_BIN:
 #ifdef __DEBUG__
-        Serial.println("Handshake failed.");
+            Serial.print("[WSc] get binary length: ");
+            Serial.println(len);
+            hexdump(payload, len);
 #endif
-        delay(5000);
-        return;
+            break;
     }
+    
 }
 
 void setup()
@@ -112,10 +103,6 @@ void setup()
 #endif
     while (WiFi.status() != WL_CONNECTED)
     {
-#ifdef __DEBUG__
-        Serial.print("Wi-Fi Status: ");
-        Serial.println(WiFi.status());
-#endif
         if (WiFi.status() == WL_CONNECT_FAILED)
         {
 #ifdef __DEBUG__
@@ -132,14 +119,16 @@ void setup()
     Serial.println(WiFi.localIP());
 #endif
 
-    connect_websocket();
+    g_websocket_client.begin(WEBSOCKET_HOST, WEBSOCKET_PORT);
+    g_websocket_client.onEvent(websocket_event);
 
 }
 
 void loop()
 {
 
-    String websocket_recv_data;
+    String  ws_data;
+    uint8_t ws_opcode;
     
     if (g_error)
     {
@@ -149,18 +138,7 @@ void loop()
     /* Check for Wi-Fi connection status. */
     if (WiFi.status() == WL_CONNECTED)
     {
-        if (g_wifi_client.connected())
-        {
-            // do something
-        }
-        else
-        {
-#ifdef __DEBUG__
-            Serial.println("Disconnected from WebSocket server. Attepting to reconnect...");
-#endif  
-            connect_websocket();
-            return;
-        }
+        g_websocket_client.loop();
     }
     else
     {
