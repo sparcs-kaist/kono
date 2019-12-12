@@ -20,8 +20,9 @@ extern const uint16_t WEBSOCKET_PORT;
 
 /* Global variables. */
 static bool             g_error = false;
-static WebSocketsClient g_websocket_client;
 static StreamingQueue  *g_queue;
+
+WebSocketsClient g_websocket_client;
 
 // test
 float data[] = { 0, 1, 2, 3, 4, 5, 6 };
@@ -126,7 +127,7 @@ void setup()
     g_websocket_client.begin(WEBSOCKET_HOST, WEBSOCKET_PORT);
     g_websocket_client.onEvent(websocket_event);
 
-    g_queue = new StreamingQueue(g_websocket_client);
+    g_queue = new StreamingQueue();
 
     // test
     g_queue->push(Packet(millis(), data));

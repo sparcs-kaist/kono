@@ -10,7 +10,9 @@
 /* Comment the following line on release. */
 #define __DEBUG__
 
-StreamingQueue::StreamingQueue(WebSocketsClient client)
+extern WebSocketsClient g_websocket_client;
+
+StreamingQueue::StreamingQueue()
 {
     _mem  = reinterpret_cast<PACKET_T>( calloc(1, QUEUE_SIZE) );
     _head = _tail = _wait = _mem;
@@ -18,8 +20,6 @@ StreamingQueue::StreamingQueue(WebSocketsClient client)
     _empty      = true;
     _full       = false;
     _wait_empty = true;
-    
-    _client     = client;
 }
 
 StreamingQueue::~StreamingQueue()
@@ -29,7 +29,7 @@ StreamingQueue::~StreamingQueue()
 
 void StreamingQueue::push(Packet packet)
 {
-    noInterrupts(); // disable interrupt: entry of critical code
+    //noInterrupts(); // disable interrupt: entry of critical code
   
     if (_empty)
         _empty = false;
@@ -53,19 +53,19 @@ void StreamingQueue::push(Packet packet)
     if (_head == _tail)
         _full = true;
 
-    interrupts(); // enable interrupt again
+    //interrupts(); // enable interrupt again
 }
 
 void StreamingQueue::loop()
 {
   
-    noInterrupts(); // disable interrupt: entry of critical code
+    //noInterrupts(); // disable interrupt: entry of critical code
 
     for ( ; _wait != _head; _wait = _incr(_wait))
     {
       
         /* Send packet at _wait through WebSocket. */
-        if (_client.sendBIN(reinterpret_cast<uint8_t *>(_wait), sizeof(Packet)))
+        if (g_websocket_client.sendBIN(reinterpret_cast<uint8_t *>(_wait), sizeof(Packet)))
         {
 #ifdef __DEBUG__
             Serial.print("[StQ] data sent: ");
@@ -75,14 +75,12 @@ void StreamingQueue::loop()
         }
         else
         {
-#ifdef __DEBUG__
             Serial.println("[StQ] data send failed!");
-#endif
             break;
         }
     }
 
-    interrupts(); // enable interrupt again
+    //interrupts(); // enable interrupt again
 
 }
 
@@ -90,7 +88,7 @@ bool StreamingQueue::pop(uint32_t timestamp)
 {
     bool success;
     
-    noInterrupts(); // disable interrupt: entry of critical code
+    //noInterrupts(); // disable interrupt: entry of critical code
 
     if (_empty)
         success = false;
@@ -105,7 +103,7 @@ bool StreamingQueue::pop(uint32_t timestamp)
         }
     }
 
-    interrupts(); // enable interrupt again
+    //interrupts(); // enable interrupt again
   
     return success;   
 }

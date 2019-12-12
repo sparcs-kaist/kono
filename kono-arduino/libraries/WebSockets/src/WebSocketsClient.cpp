@@ -153,7 +153,6 @@ void WebSocketsClient::loop(void) {
         if((millis() - _lastConnectionFail) < _reconnectInterval) {
             return;
         }
-
 #if defined(HAS_SSL)
         if(_client.isSSL) {
             DEBUG_WEBSOCKETS("[WS-Client] connect wss...\n");
@@ -185,7 +184,6 @@ void WebSocketsClient::loop(void) {
 #else
         _client.tcp = new WEBSOCKETS_NETWORK_CLASS();
 #endif
-
         if(!_client.tcp) {
             DEBUG_WEBSOCKETS("[WS-Client] creating Network class failed!");
             return;

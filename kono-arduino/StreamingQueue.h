@@ -21,7 +21,7 @@ class StreamingQueue
 {
 
 public:
-    StreamingQueue(WebSocketsClient client);
+    StreamingQueue();
     ~StreamingQueue();
     void   push(Packet packet);
     void     loop();
@@ -34,7 +34,6 @@ private:
     PACKET_T _mem;                       // memory allocated to queue
     PACKET_T _head, _tail, _wait;        // window end pointers
     bool     _empty, _full, _wait_empty; // state flags
-    WebSocketsClient _client;            // WebSocket client instance for sending packets
 
     PACKET_T _incr(PACKET_T ptr);        // incrementer in circular queue
 };
