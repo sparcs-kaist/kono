@@ -18,9 +18,12 @@ extern const char    *PASSWORD;
 extern const String   WEBSOCKET_HOST;
 extern const uint16_t WEBSOCKET_PORT;
 
+static const uint32_t   FETCH_INTERVAL = 100; // 100 ms
+
 /* Global variables. */
 static bool             g_error = false;
-static StreamingQueue  *g_queue;
+static StreamingQueue  *g_queue = NULL;
+static uint32_t         g_fetch_timer;
 
 WebSocketsClient g_websocket_client;
 
@@ -100,6 +103,7 @@ void setup()
 #endif
 
     wifi_station_connect();
+    yield();
 #ifdef __DEBUG__
     Serial.println("Waiting for connection and IP address from router...");
 #endif
@@ -126,6 +130,8 @@ void setup()
 
     g_queue = new StreamingQueue();
 
+    g_fetch_timer = millis();
+
 }
 
 void loop()
@@ -133,16 +139,27 @@ void loop()
 
     String  ws_data;
     uint8_t ws_opcode;
+    uint32_t current_time;
+    float data[] = { 1, 2, 3, 4, 5, 6, 7 };
     
     if (g_error)
     {
         return;
     }
 
+    /* Add data packet every FETCH_INTERVAL to the queue. */
+    current_time = millis();
+    if (g_fetch_timer + FETCH_INTERVAL < current_time)
+    {
+        g_queue->push(Packet(current_time, data));
+        g_fetch_timer = current_time;
+    }
+
     /* Check for Wi-Fi connection status. */
     if (WiFi.status() == WL_CONNECTED)
     {
         g_websocket_client.loop();
+        yield();
         g_queue->loop();
     }
     else
@@ -153,5 +170,7 @@ void loop()
         wifi_station_connect();
         delay(5000);
     }
+
+    delay(1);
     
 }
