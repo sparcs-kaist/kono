@@ -8,7 +8,7 @@
 #define QUEUE_CAP  (QUEUE_SIZE / sizeof(Packet))
 
 /* Comment the following line on operating code. */
-#define __DEBUG__
+// #define __DEBUG__
 
 extern WebSocketsClient g_websocket_client;
 

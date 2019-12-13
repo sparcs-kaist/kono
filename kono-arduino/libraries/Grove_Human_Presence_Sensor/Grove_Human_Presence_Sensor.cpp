@@ -532,6 +532,22 @@ float PresenceDetector::getDerivativeOfIR4() {
   return m_ders[3];
 }
 
+float PresenceDetector::getIR1() {
+  return m_smoothers[0]->getSmoothValue();
+}
+
+float PresenceDetector::getIR2() {
+  return m_smoothers[1]->getSmoothValue();
+}
+
+float PresenceDetector::getIR3() {
+  return m_smoothers[2]->getSmoothValue();
+}
+
+float PresenceDetector::getIR4() {
+  return m_smoothers[3]->getSmoothValue();
+}
+
 uint8_t PresenceDetector::getMovement() {
   uint8_t r = m_movement;
   m_movement = MOVEMENT_NONE;

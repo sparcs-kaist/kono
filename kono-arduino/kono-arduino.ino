@@ -1,5 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
+#include <Wire.h>
+#include <Grove_Human_Presence_Sensor.h>
 #include "confidentials.h"
 #include "StreamingQueue.h"
 
@@ -9,7 +11,7 @@ extern "C"
 }
 
 /* Comment the following line on release. */
-// #define __DEBUG__
+#define __DEBUG__
 
 /* Configurations for network connection. */
 extern const char    *SSID;
@@ -18,14 +20,19 @@ extern const char    *PASSWORD;
 extern const String   WEBSOCKET_HOST;
 extern const uint16_t WEBSOCKET_PORT;
 
-static const uint32_t   FETCH_INTERVAL = 100; // 100 ms
+static const uint32_t   FETCH_INTERVAL       = 100; // 100 ms
+static const float      SENSITIVITY_PRESENCE = 6.0;
+static const float      SENSITIVITY_MOVEMENT = 10.0;
+static const int        DETECT_INTERVAL      = 30;
 
 /* Global variables. */
 static bool             g_error = false;
 static StreamingQueue  *g_queue = NULL;
 static uint32_t         g_fetch_timer;
 
-WebSocketsClient g_websocket_client;
+WebSocketsClient        g_websocket_client;
+AK9753                  g_movement_sensor;
+PresenceDetector        g_detector(g_movement_sensor, SENSITIVITY_PRESENCE, SENSITIVITY_MOVEMENT, DETECT_INTERVAL);
 
 void websocket_event(WStype_t type, uint8_t *payload, size_t len)
 {
@@ -64,10 +71,21 @@ void setup()
 
     struct station_config wifi_config;
 
-#ifdef __DEBUG__
     /* Initialize serial connection. */
     Serial.begin(115200);
+  
+    /* Initialize detector. */
+    Wire.begin();
+    if (!g_movement_sensor.initialize())
+    {
+#ifdef __DEBUG__
+        Serial.println("Device not found. Check wiring");
 #endif
+        g_error = true;
+        return;
+    }
+
+    yield();
 
     /* Initialize Wi-Fi connection. */
     wifi_station_disconnect();
@@ -151,9 +169,19 @@ void loop()
     current_time = millis();
     if (g_fetch_timer + FETCH_INTERVAL < current_time)
     {
+        Serial.print(g_detector.getIR1());
+        Serial.print(" ");
+        Serial.print(g_detector.getIR2());
+        Serial.print(" ");
+        Serial.print(g_detector.getIR3());
+        Serial.print(" ");
+        Serial.println(g_detector.getIR4());
         g_queue->push(Packet(current_time, data));
         g_fetch_timer = current_time;
     }
+
+    g_detector.loop();
+    yield();
 
     /* Check for Wi-Fi connection status. */
     if (WiFi.status() == WL_CONNECTED)
