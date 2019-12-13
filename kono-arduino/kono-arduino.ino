@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 #include "confidentials.h"
@@ -9,7 +10,7 @@ extern "C"
 }
 
 /* Comment the following line on release. */
-// #define __DEBUG__
+#define __DEBUG__
 
 /* Configurations for network connection. */
 extern const char    *SSID;
@@ -21,6 +22,7 @@ extern const uint16_t WEBSOCKET_PORT;
 /* Global variables. */
 static bool             g_error = false;
 static StreamingQueue  *g_queue;
+static int              g_counter = 0;
 
 WebSocketsClient g_websocket_client;
 
@@ -54,6 +56,11 @@ void websocket_event(WStype_t type, uint8_t *payload, size_t len)
             break;
     }
     
+}
+
+void timerCallback()
+{
+    g_counter++;
 }
 
 void setup()
@@ -126,6 +133,13 @@ void setup()
 
     g_queue = new StreamingQueue();
 
+
+    /* Setup timer interrupt. */
+    timer1_isr_init();
+    timer1_attachInterrupt(timerCallback);
+    timer1_enable(TIM_DIV16, TIM_EDGE, TIM_LOOP); // 1 sec = 5,000,000 ticks
+    timer1_write(150000);                         // 30 ms =   150,000 units 
+
 }
 
 void loop()
@@ -133,6 +147,9 @@ void loop()
 
     String  ws_data;
     uint8_t ws_opcode;
+
+    Serial.println(g_counter);
+    delay(1000);
     
     if (g_error)
     {

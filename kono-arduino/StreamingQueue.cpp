@@ -7,7 +7,7 @@
 #define QUEUE_SIZE 8192 // 8KB Queue
 #define QUEUE_CAP  (QUEUE_SIZE / sizeof(Packet))
 
-/* Comment the following line on release. */
+/* Comment the following line on operating code. */
 // #define __DEBUG__
 
 extern WebSocketsClient g_websocket_client;
@@ -29,8 +29,6 @@ StreamingQueue::~StreamingQueue()
 
 void StreamingQueue::push(Packet packet)
 {
-    //noInterrupts(); // disable interrupt: entry of critical code
-  
     if (_empty)
         _empty = false;
 
@@ -52,14 +50,12 @@ void StreamingQueue::push(Packet packet)
 
     if (_head == _tail)
         _full = true;
-
-    //interrupts(); // enable interrupt again
 }
 
 void StreamingQueue::loop()
 {
   
-    //noInterrupts(); // disable interrupt: entry of critical code
+    noInterrupts(); // disable interrupt: entry of critical code
 
     for ( ; _wait != _head; _wait = _incr(_wait))
     {
@@ -79,7 +75,7 @@ void StreamingQueue::loop()
         }
     }
 
-    //interrupts(); // enable interrupt again
+    interrupts(); // enable interrupt again
 
 }
 
@@ -87,7 +83,7 @@ bool StreamingQueue::pop(uint32_t timestamp)
 {
     bool success;
     
-    //noInterrupts(); // disable interrupt: entry of critical code
+    noInterrupts(); // disable interrupt: entry of critical code
 
     if (_empty)
         success = false;
@@ -102,7 +98,7 @@ bool StreamingQueue::pop(uint32_t timestamp)
         }
     }
 
-    //interrupts(); // enable interrupt again
+    interrupts(); // enable interrupt again
   
     return success;   
 }
