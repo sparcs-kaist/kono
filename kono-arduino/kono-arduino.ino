@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 #include "confidentials.h"
@@ -10,7 +9,7 @@ extern "C"
 }
 
 /* Comment the following line on release. */
-#define __DEBUG__
+// #define __DEBUG__
 
 /* Configurations for network connection. */
 extern const char    *SSID;
@@ -19,10 +18,12 @@ extern const char    *PASSWORD;
 extern const String   WEBSOCKET_HOST;
 extern const uint16_t WEBSOCKET_PORT;
 
+static const uint32_t   FETCH_INTERVAL = 100; // 100 ms
+
 /* Global variables. */
 static bool             g_error = false;
-static StreamingQueue  *g_queue;
-static int              g_counter = 0;
+static StreamingQueue  *g_queue = NULL;
+static uint32_t         g_fetch_timer;
 
 WebSocketsClient g_websocket_client;
 
@@ -56,11 +57,6 @@ void websocket_event(WStype_t type, uint8_t *payload, size_t len)
             break;
     }
     
-}
-
-void timerCallback()
-{
-    g_counter++;
 }
 
 void setup()
@@ -107,6 +103,7 @@ void setup()
 #endif
 
     wifi_station_connect();
+    yield();
 #ifdef __DEBUG__
     Serial.println("Waiting for connection and IP address from router...");
 #endif
@@ -133,12 +130,7 @@ void setup()
 
     g_queue = new StreamingQueue();
 
-
-    /* Setup timer interrupt. */
-    timer1_isr_init();
-    timer1_attachInterrupt(timerCallback);
-    timer1_enable(TIM_DIV16, TIM_EDGE, TIM_LOOP); // 1 sec = 5,000,000 ticks
-    timer1_write(150000);                         // 30 ms =   150,000 units 
+    g_fetch_timer = millis();
 
 }
 
@@ -147,19 +139,27 @@ void loop()
 
     String  ws_data;
     uint8_t ws_opcode;
-
-    Serial.println(g_counter);
-    delay(1000);
+    uint32_t current_time;
+    float data[] = { 1, 2, 3, 4, 5, 6, 7 };
     
     if (g_error)
     {
         return;
     }
 
+    /* Add data packet every FETCH_INTERVAL to the queue. */
+    current_time = millis();
+    if (g_fetch_timer + FETCH_INTERVAL < current_time)
+    {
+        g_queue->push(Packet(current_time, data));
+        g_fetch_timer = current_time;
+    }
+
     /* Check for Wi-Fi connection status. */
     if (WiFi.status() == WL_CONNECTED)
     {
         g_websocket_client.loop();
+        yield();
         g_queue->loop();
     }
     else
@@ -170,5 +170,7 @@ void loop()
         wifi_station_connect();
         delay(5000);
     }
+
+    delay(1);
     
 }

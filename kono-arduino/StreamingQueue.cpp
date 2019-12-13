@@ -8,7 +8,7 @@
 #define QUEUE_CAP  (QUEUE_SIZE / sizeof(Packet))
 
 /* Comment the following line on operating code. */
-// #define __DEBUG__
+#define __DEBUG__
 
 extern WebSocketsClient g_websocket_client;
 
@@ -35,10 +35,6 @@ void StreamingQueue::push(Packet packet)
     if (_full)
     {
         /* If queue is already full, discard the oldest packet in the waiting list. */
-#ifdef __DEBUG__
-        Serial.print("[StQ] discarding data on timestamp: ");
-        Serial.println(_tail->timestamp);
-#endif
         if (_wait_empty)
             _wait = _incr(_wait);
         _tail = _incr(_tail);
@@ -54,9 +50,6 @@ void StreamingQueue::push(Packet packet)
 
 void StreamingQueue::loop()
 {
-  
-    noInterrupts(); // disable interrupt: entry of critical code
-
     for ( ; _wait != _head; _wait = _incr(_wait))
     {
       
@@ -73,18 +66,14 @@ void StreamingQueue::loop()
         {
             break;
         }
+        yield();
     }
-
-    interrupts(); // enable interrupt again
-
 }
 
 bool StreamingQueue::pop(uint32_t timestamp)
 {
     bool success;
     
-    noInterrupts(); // disable interrupt: entry of critical code
-
     if (_empty)
         success = false;
     else
@@ -98,8 +87,6 @@ bool StreamingQueue::pop(uint32_t timestamp)
         }
     }
 
-    interrupts(); // enable interrupt again
-  
     return success;   
 }
 
