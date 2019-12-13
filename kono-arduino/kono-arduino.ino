@@ -9,7 +9,7 @@ extern "C"
 }
 
 /* Comment the following line on release. */
-#define __DEBUG__
+// #define __DEBUG__
 
 /* Configurations for network connection. */
 extern const char    *SSID;
@@ -23,9 +23,6 @@ static bool             g_error = false;
 static StreamingQueue  *g_queue;
 
 WebSocketsClient g_websocket_client;
-
-// test
-float data[] = { 0, 1, 2, 3, 4, 5, 6 };
 
 void websocket_event(WStype_t type, uint8_t *payload, size_t len)
 {
@@ -129,9 +126,6 @@ void setup()
 
     g_queue = new StreamingQueue();
 
-    // test
-    g_queue->push(Packet(millis(), data));
-
 }
 
 void loop()
@@ -159,7 +153,5 @@ void loop()
         wifi_station_connect();
         delay(5000);
     }
-
-    delay(500);
     
 }
