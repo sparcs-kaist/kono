@@ -14,11 +14,12 @@ async def collector_handler(websocket, path):
             # process received data
             data_bin  = list(map(lambda i: message[4*i : 4*(i+1)], range(8)))
             timestamp = int.from_bytes(data_bin[0], 'little')
-            data      = list(map(lambda x: struct.unpack('<f', x)[0], data_bin[1:]))
+            device_id = int.from_bytes(data_bin[1], 'little')
+            data      = list(map(lambda x: struct.unpack('<f', x)[0], data_bin[2:]))
 
             # TODO: update data structure
 
-            print((timestamp, data))
+            print((timestamp, device_id, data))
             
             # reply
             await websocket.send(data_bin[0])
