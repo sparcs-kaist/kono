@@ -1,5 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
+#include <Wire.h>
+#include <Grove_Human_Presence_Sensor.h>
 #include "confidentials.h"
 #include "StreamingQueue.h"
 
@@ -10,6 +12,7 @@ extern "C"
 
 /* Comment the following line on release. */
 // #define __DEBUG__
+#define __CUSTOM_NETWORK__
 
 /* Configurations for network connection. */
 extern const char    *SSID;
@@ -18,14 +21,20 @@ extern const char    *PASSWORD;
 extern const String   WEBSOCKET_HOST;
 extern const uint16_t WEBSOCKET_PORT;
 
-static const uint32_t   FETCH_INTERVAL = 100; // 100 ms
+static const uint32_t   FETCH_INTERVAL       = 100; // 100 ms
+static const float      SENSITIVITY_PRESENCE = 6.0;
+static const float      SENSITIVITY_MOVEMENT = 10.0;
+static const int        DETECT_INTERVAL      = 30;
 
 /* Global variables. */
 static bool             g_error = false;
 static StreamingQueue  *g_queue = NULL;
 static uint32_t         g_fetch_timer;
+static float            g_data[7] = { };
 
-WebSocketsClient g_websocket_client;
+WebSocketsClient        g_websocket_client;
+AK9753                  g_movement_sensor;
+PresenceDetector        g_detector(g_movement_sensor, SENSITIVITY_PRESENCE, SENSITIVITY_MOVEMENT, DETECT_INTERVAL);
 
 void websocket_event(WStype_t type, uint8_t *payload, size_t len)
 {
@@ -64,24 +73,36 @@ void setup()
 
     struct station_config wifi_config;
 
-#ifdef __DEBUG__
     /* Initialize serial connection. */
     Serial.begin(115200);
-#endif
+  
+    /* Initialize detector. */
+    Wire.begin();
+    if (!g_movement_sensor.initialize())
+    {
+#ifdef __DEBUG__
+        Serial.println("Device not found. Check wiring");
+#endif // __DEBUG__
+        g_error = true;
+        return;
+    }
 
+    yield();
+
+#ifndef __CUSTOM_NETWORK__
     /* Initialize Wi-Fi connection. */
     wifi_station_disconnect();
     if (WiFi.status() == WL_NO_SHIELD)
     {
 #ifdef __DEBUG__
         Serial.println("Wi-Fi shield not present.");
-#endif
+#endif // __DEBUG__
         g_error = true;
         return;
     }
 #ifdef __DEBUG__
     Serial.println("Configuring WPA2 Connection...");
-#endif
+#endif // __DEBUG__
     wifi_station_clear_cert_key();
     wifi_station_clear_enterprise_ca_cert();
     wifi_station_clear_enterprise_identity();
@@ -100,24 +121,27 @@ void setup()
     wifi_station_set_enterprise_password((uint8 *)PASSWORD, strlen(PASSWORD));
 #ifdef __DEBUG__
     Serial.println("Configuring WPA2 Connection Done.");
-#endif
+#endif // __DEBUG__
 
     wifi_station_connect();
     yield();
 #ifdef __DEBUG__
     Serial.println("Waiting for connection and IP address from router...");
-#endif
+#endif // __DEBUG__
     while (WiFi.status() != WL_CONNECTED)
     {
         if (WiFi.status() == WL_CONNECT_FAILED)
         {
 #ifdef __DEBUG__
             Serial.println("Attempting to reconnect...");
-#endif
+#endif // __DEBUG__
             wifi_station_connect();
         }
         delay(1000);
     }
+#else // __CUSTOM_NETWORK__
+    WiFi.begin(SSID, PASSWORD);
+#endif // __CUSTOM_NETWORK
 
 #ifdef __DEBUG__
     Serial.println("Wi-Fi connected.");
@@ -140,7 +164,6 @@ void loop()
     String  ws_data;
     uint8_t ws_opcode;
     uint32_t current_time;
-    float data[] = { 1, 2, 3, 4, 5, 6, 7 };
     
     if (g_error)
     {
@@ -151,9 +174,16 @@ void loop()
     current_time = millis();
     if (g_fetch_timer + FETCH_INTERVAL < current_time)
     {
-        g_queue->push(Packet(current_time, data));
+        g_data[0] = g_detector.getIR1();
+        g_data[1] = g_detector.getIR2();
+        g_data[2] = g_detector.getIR3();
+        g_data[3] = g_detector.getIR4();
+        g_queue->push(Packet(current_time, g_data));
         g_fetch_timer = current_time;
     }
+
+    g_detector.loop();
+    yield();
 
     /* Check for Wi-Fi connection status. */
     if (WiFi.status() == WL_CONNECTED)
@@ -166,7 +196,7 @@ void loop()
     {
 #ifdef __DEBUG__
         Serial.println("Disconnected from Wi-Fi. Attempting to reconnect...");
-#endif
+#endif // __DEBUG__
         wifi_station_connect();
         delay(5000);
     }

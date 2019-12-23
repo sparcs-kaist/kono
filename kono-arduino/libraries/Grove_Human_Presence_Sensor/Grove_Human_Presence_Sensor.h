@@ -1,3 +1,8 @@
+/*
+ * Edited by inhibitor, SPARCS kono team
+ * Dec 2019
+ */
+
 /*    
  * A library for Grove - Human Presence Sensor
  *   
@@ -212,6 +217,11 @@ public:
    * @return - true: if an IR object enters any view section of this sensor
    */
   bool presentFullField(bool clear = true);
+
+  float getIR1();
+  float getIR2();
+  float getIR3();
+  float getIR4();
 
   float getDerivativeOfIR1();
   float getDerivativeOfIR2();
