@@ -11,11 +11,18 @@ async def collector_handler(websocket, path):
     print('Connected')
     try:
         async for message in websocket:
+            # process received data
             data_bin  = list(map(lambda i: message[4*i : 4*(i+1)], range(8)))
             timestamp = int.from_bytes(data_bin[0], 'little')
             data      = list(map(lambda x: struct.unpack('<f', x)[0], data_bin[1:]))
 
-            print((timestamp, data)) 
+            # TODO: update data structure
+
+            print((timestamp, data))
+            
+            # reply
+            await websocket.send(data_bin[0])
+
     finally:
         print('Disconnected')
 

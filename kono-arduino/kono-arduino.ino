@@ -38,7 +38,6 @@ PresenceDetector        g_detector(g_movement_sensor, SENSITIVITY_PRESENCE, SENS
 
 void websocket_event(WStype_t type, uint8_t *payload, size_t len)
 {
-  
     switch(type) {
         case WStype_DISCONNECTED:
 #ifdef __DEBUG__
@@ -61,8 +60,8 @@ void websocket_event(WStype_t type, uint8_t *payload, size_t len)
 #ifdef __DEBUG__
             Serial.print("[WSc] Received binary length: ");
             Serial.println(len);
-            hexdump(payload, len);
 #endif
+            g_queue->pop(*((uint32_t *) payload));
             break;
     }
     

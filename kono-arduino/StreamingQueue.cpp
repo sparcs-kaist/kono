@@ -46,6 +46,7 @@ void StreamingQueue::push(Packet packet)
 
     if (_head == _tail)
         _full = true;
+    
 }
 
 void StreamingQueue::loop()
@@ -113,5 +114,5 @@ uint16_t StreamingQueue::size()
 
 PACKET_T StreamingQueue::_incr(PACKET_T ptr)
 {
-    return (ptr - _mem) < QUEUE_CAP ? (ptr + 1) : _mem;
+    return (ptr - _mem + 1) < QUEUE_CAP ? (ptr + 1) : _mem;
 }
