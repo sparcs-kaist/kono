@@ -14,19 +14,6 @@ services:
       - db_unauthorized_api_password
       - db_authorized_api_password
 
-  db_dev:
-    build: db/
-    volumes:
-      - data_dev_volume:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    environment:
-      DB_ENV: "development"
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-    secrets:
-      - source: db_root_password_dev
-        target: db_root_password
-
   api:
     depends_on:
       - maintainer
@@ -85,7 +72,6 @@ services:
 
 volumes:
   data_production_volume:
-  data_dev_volume:
   api_build:
   api_log:
   app_build:
@@ -101,8 +87,6 @@ secrets:
     file: config/production/db_unauthorized_api_password
   db_authorized_api_password:
     file: config/production/db_authorized_api_password
-  db_root_password_dev:
-    file: config/dev/db_root_password
   api_password_key:
     file: config/production/api_password_key
   api_jwt_key:
