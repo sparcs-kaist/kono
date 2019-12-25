@@ -32,8 +32,14 @@ ADD src/ .
 RUN chmod 764 /usr/src/scripts/*.sh
 
 # Attach volumes
-VOLUME /usr/src/api/dist
-VOLUME /usr/src/app/build
+VOLUME /usr/src/api-production/dist
+VOLUME /usr/src/app-prduction/build
+VOLUME /usr/src/log/api-production
+VOLUME /usr/src/log/nginx-production
+VOLUME /usr/src/api-stage/dist
+VOLUME /usr/src/app-stage/build
+VOLUME /usr/src/log/api-stage
+VOLUME /usr/src/log/nginx-stage
 
 # Retrieve source files
 WORKDIR /usr/src
@@ -54,4 +60,4 @@ WORKDIR /usr/src
 EXPOSE 22
 
 # Execute ssh daemon
-CMD [ "/bin/sh", "-c", "/usr/src/scripts/deploy.sh && /usr/sbin/sshd -D" ]
+CMD [ "/bin/sh", "-c", "/usr/src/scripts/deploy.sh && /usr/src/scripts/stage.sh && /usr/sbin/sshd -D" ]
