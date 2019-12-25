@@ -4,7 +4,7 @@ services:
   db_production:
     build: db/
     volumes:
-      - data_production_volume:/var/lib/mysql
+      - data_production:/var/lib/mysql
     environment:
       DB_ENV: "production"
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -14,9 +14,7 @@ services:
       - db_unauthorized_api_password
       - db_authorized_api_password
 
-  api:
-    depends_on:
-      - maintainer
+  api_production:
     restart: always
     build: kono-api/
     environment:
@@ -31,52 +29,36 @@ services:
       DB_DATABASE: "kono"
       PASSWORD_KEY_FILE: /run/secrets/api_password_key
       JWT_KEY_FILE: /run/secrets/api_jwt_key
+      UPLOAD_DIR: /usr/src/assets
     volumes:
-      - api_build:/usr/src/app
-      - api_log:/usr/src/log
-      - app_static:/usr/src/assets
+      - api_build_production:/usr/src/app
+      - api_log_production:/usr/src/log
+      - app_static_production:/usr/src/assets
     secrets:
       - db_authorized_api_password
       - db_unauthorized_api_password
       - api_password_key
       - api_jwt_key
 
-  maintainer:
-    build:
-      context: .
-      dockerfile: Dockerfile-maintainer
-    ports:
-      - "8022:22"      
-    environment:
-      GENERATE_SOURCEMAP: "false"
-    volumes:
-      - api_build:/usr/src/api/dist
-      - api_log:/usr/src/log/api
-      - app_build:/usr/src/app/build
-      - nginx_log:/usr/src/log/nginx
-    secrets:
-      - db_root_password
-
-  nginx:
+  nginx_production:
     depends_on:
-      - api
-      - maintainer
+      - api_production
     restart: always
     build: nginx/
     ports:
       - "80:80"
     volumes:
-      - app_build:/usr/share/nginx/html
-      - nginx_log:/var/log/nginx
-      - app_static:/usr/share/nginx/assets
+      - app_build_production:/usr/share/nginx/html
+      - nginx_log_production:/var/log/nginx
+      - app_static_production:/usr/share/nginx/assets
 
 volumes:
-  data_production_volume:
-  api_build:
-  api_log:
-  app_build:
-  nginx_log:
-  app_static:
+  data_production:
+  api_build_production:
+  api_log_production:
+  app_build_production:
+  nginx_log_production:
+  app_static_production:
 
 secrets:
   db_root_password:
