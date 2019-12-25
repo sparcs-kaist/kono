@@ -28,7 +28,7 @@ export const count = async (req, res) => {
 
 export const list = async (req, res) => {
 
-    const { filter_type = '*', start_index = 0, max_size } = req.query;
+    const { filter_type = '%', start_index = 0, max_size } = req.query;
     
     /* Query validity check. */
     if (max_size === undefined) {
@@ -38,7 +38,7 @@ export const list = async (req, res) => {
     }
 
     const FILTER_TYPE = filter_type;
-    if (filter_type !== '*' && filter_type !== 'notice' && filter_type !== 'lostfound') {
+    if (FILTER_TYPE !== '%' && FILTER_TYPE !== 'notice' && FILTER_TYPE !== 'lostfound') {
         res.status(400);
         res.send({ msg: 'invalid filter_type' });
         return;
@@ -62,9 +62,17 @@ export const list = async (req, res) => {
     try {
 
         const posts = await db.instance
-            .select('sid', 'type', 'title_kr', 'title_en', 'created_time')
+            .select('sid', 'type', 'title_kr', 'title_en', 'created_time', 
+                db.instance
+                    .select('url')
+                    .from('image')
+                    .whereRaw('image.post_sid = post.sid')
+                    .orderBy('sid')
+                    .limit(1)
+                    .as('thumbnail'))
             .from('post')
-            .where({ deleted: 0, type: FILTER_TYPE })
+            .where('deleted', 0)
+            .where('type', 'like', FILTER_TYPE)
             .orderBy('created_time', 'desc')
             .limit(MAX_SIZE)
             .offset(START_INDEX);

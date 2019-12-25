@@ -2,20 +2,51 @@
 
 .LandingPage {
 
+    width: 100vw;
+    max-width: 1044px;
     margin: auto;
 
     @include flexbox(column, $center: true);
 
     color: #343434;
 
-    .LandingPage__post {
+    .LandingPage__container {
+        width: 100%;
+        min-height: calc(100vh - 150px);
+        padding-bottom: 50px;
         @include flexbox(row, $center: true);
+        @include mobile-screen {
+            height: auto;
+            min-height: 0;
+            padding-bottom: 0;
+            @include flexbox(column, $center: true);
+        }
+
+        .LandingPage__item {
+            width: calc(50% - 32px);
+            height: 100%;
+            padding: 0 32px;
+            &.LandingPage__item_single {
+                width: calc(100% - 64px);
+            }
+            @include mobile-screen {
+                width: calc(100% - 66px);
+                max-width: none;
+                padding: 32px 33px;
+            }
+            @include flexbox(column, $center: true);
+        }
     }
 
-    .LandingPage__room {
-        @include flexbox(row, $center: true);
-        
-        margin: 64px auto;
+    @include mobile-screen {
+        .LandingPage__container {
+            margin-top: 55px;
+            margin-bottom: 50px;
+        }
+    }
+
+    .LandingPage__container + .LandingPage__container {
+        margin-top: 0;
     }
 
 }

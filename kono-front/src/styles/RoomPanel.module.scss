@@ -1,41 +1,33 @@
 @import 'mixins/all';
 
 @include themed() {
-
     .RoomPanel {
 
         position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 600px;
+        margin: 50px;
 
-        border-radius: 6px;
-        width: 600px;
-        min-height: calc(100vh - 180px);
-
-        .RoomPanel__state {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            font-size: 14px;
-            padding: 6px;
-            border-radius: 6px;
-            border: 1px solid t(text-primary);
-            color: t(text-primary);
-            @include flexbox(row, $center: true);
-            span {
-                margin-left: 6px;
-            }
-            &:hover {
-                border-color: t(text-highlight-on);
-            }
+        @include mobile-screen {
+            height: auto;
+            margin: 0;
+            @include flexbox(column, $center: true);
+            min-height: 0;
         }
 
-        .RoomPanel__refresh {
-            @include link;
-        }
-
-        .RoomPanel__loading {
-
+        .mobile_common_menu {
+            @include flexbox(row, $center: false);
+            line-height: 13px;
+            font-size: 11px;
+            margin-top: auto;
+            .icon {
+                color: t(text-highlight);
+            }
+            .text {
+                color: t(text-highlight);
+            }
         }
 
     }
-
 }

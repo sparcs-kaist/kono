@@ -1,0 +1,12 @@
+@import 'mixins/all';
+
+@include themed() {
+    .LostFoundPanelDesktop {
+
+        width: 100%;
+        min-height: 432px;
+
+        @include flexbox(column, $center: true);
+
+    }
+}

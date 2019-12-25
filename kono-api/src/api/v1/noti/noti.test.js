@@ -537,9 +537,7 @@ describe('Integrated test.', () => {
     it('POST /api/v1/auth/login', async () => {
         const res = await request(apiURL).post('/api/v1/auth/login')
             .set('content-type', 'application/json')
-            .send(JSON.stringify({
-                password: 'inhibitor'
-            }));
+            .send(JSON.stringify({ password }));
         expect(res).to.have.status(200);
         expect(res.body.msg).to.equal('login success');
         token = res.header['set-cookie'][0].split(';').filter(str => str.includes('access_token'))[0].split('=')[1];

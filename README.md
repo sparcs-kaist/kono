@@ -5,7 +5,7 @@
     <p align="center">
         A brand-new SPARCS service, develop in progress since April 2019
         <br />
-        <a href="http://52.79.92.127">
+        <a href="http://kono.sparcs.org">
             Service
         </a>
         |

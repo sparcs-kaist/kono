@@ -1,8 +1,18 @@
 import db from '../../../db';
+import multer from 'multer';
+import uniqueString from 'unique-string';
+import path from 'path';
+import fs from 'fs';
+
+const UPLOAD_MAX_NUM_FILES = 5;
+const UPLOAD_MAX_FILE_SIZE = 5 * 1024 * 1024;
+const UPLOAD_EXT_NAMES = ['.png', '.jpg', '.jpeg'];
+const UPLOAD_KEY = 'image';
+const UPLOAD_SUBDIR = 'images';
 
 export const list = async (req, res) => {
 
-    const { filter_type = '*', start_index = 0, max_size } = req.query;
+    const { filter_type = '%', start_index = 0, max_size } = req.query;
 
     /* Query validity check. */
     if (max_size === undefined) {
@@ -12,7 +22,7 @@ export const list = async (req, res) => {
     }
 
     const FILTER_TYPE = filter_type;
-    if (FILTER_TYPE !== '*' && FILTER_TYPE !== 'notice' && FILTER_TYPE !== 'lostfound') {
+    if (FILTER_TYPE !== '%' && FILTER_TYPE !== 'notice' && FILTER_TYPE !== 'lostfound') {
         res.status(400);
         res.send({ msg: 'invalid filter_type' });
         return;
@@ -39,7 +49,8 @@ export const list = async (req, res) => {
             .select('image.sid', 'image.url', 'image.post_sid')
             .from('post')
             .innerJoin('image', 'image.post_sid', 'post.sid')
-            .where({ 'post.deleted': 0, 'post.type': FILTER_TYPE })
+            .where('post.deleted', 0)
+            .where('post.type', 'like', FILTER_TYPE)
             .orderBy('post.created_time', 'desc')
             .limit(MAX_SIZE)
             .offset(START_INDEX);
@@ -82,3 +93,67 @@ export const count = async (req, res) => {
     }
 
 }
+
+/* For post upload. */
+
+// `multer.MulterError` covers only, and most of the Clinet Bad Request errors.
+// (https://github.com/expressjs/multer/blob/master/lib/multer-error.js)
+// `UploadClientError` is for Client Bad Request errors uncovered by multer.MulterError.
+class UploadClientError extends Error {
+    constructor(...params) {
+        super(...params);
+    }
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadDir = path.join(process.env.UPLOAD_DIR, UPLOAD_SUBDIR);
+        try {
+            fs.statSync(uploadDir);
+        } catch (err) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const fileExtname = path.extname(file.originalname);
+        if (!UPLOAD_EXT_NAMES.includes(fileExtname)) {
+            return cb(new UploadClientError('File extension undefined or unsupported.'));
+        }
+        cb(null, `${uniqueString()}${fileExtname}`);
+    }
+});
+
+const uploadFiles = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: UPLOAD_MAX_FILE_SIZE
+    }
+}).array(UPLOAD_KEY, UPLOAD_MAX_NUM_FILES);
+
+export const upload = async (req, res) => {
+
+    if (!req.admin) {
+        res.status(403);
+        res.send({ msg: 'login required' });
+        return;
+    }
+
+    uploadFiles(req, res, (err) => {
+        // Refer to the comment above `UploadClientError`.
+        if (err && (err instanceof multer.MulterError || err instanceof UploadClientError)
+            || !req.files) {
+            res.status(400);
+            res.send({
+                msg: err ? err.toString() : 'File upload failed since request is invalid.'
+            });   
+        } else if (err) {
+            console.log(err);
+            res.status(500);
+            res.send({ msg: 'server error' });
+        } else {
+            res.status(200);
+            res.send(req.files.map(file => path.join(UPLOAD_SUBDIR, file.filename)));
+        }
+    });
+};

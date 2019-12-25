@@ -1,0 +1,20 @@
+@import 'mixins/all';
+
+@include themed() {
+    .LostFoundPanelMobile {
+        width: 100vw;
+        @include flexbox(column, $center: true);
+        .header_wrapper {
+            width: calc(100% - 66px);
+            padding: 0 33px;
+        }
+        .grid_wrapper {
+            width: 100%;
+            overflow-x: auto;
+            @include flexbox(row, $center: false);
+            .grid_content {
+                padding: 0 33px;
+            }
+        }
+    }
+}

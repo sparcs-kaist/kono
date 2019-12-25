@@ -1,16 +1,12 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from '../styles/App.module.scss';
-import LandingPage from './LandingPage';
-import LoginPage from './LoginPage';
-import PostPage from './PostPage';
-import CreditPage from './CreditPage';
-import Header from './Header';
-import Footer from './Footer';
-import { check } from '../api/auth';
-import * as AuthAPI from '../store/modules/auth';
-import * as ConfigActions from '../store/modules/config';
+import styles from 'styles/App.module.scss';
+import { LandingPage, LoginPage, PostPage, CreditPage } from 'components/page';
+import { Header, Footer } from 'components/layout';
+import { check } from 'api/auth';
+import * as AuthAPI from 'store/modules/auth';
+import * as ConfigActions from 'store/modules/config';
 
 export default () => {
 

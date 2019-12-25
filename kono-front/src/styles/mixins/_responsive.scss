@@ -1,0 +1,11 @@
+@mixin wide-screen {
+    @media (min-width: 1600px) {
+        @content
+    }
+};
+
+@mixin mobile-screen {
+    @media (max-width: 800px) {
+        @content
+    }
+};

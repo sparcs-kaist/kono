@@ -2,22 +2,30 @@
 
 @include themed() {
     .RoomLegendPanel {
+
         position: absolute;
-        bottom: 200px;
+        bottom: 0;
         left: 0;
         padding: 10px;
         margin: 5px;
-        border-radius: 5px;
-        border: 1px solid t(text-primary);
         @include flexbox(column, $center: true);
+
         .RoomLegendPanel__row {
             align-self: stretch;
             padding: 4px 10px;
             @include flexbox(row, $center: false);
+            align-items: center;
             .RoomLegendPanel__square {
-                border: .5px solid t(text-primary);
-                width: 16px;
-                height: 16px;
+                border-radius: 10px;
+                width: 20px;
+                height: 20px;
+                @include flexbox(row, $center: true);
+                @include wide-screen {
+                    border-radius: 15px;
+                    width: 30px;
+                    height: 30px;
+                }
+                color: t(text-highlight);
                 &.RoomLegendPanel__empty {
                     background-color: t(panel-background);
                 }
@@ -30,17 +38,21 @@
             }
             .RoomLegendPanel__text {
                 color: t(text-primary);
-                line-height: 18px;
-                font-size: 14px;
-                padding-left: 10px;
+                line-height: 15px;
+                font-size: 13px;
+                padding-left: 13px;
+                @include wide-screen {
+                    line-height: 23px;
+                    font-size: 20px;
+                    padding-left: 20px;
+                }
             }
-            &:hover {
-                .RoomLegendPanel__square {
-                    border-color: t(text-highlight-on);
-                }
-                .RoomLegendPanel__text {
-                    color: t(text-highlight-on);
-                }
+            .RoomLegendPanel__label:hover {
+                color: t(text-highlight-on);
+            }
+
+            &.RoomLegendPanel__refresh {
+                cursor: pointer;
             }
         }
 

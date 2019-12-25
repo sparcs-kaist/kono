@@ -8,4 +8,7 @@ const process = (obj, language) => (
     }), {})
 );
 
-export default (text) => process(text, useSelector(state => state.config.language, []));
+export default (text) => {
+    const language = useSelector(state => state.config.language);
+    return [process(text, language), language];
+};

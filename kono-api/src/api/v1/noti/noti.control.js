@@ -179,8 +179,8 @@ export const deleteNoti = async (req, res) => {
     try {
 
         const deleteResult = await db.authorizedInstance('noti')
-            .del()
-            .where({ sid });
+            .where({ sid })
+            .update({ deleted: 1 });
 
         if (deleteResult === 0) {
             res.status(404);
