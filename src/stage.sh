@@ -13,4 +13,4 @@ cd ..
 cd kono-front
 npm install
 npm run build:staging
-cp -r build /usr/src/
+cp -r build /usr/src/app-stage
