@@ -23,7 +23,7 @@ dbConfig();
 const app = express();
 
 app.use((req, res, next) => {
-    const whitelist = ['localhost', 'kono.sparcs.org'];
+    const whitelist = ['localhost', 'kono.sparcs.org', 'kono.kaist.ac.kr'];
     const origin = req.header('Origin');
 
     whitelist.forEach(host => {
