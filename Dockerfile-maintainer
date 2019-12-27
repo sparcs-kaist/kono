@@ -33,7 +33,7 @@ RUN chmod 764 /usr/src/scripts/*.sh
 
 # Attach volumes
 VOLUME /usr/src/api-production/dist
-VOLUME /usr/src/app-prduction/build
+VOLUME /usr/src/app-production/build
 VOLUME /usr/src/log/api-production
 VOLUME /usr/src/log/nginx-production
 VOLUME /usr/src/api-stage/dist
