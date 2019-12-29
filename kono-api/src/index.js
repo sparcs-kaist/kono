@@ -25,10 +25,10 @@ const app = express();
 app.use((req, res, next) => {
     const whitelist = ['localhost', 'kono.sparcs.org', 'kono.kaist.ac.kr'];
     const origin = req.header('Origin');
-
     whitelist.forEach(host => {
-        if (origin && origin.indexOf(host) !== -1)
+        if (origin && origin.indexOf(host) !== -1) {
             res.set('Access-Control-Allow-Origin', origin);
+        }
     });
 
     res.set('Access-Control-Allow-Credentials', true);
@@ -37,6 +37,7 @@ app.use((req, res, next) => {
 
     return next();
 });
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
