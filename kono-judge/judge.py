@@ -2,7 +2,7 @@ import os, websockets, asyncio, struct, json, collections, time
 from dotenv import load_dotenv
 
 load_dotenv()
-PORT = os.getenv('PORT')
+PORT = os.getenv('WEBSOCKET_PORT')
 INTERVALS = {
     '10sec':           10 * 1000,
     '1min' :       1 * 60 * 1000,
