@@ -3,11 +3,6 @@ import { generateToken } from '../../../lib/token';
 import dockerConfig from '../../../lib/docker.config';
 import db from '../../../db';
 
-function host() {
-    const { HOST } = process.env;
-    return HOST;
-};
-
 function hash(password) {
     const secret = process.env.PASSWORD_KEY || dockerConfig.env.PASSWORD_KEY;
     return crypto.createHmac('sha256', secret).update(password).digest('hex');
@@ -16,10 +11,13 @@ function hash(password) {
 export const login = async (req, res) => {
 
     const { password } = req.body;
+    const domain = req.header('Origin')
+        .replace('http://', '')
+        .replace('https://', '');
     
     if (!password) {
         res.status(400);
-        res.clearCookie('access_token', { domain: host() });
+        res.clearCookie('access_token', { domain });
         res.send({ msg: 'password field required' });
         return;
     }
@@ -38,7 +36,7 @@ export const login = async (req, res) => {
                     res.status(200);
                     res.cookie('access_token', token, {
                         maxAge: 1000 * 60 * 60,
-                        domain: host()
+                        domain
                     });
                     res.send({ msg: 'login success' });
                     return;
@@ -53,7 +51,7 @@ export const login = async (req, res) => {
         }
 
         res.status(403);
-        res.clearCookie('access_token', { domain: host() });
+        res.clearCookie('access_token', { domain });
         res.send({ msg: 'wrong password' });
 
         return;
@@ -86,8 +84,12 @@ export const logout = (req, res) => {
         return;
     }
 
+    const domain = req.header('Origin')
+        .replace('http://', '')
+        .replace('https://', '');
+
     res.status(204);
-    res.clearCookie('access_token', { domain: host() });
+    res.clearCookie('access_token', { domain });
     res.end();
 
 }
