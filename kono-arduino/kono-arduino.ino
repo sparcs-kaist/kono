@@ -20,6 +20,7 @@ extern const char    *USERNAME;
 extern const char    *PASSWORD;
 extern const String   WEBSOCKET_HOST;
 extern const uint16_t WEBSOCKET_PORT;
+extern const uint32_t DEVICE_ID;
 
 static const uint32_t   FETCH_INTERVAL       = 100; // 100 ms
 static const float      SENSITIVITY_PRESENCE = 6.0;
@@ -30,7 +31,7 @@ static const int        DETECT_INTERVAL      = 30;
 static bool             g_error = false;
 static StreamingQueue  *g_queue = NULL;
 static uint32_t         g_fetch_timer;
-static float            g_data[7] = { };
+static float            g_data[6] = { };
 
 WebSocketsClient        g_websocket_client;
 AK9753                  g_movement_sensor;
@@ -177,7 +178,7 @@ void loop()
         g_data[1] = g_detector.getIR2();
         g_data[2] = g_detector.getIR3();
         g_data[3] = g_detector.getIR4();
-        g_queue->push(Packet(current_time, g_data));
+        g_queue->push(Packet(current_time, DEVICE_ID, g_data));
         g_fetch_timer = current_time;
     }
 

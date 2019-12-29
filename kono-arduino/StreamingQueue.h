@@ -9,10 +9,11 @@
 typedef struct Packet
 {
     uint32_t timestamp;
-    float    value[7];
-    Packet(uint32_t _timestamp, float _value[]): timestamp(_timestamp)
+    uint32_t device_id;
+    float    value[6];
+    Packet(uint32_t _timestamp, uint32_t _device_id, float _value[]): timestamp(_timestamp), device_id(_device_id)
     {
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 6; i++)
           value[i] = _value[i];
     }
 } *PACKET_T; // sizeof(Packet) = 32
