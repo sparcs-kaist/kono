@@ -1,11 +1,17 @@
 import os, websockets, asyncio, struct, collections, time, json
-import http.server
-import socketserver
 from dotenv import load_dotenv
+from aiohttp.web import Application, run_app
+from router import Router
 
 load_dotenv()
 WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')
 HTTP_PORT      = os.getenv('HTTP_PORT')
+
+def run_http_server():
+    app = Application()
+    router = Router()
+    router.register(app.router)
+    run_app(app, port=HTTP_PORT)
 
 INTERVALS = {
     '10sec':           10 * 1000,
@@ -22,6 +28,12 @@ MAX_STATUS_CLIENTS = 2
 metadata = { }
 datadump = { }
 status_clients = []
+
+def get_data(device_id):
+    if device_id in datadump:
+        return datadump[device_id]
+    else:
+        return None
 
 def millis():
     return int(round(time.time() * 1000))
@@ -93,14 +105,14 @@ async def collector_handler(websocket, path):
         if websocket in status_clients:
             status_clients.remove(websocket)
 
-def main():
+def run_websocket_server():
     start_server = websockets.serve(collector_handler, host='0.0.0.0', port=WEBSOCKET_PORT)
     asyncio.get_event_loop().run_until_complete(start_server)
-    asyncio.get_event_loop().run_forever()
 
-    httpRequestHandler = http.server.SimpleHTTPRequestHandler
-    with socketserver.TCPServer(('', HTTP_PORT), httpRequestHandler) as httpd:
-        httpd.serve_forever()
+def main():
+    run_websocket_server()
+    run_http_server()
+    asyncio.get_event_loop().run_forever()
 
 if __name__ == '__main__':
     main()
