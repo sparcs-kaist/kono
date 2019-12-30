@@ -2,31 +2,24 @@ import os, websockets, asyncio, struct, collections, time, json
 from dotenv import load_dotenv
 from aiohttp.web import Application, run_app
 from router import Router
+from data   import Datadump
 
 load_dotenv()
 WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')
 HTTP_PORT      = os.getenv('HTTP_PORT')
 
+datadump = Datadump()
+
 def run_http_server():
     app = Application()
-    router = Router()
+    router = Router(datadump)
     router.register(app.router)
     run_app(app, port=HTTP_PORT)
 
-INTERVALS = {
-    '10sec':           10 * 1000,
-    '1min' :       1 * 60 * 1000,
-    '10min':      10 * 60 * 1000,
-    '1h'   :  1 * 60 * 60 * 1000,
-    '6h'   :  6 * 60 * 60 * 1000,
-    '24h'  : 24 * 60 * 60 * 1000
-}
-INTERVAL_KEYS = INTERVALS.keys()
 WEIGHT = 0.97
 MAX_STATUS_CLIENTS = 2
 
 metadata = { }
-datadump = { }
 status_clients = []
 
 def get_data(device_id):
@@ -48,6 +41,8 @@ async def collector_handler(websocket, path):
             device_id = int.from_bytes(data_bin[1], 'little')
             data      = list(map(lambda x: struct.unpack('<f', x)[0], data_bin[2:]))
 
+            current_time = millis()
+
             if device_id == 0xFFFFFFFF:
                 if len(status_clients) >= MAX_STATUS_CLIENTS:
                     await websocket.send('[kono-judge] Connection refused')
@@ -56,29 +51,14 @@ async def collector_handler(websocket, path):
                     await websocket.send('[kono-judge] Connected')
                 continue
 
-            current_time = millis()
-
             if device_id not in metadata:
                 metadata[device_id] = {
                     'offset'     : current_time - timestamp,
-                    'last_packet': 0,
-                    'buffer_size': {
-                        '10sec': 0,
-                        '1min' : 0,
-                        '10min': 0,
-                        '1h'   : 0,
-                        '6h'   : 0,
-                        '24h'  : 0
-                    }
+                    'last_packet': 0
                 }
-            
+
             metadata[device_id]['last_packet'] = timestamp
             metadata[device_id]['offset'] = WEIGHT * metadata[device_id]['offset'] + (1 - WEIGHT) * (current_time - timestamp)
-
-            if device_id not in datadump:
-                datadump[device_id] = { }
-                for key in INTERVAL_KEYS:
-                    datadump[device_id][key] = collections.deque()
 
             new_data = {
                 'timestamp': round(timestamp + metadata[device_id]['offset']),
@@ -86,16 +66,8 @@ async def collector_handler(websocket, path):
                 'data': data
             }
 
-            for key in INTERVAL_KEYS:
-                datadump[device_id][key].append(new_data)
+            datadump.insert(device_id, new_data, current_time)
 
-            for key in INTERVAL_KEYS:
-                while datadump[device_id][key][0]['timestamp'] + INTERVALS[key] < current_time:
-                    datadump[device_id][key].popleft()
-
-            for key in INTERVAL_KEYS:
-                metadata[device_id]['buffer_size'][key] = len(datadump[device_id][key])
-            
             if len(status_clients) > 0:
                 await asyncio.wait([client.send(json.dumps(new_data)) for client in status_clients])
             await websocket.send(data_bin[0])

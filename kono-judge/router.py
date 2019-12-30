@@ -5,6 +5,7 @@ import json
 from aiohttp.web import Request, Response
 from aiohttp.http_exceptions import HttpBadRequest
 from aiohttp.web_exceptions  import HTTPMethodNotAllowed
+from data import Datadump
 
 DEFAULT_METHODS = ('GET', 'POST', 'PUT', 'DELETE')
 
@@ -37,31 +38,28 @@ class RestEndPoint:
         return await method(**{arg_name: available_args[arg_name] for arg_name in wanted_args})
 
 class DataEndpoint(RestEndPoint):
-    def __init__(self):
+    def __init__(self, datadump):
         super().__init__()
+        self.datadump = datadump
 
     async def get(self, request):
-
         try:
-            device_id = request.match_info['device_id']
+            device_id = int(request.match_info['device_id'])
             recent    = request.rel_url.query['recent']
-
-            print(device_id, recent)
-
             return Response(
                 status=200, content_type='application/json',
-                body=json.dumps({'hello': 'world'})
+                body=json.dumps(self.datadump.get(device_id, recent))
             )
 
         except KeyError:
             return Response(
                 status=400, content_type='text/plain',
-                body='missing query parameter \"recent\"'
+                body='invalid query parameter \"recent\"'
             )
 
 class Router:
-    def __init__(self):
-        self.endpoint = DataEndpoint()
+    def __init__(self, datadump):
+        self.endpoint = DataEndpoint(datadump)
 
     def register(self, router):
         router.add_route('*', '/{device_id}', self.endpoint.dispatch)
