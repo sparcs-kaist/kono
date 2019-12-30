@@ -1,8 +1,12 @@
-import os, websockets, asyncio, struct, json, collections, time
+import os, websockets, asyncio, struct, collections, time, json
+import http.server
+import socketserver
 from dotenv import load_dotenv
 
 load_dotenv()
-PORT = os.getenv('WEBSOCKET_PORT')
+WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')
+HTTP_PORT      = os.getenv('HTTP_PORT')
+
 INTERVALS = {
     '10sec':           10 * 1000,
     '1min' :       1 * 60 * 1000,
@@ -13,9 +17,11 @@ INTERVALS = {
 }
 INTERVAL_KEYS = INTERVALS.keys()
 WEIGHT = 0.97
+MAX_STATUS_CLIENTS = 2
 
 metadata = { }
 datadump = { }
+status_clients = []
 
 def millis():
     return int(round(time.time() * 1000))
@@ -29,6 +35,14 @@ async def collector_handler(websocket, path):
             timestamp = int.from_bytes(data_bin[0], 'little')
             device_id = int.from_bytes(data_bin[1], 'little')
             data      = list(map(lambda x: struct.unpack('<f', x)[0], data_bin[2:]))
+
+            if device_id == 0xFFFFFFFF:
+                if len(status_clients) >= MAX_STATUS_CLIENTS:
+                    await websocket.send('[kono-judge] Connection refused')
+                else:
+                    status_clients.append(websocket)
+                    await websocket.send('[kono-judge] Connected')
+                continue
 
             current_time = millis()
 
@@ -54,26 +68,39 @@ async def collector_handler(websocket, path):
                 for key in INTERVAL_KEYS:
                     datadump[device_id][key] = collections.deque()
 
-            for key in INTERVAL_KEYS:
-                datadump[device_id][key].append((timestamp + metadata[device_id]['offset'], data))
+            new_data = {
+                'timestamp': round(timestamp + metadata[device_id]['offset']),
+                'device_id': device_id,
+                'data': data
+            }
 
             for key in INTERVAL_KEYS:
-                while datadump[device_id][key][0][0] + INTERVALS[key] < current_time:
+                datadump[device_id][key].append(new_data)
+
+            for key in INTERVAL_KEYS:
+                while datadump[device_id][key][0]['timestamp'] + INTERVALS[key] < current_time:
                     datadump[device_id][key].popleft()
 
             for key in INTERVAL_KEYS:
                 metadata[device_id]['buffer_size'][key] = len(datadump[device_id][key])
             
-            # reply
+            if len(status_clients) > 0:
+                await asyncio.wait([client.send(json.dumps(new_data)) for client in status_clients])
             await websocket.send(data_bin[0])
 
     finally:
         print('[kono-judge] Device Disconnected')
+        if websocket in status_clients:
+            status_clients.remove(websocket)
 
 def main():
-    start_server = websockets.serve(collector_handler, host='0.0.0.0', port=PORT)
+    start_server = websockets.serve(collector_handler, host='0.0.0.0', port=WEBSOCKET_PORT)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
+
+    httpRequestHandler = http.server.SimpleHTTPRequestHandler
+    with socketserver.TCPServer(('', HTTP_PORT), httpRequestHandler) as httpd:
+        httpd.serve_forever()
 
 if __name__ == '__main__':
     main()
