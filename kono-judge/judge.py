@@ -39,7 +39,7 @@ async def collector_handler(websocket, path):
             data_bin  = list(map(lambda i: message[4*i : 4*(i+1)], range(8)))
             timestamp = int.from_bytes(data_bin[0], 'little')
             device_id = int.from_bytes(data_bin[1], 'little')
-            data      = list(map(lambda x: struct.unpack('<f', x)[0], data_bin[2:]))
+            data      = list(map(lambda x: round(struct.unpack('<f', x)[0], 2), data_bin[2:]))
 
             current_time = millis()
 
