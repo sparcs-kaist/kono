@@ -27,4 +27,8 @@ class Datadump():
                 q.popleft()
     
     def get(self, device_id, recent):
+        if device_id not in self.datadump:
+            raise KeyError('device_id')
+        if recent not in self.datadump[device_id]:
+            raise KeyError('recent')
         return list(self.datadump[device_id][recent])

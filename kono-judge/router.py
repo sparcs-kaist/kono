@@ -43,19 +43,35 @@ class DataEndpoint(RestEndPoint):
         self.datadump = datadump
 
     async def get(self, request):
+
         try:
             device_id = int(request.match_info['device_id'])
+            if 'recent' not in request.rel_url.query:
+                raise Exception('recent')
             recent    = request.rel_url.query['recent']
             return Response(
                 status=200, content_type='application/json',
                 body=json.dumps(self.datadump.get(device_id, recent))
             )
 
-        except KeyError:
+        except ValueError:
             return Response(
                 status=400, content_type='text/plain',
-                body='invalid query parameter \"recent\"'
+                body='invalid path parameter \"device_id\"'
             )
+
+        except Exception as e:
+            msg = e.args[0]
+            if msg == 'device_id':
+                return Response(
+                    status=404, content_type='text/plain',
+                    body='device does not exist'
+                )
+            elif msg == 'recent':
+                return Response(
+                    status=400, content_type='text/plain',
+                    body='invalid query parameter \"recent\"'
+                )
 
 class Router:
     def __init__(self, datadump):
