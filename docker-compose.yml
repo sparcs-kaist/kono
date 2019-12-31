@@ -119,8 +119,6 @@ services:
     depends_on:
       - maintainer
     restart: always
-    ports:
-      - "7077:7077"
     environment:
       WEBSOCKET_PORT: 7077
       HTTP_PORT: 7078
