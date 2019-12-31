@@ -139,7 +139,7 @@ services:
   maintainer:
     build:
       context: .
-      dockerfile: Dockerfile-maintainer
+      dockerfile: maintainer.Dockerfile
     ports:
       - "8022:22"
     environment:
