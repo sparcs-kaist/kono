@@ -40,6 +40,7 @@ VOLUME /usr/src/api-stage/dist
 VOLUME /usr/src/app-stage/build
 VOLUME /usr/src/log/api-stage
 VOLUME /usr/src/log/nginx-stage
+VOLUME /usr/src/judge
 
 # Retrieve source files
 WORKDIR /usr/src

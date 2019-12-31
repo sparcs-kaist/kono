@@ -15,3 +15,9 @@ npm install
 npm run build
 cp -r build /usr/src/app-production
 cd ..
+
+cd kono-judge
+cp -r requirements.txt /usr/src/judge
+pip3 install -r requirements.txt
+cp -r src /usr/src/judge
+cd ..
