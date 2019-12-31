@@ -13,12 +13,9 @@ RUN npm i -g nodemon
 VOLUME /usr/src/app
 WORKDIR /usr/src/app
 
-ADD requirements.txt .
-ADD src/ src/
-
 RUN pip3 install -r requirements.txt
 
 EXPOSE 7077
 EXPOSE 7078
 
-CMD [ "/bin/sh", "-c", "ls && nodemon --watch src/ --exec \"python3 src/judge.py\"" ]
+CMD [ "/bin/sh", "-c", "nodemon --watch src/ --exec \"python3 src/judge.py\"" ]

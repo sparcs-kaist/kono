@@ -115,10 +115,22 @@ services:
       - nginx_log_stage:/var/log/nginx
       - app_static_stage:/usr/share/nginx/assets
 
+  judge:
+    depends_on:
+      - maintainer
+    restart: always
+    environment:
+      WEBSOCKET_PORT: 7077
+      HTTP_PORT: 7078
+    build: kono-judge/
+    volumes:
+      - judge:/usr/src/app
+
   nginx_general:
     depends_on:
       - nginx_production
       - nginx_stage
+      - judge
     ports:
       - "80:80"
     restart: always
@@ -141,6 +153,7 @@ services:
       - api_log_stage:/usr/src/log/api-stage
       - app_build_stage:/usr/src/app-stage/build
       - nginx_log_stage:/usr/src/log/nginx-stage
+      - judge:/usr/src/judge
 
 volumes:
   data_production:
@@ -155,6 +168,7 @@ volumes:
   app_build_stage:
   nginx_log_stage:
   app_static_stage:
+  judge:
 
 secrets:
   db_root_password_production:
