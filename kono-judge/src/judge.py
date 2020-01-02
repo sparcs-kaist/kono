@@ -1,4 +1,5 @@
 import os, websockets, asyncio, struct, collections, time, json
+from websockets.exceptions import ConnectionClosedError
 from dotenv import load_dotenv
 from aiohttp.web import Application, run_app
 from router import Router
@@ -18,6 +19,8 @@ def run_http_server():
 
 WEIGHT = 0.97
 MAX_STATUS_CLIENTS = 2
+
+confidentials = json.loads(open('confidentials.json').read())
 
 metadata = { }
 status_clients = []
@@ -50,6 +53,11 @@ async def collector_handler(websocket, path):
                     status_clients.append(websocket)
                     await websocket.send('[kono-judge] Connected')
                 continue
+            
+            if device_id not in confidentials['allowed_device_ids']:
+                await websocket.send('[kono-judge] Invalid device id')
+                await websocket.close()
+                continue
 
             if device_id not in metadata:
                 metadata[device_id] = {
@@ -71,6 +79,9 @@ async def collector_handler(websocket, path):
             if len(status_clients) > 0:
                 await asyncio.wait([client.send(json.dumps(new_data)) for client in status_clients])
             await websocket.send(data_bin[0])
+
+    except ConnectionClosedError:
+        print('[kono-judge] Connection closed without close frame')
 
     finally:
         print('[kono-judge] Device Disconnected')
