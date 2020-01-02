@@ -23,7 +23,8 @@ MAX_STATUS_CLIENTS = 2
 confidentials = json.loads(open('confidentials.json').read())
 
 metadata = { }
-status_clients = []
+arduino_clients = { }
+status_clients  = []
 
 def get_data(device_id):
     if device_id in datadump:
@@ -53,11 +54,19 @@ async def collector_handler(websocket, path):
                     status_clients.append(websocket)
                     await websocket.send('[kono-judge] Connected')
                 continue
-            
-            if device_id not in confidentials['allowed_device_ids']:
-                await websocket.send('[kono-judge] Invalid device id')
-                await websocket.close()
-                continue
+            else:
+                if device_id in confidentials['allowed_device_ids']:
+                    if device_id in arduino_clients.values():
+                        await websocket.send(f'[kono-judge] The device {device_id} is already connected. Are you sure you are the right device?')
+                        print(f'[kono-judge] Dupulicate connection attempt from device {device_id}')
+                        await websocket.close()
+                        continue
+                    else:
+                        arduino_clients[websocket] = device_id
+                else:
+                    await websocket.send('[kono-judge] Invalid device id')
+                    await websocket.close()
+                    continue
 
             if device_id not in metadata:
                 metadata[device_id] = {
@@ -85,11 +94,17 @@ async def collector_handler(websocket, path):
 
     finally:
         print('[kono-judge] Device Disconnected')
+        if websocket in arduino_clients:
+            del arduino_clients[websocket]
         if websocket in status_clients:
             status_clients.remove(websocket)
 
 def run_websocket_server():
-    start_server = websockets.serve(collector_handler, host='0.0.0.0', port=WEBSOCKET_PORT)
+    start_server = websockets.serve(
+        collector_handler, 
+        host='0.0.0.0', port=WEBSOCKET_PORT,
+        max_size=256, max_queue=8, read_limit=1024, write_limit=1024
+    )
     asyncio.get_event_loop().run_until_complete(start_server)
 
 def main():
