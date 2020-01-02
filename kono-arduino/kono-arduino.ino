@@ -22,7 +22,7 @@ extern const String   WEBSOCKET_HOST;
 extern const uint16_t WEBSOCKET_PORT;
 extern const uint32_t DEVICE_ID;
 
-static const uint32_t   FETCH_INTERVAL       = 100; // 100 ms
+static const uint32_t   FETCH_INTERVAL       = 1000; // 1000 ms
 static const float      SENSITIVITY_PRESENCE = 6.0;
 static const float      SENSITIVITY_MOVEMENT = 10.0;
 static const int        DETECT_INTERVAL      = 30;
