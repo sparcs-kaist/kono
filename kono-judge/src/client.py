@@ -1,6 +1,6 @@
 import asyncio
 import websockets
-import signal
+from websockets.exceptions import ConnectionClosedError
 import os
 from dotenv import load_dotenv
 
@@ -16,6 +16,8 @@ async def client(websocket):
     try:
         async for message in websocket:
             print(f'[Client] Received: {message}')
+    except ConnectionClosedError:
+        print('[Client] Connection closed without close frame') 
     finally:
         print('[Client] Server closed connection')
 

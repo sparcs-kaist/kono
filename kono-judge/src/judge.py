@@ -1,7 +1,7 @@
 import os, websockets, asyncio, struct, collections, time, json
 from websockets.exceptions import ConnectionClosedError
 from dotenv import load_dotenv
-from aiohttp.web import Application, run_app
+from aiohttp.web import Application, AppRunner, TCPSite
 from router import Router
 from data   import Datadump
 
@@ -11,18 +11,27 @@ HTTP_PORT      = os.getenv('HTTP_PORT')
 
 datadump = Datadump()
 
-def run_http_server():
+async def http_server():
     app = Application()
     router = Router(datadump)
     router.register(app.router)
-    run_app(app, port=HTTP_PORT)
+    runner = AppRunner(app)
+    await runner.setup()
+    site = TCPSite(runner, '0.0.0.0', HTTP_PORT)
+    return runner, site
+
+async def close_http_server(runner):
+    print('[kono-judge] Closing HTTP server')
+    await runner.cleanup()
 
 WEIGHT = 0.97
-MAX_STATUS_CLIENTS = 2
+MAX_CONNECTIONS     = 1
+MAX_STATUS_CLIENTS  = 2
 
 confidentials = json.loads(open('confidentials.json').read())
 
 metadata = { }
+connections = []
 arduino_clients = { }
 status_clients  = []
 
@@ -37,6 +46,11 @@ def millis():
 
 async def collector_handler(websocket, path):
     print('[kono-judge] Device Connected')
+    if len(connections) >= MAX_CONNECTIONS:
+        await websocket.send('[kono-judge] Max connection limit exceeded')
+        await websocket.close()
+    else:
+        connections.append(websocket)
     try:
         async for message in websocket:
 
@@ -94,23 +108,29 @@ async def collector_handler(websocket, path):
 
     finally:
         print('[kono-judge] Device Disconnected')
+        if websocket in connections:
+            connections.remove(websocket)
         if websocket in arduino_clients:
             del arduino_clients[websocket]
         if websocket in status_clients:
             status_clients.remove(websocket)
 
-def run_websocket_server():
-    start_server = websockets.serve(
+def websocket_server():
+    return websockets.serve(
         collector_handler, 
         host='0.0.0.0', port=WEBSOCKET_PORT,
         max_size=256, max_queue=8, read_limit=1024, write_limit=1024
     )
-    asyncio.get_event_loop().run_until_complete(start_server)
 
 def main():
-    run_websocket_server()
-    run_http_server()
-    asyncio.get_event_loop().run_forever()
+    loop = asyncio.get_event_loop()
+    websocket_runner       = websocket_server()
+    http_runner, http_site = loop.run_until_complete(http_server())
+    try:
+        asyncio.gather(websocket_runner, http_site.start())
+        asyncio.get_event_loop().run_forever()
+    except KeyboardInterrupt:
+        print('[kono-judge] Exiting...')
 
 if __name__ == '__main__':
     main()
