@@ -1,6 +1,6 @@
 import asyncio
 import websockets
-from websockets.exceptions import ConnectionClosedError
+from websockets.exceptions import ConnectionClosedOK, ConnectionClosedError
 import os
 from dotenv import load_dotenv
 
@@ -12,10 +12,12 @@ async def connect():
     return await websockets.connect(uri)
 
 async def client(websocket):
-    await websocket.send(b'\x00\x00\x00\x00\x4C\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
     try:
+        await websocket.send(b'\x00\x00\x00\x00\x4C\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
         async for message in websocket:
             print(f'[Client] Received: {message}')
+    except ConnectionClosedOK:
+        print('[Client] Connection refused from server')
     except ConnectionClosedError:
         print('[Client] Connection closed without close frame') 
     finally:
