@@ -42,7 +42,11 @@ MAX_CONNECTIONS     = 9     # Max number of total websocket connections availabl
 MAX_STATUS_CLIENTS  = 2     # Max number of kono-judge-status clients available
 
 # Confidentials (refer to docs.kono.sparcs.org)
-confidentials = json.loads(open('confidentials.json').read())
+try:
+    confidentials = json.loads(open('confidentials.json').read())
+except FileNotFoundError:
+    print('confidentials.json does not exist')
+    exit()
 
 # Global data structure
 metadata        = {}    # Storage of arduino websocket metadata 
@@ -186,7 +190,7 @@ def main():
         # Execute cleanup coroutines
         loop.run_until_complete(close_websocket_server())
         loop.run_until_complete(close_http_server(http_runner))
-        
+
         print('[kono-judge] Exiting...')
 
 if __name__ == '__main__':
