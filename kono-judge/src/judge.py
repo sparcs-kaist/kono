@@ -98,6 +98,7 @@ async def collector_handler(websocket, path):
                 # MAX_STATUS_CLIENTS check
                 if len(status_clients) >= MAX_STATUS_CLIENTS:
                     await websocket.send('[kono-judge] Connection refused by max status client limit')
+                    await websocket.close()
                 else:
                     status_clients.append(websocket)
                     await websocket.send('[kono-judge] Connected')

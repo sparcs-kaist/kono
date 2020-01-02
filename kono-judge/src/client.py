@@ -14,7 +14,7 @@ WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')
 
 async def connect():
     # Connection coroutine
-    uri = f"ws://localhost:{WEBSOCKET_PORT}"
+    uri = f"ws://judge.kono.sparcs.org/ws"
     return await websockets.connect(uri)
 
 async def client(websocket):
@@ -24,7 +24,7 @@ async def client(websocket):
         # - bits[0:3] are timestamp
         # - bits[4:7] are device id
         # - Little endian representation
-        await websocket.send(b'\x00\x00\x00\x00\x4C\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+        await websocket.send(b'\x00\x00\x00\x00\xFF\xFF\xFF\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
         # Print received messages from now on
         async for message in websocket:
             print(f'[Client] Received: {message}')
