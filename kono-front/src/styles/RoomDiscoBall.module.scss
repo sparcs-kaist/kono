@@ -1,5 +1,14 @@
 @import 'mixins/all';
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes bounce {
   0% {
     transform: scale(1);
@@ -75,7 +84,7 @@ $dur: 10s;
 
 @include themed() {
   .discoBall{
-    animation: bounce 2s infinite;
+    animation: bounce 2s infinite, fadeIn 0.3s;
 
     .view {
       @include view(400);
