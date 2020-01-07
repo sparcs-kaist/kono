@@ -45,8 +45,8 @@ export default ({ rooms, highlight }) => {
         const onMouseOver = room && (() => setHover(room_idx));
         const onMouseOut = room && (() => setHover(null));
 
-        const showHighlight = (highlight === stateType) || ( (state !== 1) && isHovered );
-        const showAnimation = (state === 1) && isHovered;
+        const showHighlight = (highlight === stateType) || ( (state !== 0) && isHovered );
+        const showAnimation = (state === 0) && isHovered;
 
         return (
             <Fragment key={`room-fragment-${room_idx}`}>
@@ -67,7 +67,7 @@ export default ({ rooms, highlight }) => {
                         isHovered && <text>
                             <tspan 
                                 x={state2path(state).pos[room_idx].x}
-                                y={(state === 1)? state2path(state).pos[room_idx].y + 20 : state2path(state).pos[room_idx].y - 5}
+                                y={(state === 0)? state2path(state).pos[room_idx].y + 20 : state2path(state).pos[room_idx].y - 5}
                                 fontSize="16"
                             >
                                 {
@@ -78,7 +78,7 @@ export default ({ rooms, highlight }) => {
                             </tspan>
                             <tspan
                                 x={state2path(state).pos[room_idx].x}
-                                y={(state === 1)? state2path(state).pos[room_idx].y + 45 : state2path(state).pos[room_idx].y + 20}
+                                y={(state === 0)? state2path(state).pos[room_idx].y + 45 : state2path(state).pos[room_idx].y + 20}
                                 fontSize="20"
                             >
                                 { text[stateType] }
@@ -89,8 +89,8 @@ export default ({ rooms, highlight }) => {
                 {
                     showAnimation && <RoomDiscoBall
                         key={`room-discoball-${room_idx}`}
-                        x={SVGPathsFilled.discoBallPos[room_idx].x}
-                        y={SVGPathsFilled.discoBallPos[room_idx].y}
+                        x={SVGPathsEmpty.discoBallPos[room_idx].x}
+                        y={SVGPathsEmpty.discoBallPos[room_idx].y}
                     />
                 }
             </Fragment>
