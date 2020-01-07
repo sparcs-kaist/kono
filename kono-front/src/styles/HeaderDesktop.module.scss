@@ -24,8 +24,8 @@
             
             .HeaderDesktop__menu {
                 margin: 17px 0 18px 24px;
-                height: 15px;
-                font-size: 15px;
+                height: 16px;
+                font-size: 14px;
 
                 @include flexbox(row, $center: true);
                 @include link;
@@ -37,7 +37,7 @@
         
             .HeaderDesktop__common_menu {
                 margin: 17px 24px 17px auto;
-                height: 14px;
+                height: 16px;
                 font-size: 14px;
                 
                 @include flexbox(row, $center: true);
@@ -45,7 +45,7 @@
             }
 
             .HeaderDesktop__common_menu + .HeaderDesktop__common_menu {
-                margin-left: 24px;
+                margin-left: -4px;
             }
 
         }

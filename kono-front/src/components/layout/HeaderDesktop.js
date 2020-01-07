@@ -26,14 +26,14 @@ export default ({
                     className={styles.HeaderDesktop__common_menu}
                     onClick={onToggleTheme}
                 >
-                    <MaterialIcon style={{ padding: '0 5px' }} md20>brightness_4</MaterialIcon>
+                    <MaterialIcon style={{ padding: '0 6px' }} md18>brightness_4</MaterialIcon>
                     <div>{ text.toggle_theme }</div>
                 </span>
                 <div 
                     className={styles.HeaderDesktop__common_menu}
                     onClick={onToggleLanguage}
                 >
-                    <MaterialIcon style={{ padding: '0 5px' }} md20>language</MaterialIcon>
+                    <MaterialIcon style={{ padding: '0 6px' }} md18>language</MaterialIcon>
                     <div>{ text.toggle_language }</div>
                 </div>
                 {
