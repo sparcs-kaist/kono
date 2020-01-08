@@ -20,6 +20,7 @@ extern const char    *USERNAME;
 extern const char    *PASSWORD;
 extern const String   WEBSOCKET_HOST;
 extern const uint16_t WEBSOCKET_PORT;
+extern const String   WEBSOCKET_PATH;
 extern const uint32_t DEVICE_ID;
 
 static const uint32_t   FETCH_INTERVAL       = 1000; // 1000 ms
@@ -149,7 +150,7 @@ void setup()
     Serial.println(WiFi.localIP());
 #endif
 
-    g_websocket_client.begin(WEBSOCKET_HOST, WEBSOCKET_PORT);
+    g_websocket_client.begin(WEBSOCKET_HOST, WEBSOCKET_PORT, WEBSOCKET_PATH);
     g_websocket_client.onEvent(websocket_event);
 
     g_queue = new StreamingQueue();
