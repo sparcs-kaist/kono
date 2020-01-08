@@ -39,8 +39,8 @@ export default ({ setHighlight, isLoadingRooms, refreshRooms, lastUpdatedTime })
 
     return (
         <div className={styles.RoomLegendPanel}>
-            <LegendLabel labelName="filled" />
-            <LegendLabel labelName="empty"  />
+            <LegendLabel labelName="empty" />
+            <LegendLabel labelName="filled"  />
             <LegendLabel labelName="null"   />
             <RoomRefreshButton
                 isLoading={isLoadingRooms}
