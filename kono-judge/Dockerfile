@@ -16,4 +16,4 @@ WORKDIR /usr/src/app
 EXPOSE 7077
 EXPOSE 7078
 
-CMD [ "/bin/sh", "-c", "nodemon --watch src/ --exec \"python3 src/judge.py\"" ]
+CMD [ "/bin/sh", "-c", "nodemon --watch src/ --watch requirements.txt -e py --exec \"pip3 install -r requirements.txt && python3 src/judge.py\"" ]
