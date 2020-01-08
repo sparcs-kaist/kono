@@ -27,10 +27,10 @@
                 }
                 color: t(text-highlight);
                 &.RoomLegendPanel__empty {
-                    background-color: t(panel-background);
+                    background-color: t(theme-background);
                 }
                 &.RoomLegendPanel__filled {
-                    background-color: t(theme-background);
+                    background-color: t(panel-background);
                 }
                 &.RoomLegendPanel__null {
                     background-color: t(inactive-background);
