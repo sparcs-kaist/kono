@@ -105,20 +105,21 @@ async def collector_handler(websocket, path):
                 continue
             else:
                 # Client is kono-arduino
-                # device_id check
-                if device_id in confidentials['allowed_device_ids']:
-                    # duplicate connection check
-                    if device_id in arduino_clients.values():
-                        await websocket.send(f'[kono-judge] The device {device_id} is already connected. Are you sure you are the right device?')
-                        print(f'[kono-judge] Dupulicate connection attempt from device {device_id}')
+                if websocket not in arduino_clients:
+                    # device_id check
+                    if device_id in confidentials['allowed_device_ids']:
+                        # duplicate connection check
+                        if device_id in arduino_clients.values():
+                            await websocket.send(f'[kono-judge] The device {device_id} is already connected. Are you sure you are the right device?')
+                            print(f'[kono-judge] Dupulicate connection attempt from device {device_id}')
+                            await websocket.close()
+                            continue
+                        else:
+                            arduino_clients[websocket] = device_id
+                    else:
+                        await websocket.send('[kono-judge] Invalid device id')
                         await websocket.close()
                         continue
-                    else:
-                        arduino_clients[websocket] = device_id
-                else:
-                    await websocket.send('[kono-judge] Invalid device id')
-                    await websocket.close()
-                    continue
 
             # Initialize metadata data structure
             if device_id not in metadata:

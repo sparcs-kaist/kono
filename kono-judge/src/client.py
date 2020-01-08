@@ -14,7 +14,7 @@ WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')
 
 async def connect():
     # Connection coroutine
-    uri = f"ws://judge.kono.sparcs.org/ws"
+    uri = f"ws://localhost:7077"
     return await websockets.connect(uri)
 
 async def client(websocket):
