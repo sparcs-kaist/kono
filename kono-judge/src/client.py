@@ -5,12 +5,16 @@
 
 import asyncio
 import websockets
+import time
 from websockets.exceptions import ConnectionClosedOK, ConnectionClosedError
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')
+
+def millis():
+    return int(round(time.time() * 1000)) % 1048576
 
 async def connect():
     # Connection coroutine
@@ -24,10 +28,13 @@ async def client(websocket):
         # - bits[0:3] are timestamp
         # - bits[4:7] are device id
         # - Little endian representation
-        await websocket.send(b'\x00\x00\x00\x00\xFF\xFF\xFF\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+        await websocket.send(millis().to_bytes(4, byteorder='little') + b'\xFF\xFF\xFF\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+        # await websocket.send(millis().to_bytes(4, byteorder='little') + b'\xFD\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
         # Print received messages from now on
         async for message in websocket:
             print(f'[Client] Received: {message}')
+            # await asyncio.sleep(1)
+            # await websocket.send(millis().to_bytes(4, byteorder='little') + b'\xFD\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
     except ConnectionClosedOK:
         # Received closing frame from the server
         print('[Client] Connection refused from server')
