@@ -23,6 +23,15 @@
 
 }
 
+@keyframes textFillColorChange {
+
+    0%      {fill: #333333;}
+    50%     {fill: #333333;}
+    75%     {fill: #EEEEEE;}
+    100%    {fill: #EEEEEE;}
+
+}
+
 @include themed() {
 
     .RoomStatePanelDesktop {
@@ -78,6 +87,10 @@
                 letter-spacing: -0.03em;
             }
 
+        }
+        
+        .textEffect {
+            animation: textFillColorChange 2s infinite;
         }
 
     }
