@@ -11,13 +11,21 @@ export default () => {
         errorCodeData
     ] = useFetch([]);
 
+    const [
+        deviceIDs,
+        fetchDeviceIDs,
+        isLoadingDeviceIDs,
+        errorCodeDeviceIDs
+    ] = useFetch([]);
+
     const [lastUpdatedTime, setLastUpdatedTime] = useState(Date.now());
     const lastUpdatedTimeString = new Date(lastUpdatedTime).toLocaleString()
 
     useEffect(() => {
         fetchData(API.data, [2124, '10sec']);
+        fetchDeviceIDs(API.devices, []);
         setLastUpdatedTime(Date.now());
-    }, [fetchData]);
+    }, [fetchData, fetchDeviceIDs]);
 
     return (
         <div>
@@ -28,10 +36,20 @@ export default () => {
             <div>
                 { errorCodeData }
             </div>
+            <div>
+                { errorCodeDeviceIDs }
+            </div>
             {
-                isLoadingData && (
+                !isLoadingData && (
                     <div>
                         { data }
+                    </div>
+                )
+            }
+            {
+                !isLoadingDeviceIDs && (
+                    <div>
+                        { deviceIDs }
                     </div>
                 )
             }
