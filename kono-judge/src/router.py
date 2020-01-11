@@ -78,4 +78,6 @@ class Router:
         self.endpoint = DataEndpoint(datadump)
 
     def register(self, router):
-        router.add_route('*', '/{device_id}', self.endpoint.dispatch)
+        # Add routes for methods other than OPTIONS (CORS preflight handled by aiohttp_cors)
+        for method in ('GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'):
+            router.add_route(method, '/{device_id}', self.endpoint.dispatch)
