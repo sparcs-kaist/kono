@@ -1,4 +1,5 @@
-import { WebsocketManager } from 'lib/websocket';
+import { useEffect } from 'react';
+import { WebSocketManager } from 'lib/websocket';
 
 const READY_STATE_CONNECTING = 'CONNECTING';
 const REDAY_STATE_OPEN       = 'OPEN';
@@ -22,8 +23,13 @@ function readyState2String(readyState) {
 
 export default () => {
 
-    const { register, unregister } = WebsocketManager;
+    const { register, unregister } = WebSocketManager;
 
-    return [register, unregister];
+    useEffect(() => {
+        const eventListener = register();
+        return () => {
+            unregister(eventListener);
+        };
+    });
 
 };

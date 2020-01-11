@@ -51,23 +51,27 @@ const WebsocketManager = (() => {
             if (!_websocket) {
                 _websocket = initWebSocket();
             }
-            _eventListeners.push(eventListener);
+            if (eventListener) {
+                _eventListeners.push(eventListener);
+            }
             return eventListener;
         },
         unregister: (eventListener) => {
-            const idx = _eventListeners.findIndex(eventListener);
-            if (idx > -1)
-                _eventListeners.splice(idx, 1);
-            else
-                throw Error('unregister: given eventListener was not in the list');
-            if (_eventListeners.length === 0) {
-                _websocket.close();
-                const oldWebSocketCloseHandler = _websocket.onclose;
-                // cleanup websocket context when no one is listening
-                _websocket.onclose = (e) => {
-                    oldWebSocketCloseHandler(e);
-                    _websocket = null;
-                };
+            if (eventListener) {
+                const idx = _eventListeners.findIndex(eventListener);
+                if (idx > -1)
+                    _eventListeners.splice(idx, 1);
+                else
+                    throw Error('unregister: given eventListener was not in the list');
+                if (_eventListeners.length === 0) {
+                    _websocket.close();
+                    const oldWebSocketCloseHandler = _websocket.onclose;
+                    // cleanup websocket context when no one is listening
+                    _websocket.onclose = (e) => {
+                        oldWebSocketCloseHandler(e);
+                        _websocket = null;
+                    };
+                }
             }
         }
     }

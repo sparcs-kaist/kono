@@ -42,14 +42,14 @@ export default () => {
             {
                 !isLoadingData && (
                     <div>
-                        { data }
+                        { JSON.stringify(data) }
                     </div>
                 )
             }
             {
                 !isLoadingDeviceIDs && (
                     <div>
-                        { deviceIDs }
+                        { JSON.stringify(deviceIDs) }
                     </div>
                 )
             }
