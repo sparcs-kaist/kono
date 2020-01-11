@@ -2,9 +2,11 @@
 
 import inspect
 import json
+
 from aiohttp.web import Request, Response
 from aiohttp.http_exceptions import HttpBadRequest
 from aiohttp.web_exceptions  import HTTPMethodNotAllowed
+
 from data import Datadump
 
 DEFAULT_METHODS = ('GET', 'POST', 'PUT', 'DELETE')
@@ -73,11 +75,24 @@ class DataEndpoint(RestEndPoint):
                     body='invalid query parameter \"recent\"'
                 )
 
+class DeviceEndPoint(RestEndPoint):
+    def __init__(self, connection):
+        super().__init__()
+        self.connection = connection
+
+    async def get(self, request):
+        return Response(
+                status=200, content_type='application/json',
+                body=json.dumps(self.connection.device_ids())
+            )
+
 class Router:
-    def __init__(self, datadump):
-        self.endpoint = DataEndpoint(datadump)
+    def __init__(self, datadump, connection):
+        self.data_endpoint = DataEndpoint(datadump)
+        self.device_endpoint = DeviceEndPoint(connection)
 
     def register(self, router):
         # Add routes for methods other than OPTIONS (CORS preflight handled by aiohttp_cors)
         for method in ('GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'):
-            router.add_route(method, '/{device_id}', self.endpoint.dispatch)
+            router.add_route(method, '/device_ids', self.device_endpoint.dispatch)
+            router.add_route(method, '/{device_id}', self.data_endpoint.dispatch)
