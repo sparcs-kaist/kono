@@ -6,10 +6,21 @@
 # 
 # bash> python3 judge.py
 
-import os, websockets, asyncio, struct, collections, time, json
+import os
+import asyncio
+import struct
+import collections
+import time
+import json
+
+import websockets
 from websockets.exceptions import ConnectionClosedError
+
 from dotenv import load_dotenv
+
 from aiohttp.web import Application, AppRunner, TCPSite
+import aiohttp_cors
+
 from router import Router
 from data   import Datadump
 
@@ -18,14 +29,34 @@ load_dotenv()
 WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')    # Port used for websocket server
 HTTP_PORT      = os.getenv('HTTP_PORT')         # Port used for RESTful HTTP server
 
+# Whitelist for API requests (CORS issue)
+WHITELIST = ['http://judge.kono.sparcs.org']
+
 # Create data structure (data.py)
 datadump = Datadump()
 
 async def http_server():
     # Create context for HTTP server
     app = Application()
+
+    # Configure CORS options
+    # Check https://github.com/aio-libs/aiohttp-cors for details
+    cors_default_options = {}
+    for host in WHITELIST:
+        cors_default_options[host] = aiohttp_cors.ResourceOptions(
+            allow_methods=['GET'], 
+            allow_headers=('Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'x-timebase', 'Link')
+        )
+    cors = aiohttp_cors.setup(app, defaults=cors_default_options)
+
+    # Configure routes
     router = Router(datadump)
     router.register(app.router)
+
+    # Configure CORS on all routes
+    for route in list(app.router.routes()):
+        cors.add(route)
+
     runner = AppRunner(app)
     await runner.setup()
     site = TCPSite(runner, '0.0.0.0', HTTP_PORT)
