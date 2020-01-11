@@ -30,7 +30,10 @@ WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')    # Port used for websocket server
 HTTP_PORT      = os.getenv('HTTP_PORT')         # Port used for RESTful HTTP server
 
 # Whitelist for API requests (CORS issue)
-WHITELIST = ['http://judge.kono.sparcs.org', 'http://localhost:3000']
+WHITELIST = [
+    'http://judge.kono.sparcs.org',     # Production server
+    'http://localhost:3000'             # Local development
+]
 
 # Create data structure (data.py)
 datadump = Datadump()
@@ -94,6 +97,9 @@ def get_data(device_id):
         return datadump[device_id]
     else:
         return None
+
+def get_device_ids():
+    return list(arduino_clients.values())
 
 def millis():
     return int(round(time.time() * 1000))
