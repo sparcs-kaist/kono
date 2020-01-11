@@ -30,7 +30,7 @@ WEBSOCKET_PORT = os.getenv('WEBSOCKET_PORT')    # Port used for websocket server
 HTTP_PORT      = os.getenv('HTTP_PORT')         # Port used for RESTful HTTP server
 
 # Whitelist for API requests (CORS issue)
-WHITELIST = ['http://judge.kono.sparcs.org']
+WHITELIST = ['http://judge.kono.sparcs.org', 'http://localhost:3000']
 
 # Create data structure (data.py)
 datadump = Datadump()
