@@ -6,10 +6,21 @@
 # 
 # bash> python3 judge.py
 
-import os, websockets, asyncio, struct, collections, time, json
+import os
+import asyncio
+import struct
+import collections
+import time
+import json
+
+import websockets
 from websockets.exceptions import ConnectionClosedError
+
 from dotenv import load_dotenv
+
 from aiohttp.web import Application, AppRunner, TCPSite
+import aiohttp_cors
+
 from router import Router
 from data   import Datadump
 
