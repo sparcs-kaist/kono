@@ -43,6 +43,8 @@ export default () => {
                     ...prevState,
                     state: constants.STATE_CLOSED
                 }));
+                if (_websocket)
+                    _websocket = null;
             };
 
             _websocket = new WebSocket(HOST);
@@ -58,9 +60,10 @@ export default () => {
         },
 
         close: (setContext) => {
-            if (_websocket)
-                _websocket.close(constants.WEBSOCKET_CLOSE_CODE);
+            if (!_websocket)
+                return;
             
+            _websocket.close(constants.WEBSOCKET_CLOSE_CODE);
             _websocket = null;
 
             setContext(prevState => ({
