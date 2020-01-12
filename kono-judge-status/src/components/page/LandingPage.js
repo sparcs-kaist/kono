@@ -1,6 +1,6 @@
 import React from 'react';
-import { RawVisualizer } from 'components/visualizer';
 import { WebsocketController } from 'components/websocket';
+import { RawData } from 'components/landing';
 
 export default () => {
 
@@ -9,8 +9,7 @@ export default () => {
             <p>
                 Landing Page
             </p>
-            <RawVisualizer />
-            <WebsocketController />
+            <RawData />
             <WebsocketController />
         </>
     );

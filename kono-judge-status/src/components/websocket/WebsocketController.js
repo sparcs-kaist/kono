@@ -3,7 +3,7 @@ import { WebsocketContext } from 'components/provider/WebsocketProvider';
 
 export default () => {
 
-    const { open, close, state, data } = useContext(WebsocketContext);
+    const { open, close, state } = useContext(WebsocketContext);
 
     return (
         <>
@@ -11,7 +11,6 @@ export default () => {
                 WebsocketController
             </h3>
             <div>{ state }</div>
-            <div>{ data }</div>
             <div onClick={open}>open!</div>
             <div onClick={close}>close!</div>
         </>
