@@ -51,7 +51,8 @@ void StreamingQueue::push(Packet packet)
 
 void StreamingQueue::loop()
 {
-    for ( ; _wait != _head; _wait = _incr(_wait))
+    bool window_full = _wait_empty && _full;
+    for ( ; window_full || _wait != _head; _wait = _incr(_wait))
     {
       
         /* Send packet at _wait through WebSocket. */
@@ -62,12 +63,12 @@ void StreamingQueue::loop()
             Serial.println(_wait->timestamp);
 #endif
             _wait_empty = false;
+            window_full = false;
         }
         else
         {
             break;
         }
-        yield();
     }
 }
 
@@ -83,6 +84,9 @@ bool StreamingQueue::pop(uint32_t timestamp)
         if (success)
         {
             _tail = _incr(_tail);
+            _full = false;
+            if (_tail == _head)
+                _empty = true;
             if (_tail == _wait)
                 _wait_empty = true;
         }
