@@ -1,8 +1,13 @@
 import React, { createContext, useState } from 'react';
 
-const WebsocketContext = createContext();
+export const WebsocketContext = createContext();
 
 const { REACT_APP_JUDGE_WS_URL, REACT_APP_JUDGE_WS_PATH } = process.env;
+
+const STATE_CONNECTING = 'CONNECTING';
+const STATE_OPEN       = 'OPEN';
+const STATE_CLOSING    = 'CLOSING';
+const STATE_CLOSED     = 'CLOSED';
 
 export default ({ children }) => {
 
@@ -10,6 +15,10 @@ export default ({ children }) => {
 
     const onopen = () => (e) => {
         console.log(`[Websocket] Connection established to host: ${host}`);
+        setContext(prevState => ({
+            ...prevState,
+            state: STATE_OPEN
+        }));
     };
 
     const onmessage = () => (e) => {
@@ -27,7 +36,10 @@ export default ({ children }) => {
 
     const onclose = () => (e) => {
         console.log(`[Websocket] Disconnected from host: ${host}`);
-        setWebsocket(null);
+        setContext(prevState => ({
+            ...prevState,
+            state: STATE_CLOSED
+        }));
     }
 
     const open = () => {
@@ -38,21 +50,34 @@ export default ({ children }) => {
         websocket.onerror   = onerror();
         websocket.onclose   = onclose();
         
-        setWebsocket(websocket);
+        setContext(prevState => ({
+            ...prevState,
+            websocket,
+            state: STATE_CONNECTING
+        }));
     };
 
     const close = () => {
-        if (websocket)
-            websocket.close();
+        setContext(prevState => {
+            const { websocket } = prevState;
+            if (websocket)
+                websocket.close(1000);
+            return {
+                ...prevState,
+                websocket: null,
+                state: STATE_CLOSING
+            };
+        });
     }
 
     const initialContext = {
+        websocket: null,
         message: null,
         open,
-        close
+        close,
+        state: STATE_CLOSED
     };
 
-    const [websocket, setWebsocket] = useState(null);
     const [context, setContext] = useState(initialContext);
 
     return (
