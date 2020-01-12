@@ -22,7 +22,7 @@ export default () => {
     const lastUpdatedTimeString = new Date(lastUpdatedTime).toLocaleString()
 
     useEffect(() => {
-        fetchData(API.data, [2124, '10sec']);
+        fetchData(API.data, [2645, '10sec']);
         fetchDeviceIDs(API.devices, []);
         setLastUpdatedTime(Date.now());
     }, [fetchData, fetchDeviceIDs]);
