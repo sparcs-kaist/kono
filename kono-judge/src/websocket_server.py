@@ -42,7 +42,6 @@ class WebSocketServer():
         # Main message handling routine
         try:
             async for message in websocket:
-
                 # Parse received packet
                 #   - message[0:3] = timestamp (int,   little endian)
                 #   - message[4:7] = device_id (int,   little endian, -1 if kono-judge-status)
