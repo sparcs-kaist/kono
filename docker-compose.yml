@@ -123,6 +123,8 @@ services:
       WEBSOCKET_PORT: 7077
       HTTP_PORT: 7078
     build: kono-judge/
+    ports:
+      - "7077:7077"
     volumes:
       - judge:/usr/src/app
 
