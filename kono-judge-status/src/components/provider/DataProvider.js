@@ -53,7 +53,8 @@ export default ({ children }) => {
     const initialContext = {
         deviceIDs: [],
         isLoading: false,
-        filter: generateFilter(cache)
+        filter: generateFilter(cache),
+        fetch: (deviceID, recent) => fetchAPIData(API.data, [deviceID, recent])
     };
 
     const isLoading = isLoadingDeviceIDs || isLoadingAPIData;
@@ -82,6 +83,7 @@ export default ({ children }) => {
     }, [data]);
 
     useEffect(() => { setContext(prev => ({ ...prev, filter: generateFilter(cache) })) }, [cache]);
+    useEffect(() => { console.log(apiData) }, [apiData]);
 
     return (
         <DataContext.Provider value={context}>
