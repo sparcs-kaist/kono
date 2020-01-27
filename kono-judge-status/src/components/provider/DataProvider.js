@@ -22,6 +22,45 @@ function recent2millis(recent) {
     }
 }
 
+function filterData(data, lastUpdated, deviceID, recent) {
+    if (!data[deviceID])
+        return {};
+    return Object.keys(data[deviceID])
+        .filter(timestampStr => {
+            const timestamp = Number(timestampStr);
+            return timestamp + recent2millis(recent) >= lastUpdated;
+        })
+        .reduce((obj, timestamp) => {
+            obj[timestamp] = data[deviceID][timestamp];
+            return obj;
+        }, {});
+}
+
+function mergeData(data1, data2) {
+    const deviceIDs = [...Object.keys(data1), ...Object.keys(data2)];
+    return deviceIDs.reduce(
+        (obj, deviceID) => {
+            obj[deviceID] = { ...data1[deviceID], ...data2[deviceID] };
+            return obj;
+        }, {}
+    );
+}
+
+function processAPIData(apiData) {
+    return apiData.reduce(
+        (obj, { timestamp, device_id: deviceID, ...rest }) => {
+            if (!obj[deviceID])
+                obj[deviceID] = {};
+            obj[deviceID][timestamp] = rest;
+            return obj;
+        }, {}
+    );
+}
+
+function generateFilter({ data, lastUpdated }) {
+    return (deviceID, recent) => filterData(data, lastUpdated, deviceID, recent);
+};
+
 export const DataContext = createContext();
 
 export default ({ children }) => {
@@ -33,21 +72,24 @@ export default ({ children }) => {
         deviceIDs,
         fetchDeviceIDs,
         isLoadingDeviceIDs,
-        errorCodeDeviceIDs
+        // errorCodeDeviceIDs
     ] = useFetch([]);
 
     const [
         apiData,
         fetchAPIData,
         isLoadingAPIData,
-        errorCodeAPIData
+        // errorCodeAPIData
     ] = useFetch([]);
 
-    const generateFilter = (cache) => (recent) => {
-        const { data, lastUpdated } = cache;
-        return Object.keys(data)
-            .filter(timestamp => (timestamp + recent2millis(recent) >= lastUpdated))
-            .reduce( (res, key) => (res[key] = data[key], res), {} );
+    const updateCache = (newData) => {
+        setCache(prevCache => {
+            const { data: oldData } = prevCache;
+            return {
+                data: mergeData(oldData, newData),
+                lastUpdated: Date.now()
+            };
+        });
     };
 
     const initialContext = {
@@ -61,29 +103,37 @@ export default ({ children }) => {
 
     const [context, setContext] = useState(initialContext);
 
+    /* Context updater for deviceIDs and isLoading */
     useEffect(() => { setContext(prev => ({ ...prev, deviceIDs })); }, [deviceIDs])
     useEffect(() => { setContext(prev => ({ ...prev, isLoading })); }, [isLoading])
 
-    useEffect(() => {
-        fetchDeviceIDs(API.devices, []);
-    }, [fetchDeviceIDs]);
-
+    /* Context updater for WebSocket update */
     useEffect(() => {
         try {
-            const parsed = JSON.parse(data);
-            const { timestamp, ...rest } = parsed;
-            setCache(prev => {
-                const { data: _data } = prev;
-                return {
-                    data: { ..._data, [timestamp]: rest },
-                    lastUpdated: Date.now()
-                };
-            });
+            if (data) {
+                const parsed = JSON.parse(data);
+                const { device_id: deviceID, timestamp, ...rest } = parsed;
+                const newData = { [deviceID]: { [timestamp]: rest } };
+                updateCache(newData);
+            }
         } catch (e) { }
     }, [data]);
 
+    /* Context updater for API update */
+    useEffect(() => {
+        if (apiData) {
+            const newData = processAPIData(apiData);
+            updateCache(newData);
+        }
+    }, [apiData]);
+
+    /* Update cache for subscribers */
     useEffect(() => { setContext(prev => ({ ...prev, filter: generateFilter(cache) })) }, [cache]);
-    useEffect(() => { console.log(apiData) }, [apiData]);
+
+    /* Fetch device ID list at first render */
+    useEffect(() => {
+        fetchDeviceIDs(API.devices, []);
+    }, [fetchDeviceIDs]);
 
     return (
         <DataContext.Provider value={context}>
