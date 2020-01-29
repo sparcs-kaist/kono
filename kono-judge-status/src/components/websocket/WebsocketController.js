@@ -1,4 +1,6 @@
 import React, { useContext } from 'react';
+import styles from 'styles/components/WebsocketController.module.scss';
+import { MaterialIcon } from 'components/common';
 import { WebsocketContext } from 'components/provider/WebsocketProvider';
 
 export default () => {
@@ -6,14 +8,9 @@ export default () => {
     const { open, close, state } = useContext(WebsocketContext);
 
     return (
-        <>
-            <h3>
-                WebsocketController
-            </h3>
-            <div>{ state }</div>
-            <div onClick={open}>open!</div>
-            <div onClick={close}>close!</div>
-        </>
+        <div className={styles.WebsocketController}>
+            <MaterialIcon>wifi</MaterialIcon>
+        </div>
     )
 
 }
