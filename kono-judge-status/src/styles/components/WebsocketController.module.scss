@@ -9,8 +9,13 @@
 
     @include flexbox(column, $center: false);
 
+    padding: 12px 0;
+    div + div {
+        margin-top: 12px;
+    }
+
     .state_wrapper {
-        padding: 12px 36px;
+        padding: 0 36px;
         @include flexbox(row, $center: false);
         span {
             margin-left: 12px;
@@ -18,7 +23,27 @@
     }
 
     .button_wrapper {
+        padding: 0 36px;
         @include flexbox(row, $center: true);
+        font-size: 12px;
+
+        div {
+            padding: 3px 6px;
+            color: #4DB6AC;
+        }
+
+        div.button_activate {
+            color: #EEE;
+            cursor: pointer;
+            &:hover {
+                background-color: #00897B;
+            }
+        }
+
+        div + div {
+            margin-top: 0px;
+            margin-left: 12px;
+        }
     }
 
 }

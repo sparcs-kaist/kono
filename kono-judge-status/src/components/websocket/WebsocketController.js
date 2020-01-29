@@ -8,6 +8,9 @@ export default () => {
 
     const { open, close, state } = useContext(WebsocketContext);
 
+    const activateConnectButton = (state === WebsocketConstants.STATE_CLOSED);
+    const activateDisconnectButton = (state === WebsocketConstants.STATE_OPEN);
+
     return (
         <div className={styles.WebsocketController}>
             <div className={styles.state_wrapper}>
@@ -35,8 +38,14 @@ export default () => {
                 <span>{ state }</span>
             </div>
             <div className={styles.button_wrapper}>
-                <div onClick={open}>CONNECT</div>
-                <div onClick={close}>DISCONENCT</div>
+                <div onClick={() => { activateConnectButton && open(); }} 
+                    className={activateConnectButton && styles.button_activate}>
+                    CONNECT
+                </div>
+                <div onClick={() => { activateDisconnectButton && close(); }}
+                    className={activateDisconnectButton && styles.button_activate}>
+                    DISCONENCT
+                </div>
             </div>
         </div>
     )
