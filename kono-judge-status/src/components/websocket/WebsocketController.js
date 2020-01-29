@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styles from 'styles/components/WebsocketController.module.scss';
-import { MaterialIcon } from 'components/common';
+import { MaterialIcon, Spinner } from 'components/common';
 import { WebsocketContext } from 'components/provider/WebsocketProvider';
 
 export default () => {
@@ -10,6 +10,7 @@ export default () => {
     return (
         <div className={styles.WebsocketController}>
             <MaterialIcon>wifi</MaterialIcon>
+            <Spinner />
         </div>
     )
 
