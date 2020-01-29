@@ -1,8 +1,6 @@
 @import '../mixins/all';
 
 .Spinner {
-        
-    margin: auto;
 
     @include flexbox(column, $center: true);
 

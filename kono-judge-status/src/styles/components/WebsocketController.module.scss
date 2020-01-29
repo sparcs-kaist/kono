@@ -1,5 +1,24 @@
+@import '../mixins/all';
+
 .WebsocketController {
 
+    color: #EEE;
     background-color: #00695C;
+
+    width: 240px;
+
+    @include flexbox(column, $center: false);
+
+    .state_wrapper {
+        padding: 12px 36px;
+        @include flexbox(row, $center: false);
+        span {
+            margin-left: 12px;
+        }
+    }
+
+    .button_wrapper {
+        @include flexbox(row, $center: true);
+    }
 
 }
