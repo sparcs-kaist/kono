@@ -62,6 +62,7 @@ function generateFilter({ data, lastUpdated }) {
 };
 
 export const DataContext = createContext();
+export const TIME_FILTERS = ['10sec', '1min', '10min', '1h', '6h', '24h'];
 
 export default ({ children }) => {
 
