@@ -1,0 +1,15 @@
+@import '../mixins/all';
+
+.Selector {
+
+    @include flexbox(column, $center: true);
+
+    .item {
+
+    }
+
+    .item_selected {
+
+    }
+
+}

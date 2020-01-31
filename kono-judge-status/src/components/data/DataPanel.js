@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { DataContext } from 'components/provider/DataProvider';
 import { DeviceSelector } from 'components/data';
 
@@ -6,6 +6,8 @@ export default () => {
 
     const { deviceIDs } = useContext(DataContext);
     const [ selectedDeviceID, setSelectedDeviceID ] = useState(null);
+
+    useEffect(() => console.log(`device selected: ${selectedDeviceID}`), [selectedDeviceID])
 
     return (
         <div>

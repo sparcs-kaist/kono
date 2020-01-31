@@ -9,8 +9,12 @@ export default ({
 
     return (
         <div>
-            DeviceSelector
-            <span>{ selectedDeviceID }</span>
+            <span>Available Devices:</span>
+            <Selector
+                elements={deviceIDs}
+                selected={selectedDeviceID}
+                setSelected={setSelectedDeviceID}
+            />
         </div>
     )
 
