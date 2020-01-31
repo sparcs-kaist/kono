@@ -3,6 +3,7 @@ import styles from 'styles/components/WebsocketController.module.scss';
 import { MaterialIcon, Spinner } from 'components/common';
 import { WebsocketContext } from 'components/provider/WebsocketProvider';
 import * as WebsocketConstants from 'lib/websocket/constants';
+import classnames from 'lib/classnames';
 
 export default () => {
 
@@ -39,11 +40,11 @@ export default () => {
             </div>
             <div className={styles.button_wrapper}>
                 <div onClick={() => { activateConnectButton && open(); }} 
-                    className={activateConnectButton && styles.button_activate}>
+                    className={classnames([activateConnectButton && styles.button_activate])}>
                     CONNECT
                 </div>
                 <div onClick={() => { activateDisconnectButton && close(); }}
-                    className={activateDisconnectButton && styles.button_activate}>
+                    className={classnames([activateDisconnectButton && styles.button_activate])}>
                     DISCONENCT
                 </div>
             </div>
