@@ -11,7 +11,6 @@ export default () => {
 
     return (
         <div>
-            { JSON.stringify(deviceIDs) }
             <DeviceSelector 
                 deviceIDs={deviceIDs}
                 selectedDeviceID={selectedDeviceID}

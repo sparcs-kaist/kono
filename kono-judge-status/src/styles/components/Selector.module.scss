@@ -2,14 +2,28 @@
 
 .Selector {
 
-    @include flexbox(column, $center: true);
+    @include flexbox(column, $center: false);
+
+    padding: 12px 0 0 12px;
 
     .item {
+        padding: 3px 6px;
+        background-color: #00838F;
+        transition: background-color .3s;
+        cursor: pointer;
+        @include flexbox(row, $center: false);
+        span {
+            margin-right: 6px;
+        }
+    }
 
+    .item:hover {
+        background-color: #00ACC1;
     }
 
     .item_selected {
-
+        background-color: #00ACC1;
+        cursor: default;
     }
 
 }

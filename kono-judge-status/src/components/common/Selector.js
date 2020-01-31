@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from 'styles/components/Selector.module.scss';
 import classnames from 'lib/classnames';
+import { MaterialIcon } from 'components/common';
 
 export default ({ elements, selected, setSelected }) => {
     
@@ -18,7 +19,10 @@ export default ({ elements, selected, setSelected }) => {
                             ])}
                             onClick={onClick}
                             key={`selector-${e}`}>
-                            { e }
+                            <span>{ e }</span>
+                            {
+                                isSelected && <MaterialIcon>check_circle</MaterialIcon>
+                            }
                         </div>
                     )
                 })
