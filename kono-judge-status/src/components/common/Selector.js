@@ -3,10 +3,13 @@ import styles from 'styles/components/Selector.module.scss';
 import classnames from 'lib/classnames';
 import { MaterialIcon } from 'components/common';
 
-export default ({ elements, selected, setSelected }) => {
+export default ({ elements, selected, setSelected, theme }) => {
     
     return (
-        <div className={styles.Selector}>
+        <div className={classnames([
+            styles.Selector,
+            styles[theme]
+        ])}>
             {
                 elements.map(e => {
                     const isSelected = selected === e;

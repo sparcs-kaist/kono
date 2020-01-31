@@ -16,6 +16,7 @@ export default ({
                     elements={deviceIDs}
                     selected={selectedDeviceID}
                     setSelected={setSelectedDeviceID}
+                    theme="cyan"
                 />
             </div>
         </div>

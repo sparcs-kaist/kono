@@ -19,6 +19,7 @@ export default () => {
                 selectedDeviceID={selectedDeviceID}
                 setSelectedDeviceID={setSelectedDeviceID}/>
             <FilterSelector
+                filters={TIME_FILTERS}
                 selectedFilter={selectedFilter}
                 setSelectedFilter={setSelectedFilter}/>
         </div>

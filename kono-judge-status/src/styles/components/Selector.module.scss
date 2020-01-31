@@ -5,11 +5,9 @@
     @include flexbox(column, $center: false);
 
     margin: 12px 0 0 12px;
-    border: 1px solid #4DD0E1;
 
     .item {
         padding: 3px 6px;
-        background-color: #00838F;
         transition: background-color .3s;
         cursor: pointer;
         @include flexbox(row, $center: false);
@@ -18,17 +16,40 @@
         }
     }
 
-    .item + .item {
-        border-top: 1px solid #4DD0E1;
-    }
-
-    .item:hover {
-        background-color: #00ACC1;
-    }
-
     .item_selected {
-        background-color: #00ACC1;
         cursor: default;
+    }
+
+    &.cyan {
+        border: 1px solid #4DD0E1;
+        .item {
+            background-color: #00838F;
+        }
+        .item + .item {
+            border-top: 1px solid #4DD0E1;
+        }
+        .item:hover {
+            background-color: #00ACC1;
+        }
+        .item_selected {
+            background-color: #00ACC1;
+        }
+    }
+
+    &.green {
+        border: 1px solid #81C784;
+        .item {
+            background-color: #2E7D32;
+        }
+        .item + .item {
+            border-top: 1px solid #81C784;
+        }
+        .item:hover {
+            background-color: #43A047;
+        }
+        .item_selected {
+            background-color: #43A047;
+        }
     }
 
 }

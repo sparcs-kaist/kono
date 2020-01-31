@@ -6,9 +6,6 @@ export default () => {
 
     return (
         <>
-            <p>
-                Landing Page
-            </p>
             <WebsocketController />
             <DataPanel />
         </>
