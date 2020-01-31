@@ -4,7 +4,8 @@
 
     @include flexbox(column, $center: false);
 
-    padding: 12px 0 0 12px;
+    margin: 12px 0 0 12px;
+    border: 1px solid #4DD0E1;
 
     .item {
         padding: 3px 6px;
@@ -15,6 +16,10 @@
         span {
             margin-right: 6px;
         }
+    }
+
+    .item + .item {
+        border-top: 1px solid #4DD0E1;
     }
 
     .item:hover {
