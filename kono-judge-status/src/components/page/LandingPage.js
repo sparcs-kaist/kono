@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styles from 'styles/components/LandingPage.module.scss';
 import { WebsocketController } from 'components/websocket';
-import { FilterSelector, DeviceSelector } from 'components/data';
+import { FilterSelector, DeviceSelector, DataPanel } from 'components/data';
 import { TIME_FILTERS, DataContext } from 'components/provider/DataProvider';
 import classnames from 'lib/classnames';
 
@@ -14,7 +14,7 @@ export default () => {
     return (
         <div className={styles.LandingPage}>
             <div className={styles.content}>
-                Data
+                <DataPanel />
             </div>
             <div className={styles.sidebar}>
                 <div className={styles.sidebar_item}>

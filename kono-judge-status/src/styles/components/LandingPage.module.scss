@@ -9,6 +9,7 @@
 
     .content {
         flex: 1;
+        @include flexbox(column, $center: false);
     }
 
     .sidebar {

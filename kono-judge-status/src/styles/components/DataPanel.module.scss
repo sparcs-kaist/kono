@@ -1,0 +1,17 @@
+@import '../mixins/all';
+
+.DataPanel {
+
+    flex: 1;
+
+    background-color: #263238;
+    color: #EEE;
+
+    padding: 24px;
+    @include flexbox(column, $center: true);
+
+    .content {
+        margin: auto;
+    }
+
+}
