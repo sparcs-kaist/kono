@@ -41,6 +41,7 @@ VOLUME /usr/src/app-stage/build
 VOLUME /usr/src/log/api-stage
 VOLUME /usr/src/log/nginx-stage
 VOLUME /usr/src/judge
+VOLUME /usr/src/judge-status/build
 
 # Retrieve source files
 WORKDIR /usr/src
@@ -54,6 +55,10 @@ RUN npm install
 
 # Setup kono-front
 WORKDIR /usr/src/kono/kono-front
+RUN npm install
+
+# Setup kono-judge-status
+WORKDIR /usr/src/kono/kono-judge-status
 RUN npm install
 
 WORKDIR /usr/src
