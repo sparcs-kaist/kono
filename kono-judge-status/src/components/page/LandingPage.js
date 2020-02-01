@@ -63,6 +63,7 @@ export default () => {
                 showHover && <Hover>
                     <DownloadDetailPanel 
                         onEscape={() => setShowHover(false)}
+                        deviceIDs={deviceIDs}
                     />
                 </Hover>
             }

@@ -29,6 +29,26 @@
         .options {
             flex: 1;
             padding: 12px 0;
+            @include flexbox(row, $center: false);
+            .column {
+                flex: 1;
+                @include flexbox(column, $center: false);
+                .column_title {
+                    font-size: 15px;
+                    margin-bottom: 12px;
+                }
+                .column_content {
+                    flex: 1;
+                    font-size: 14px;
+                    .column_item {
+                        @include flexbox(row, $center: true);
+                        span {
+                            margin-left: 6px;
+                            flex: 1;
+                        }
+                    }
+                }
+            }
         }
 
         .button_wrapper {
