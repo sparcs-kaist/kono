@@ -1,0 +1,51 @@
+@import '../mixins/all';
+
+.DownloadDetailPanel {
+
+    width: 100%;
+    height: 100%;
+
+    @include flexbox(column, $center: true);
+
+    .content {
+
+        background: #EEE;
+
+        width: 360px;
+        height: 240px;
+
+        padding: 12px;
+
+        @include flexbox(column, $center: false);
+
+        .header {
+            @include flexbox(row, $center: false);
+            font-size: 18px;
+            div + div {
+                margin-left: auto;
+            }
+        }
+
+        .options {
+            flex: 1;
+            padding: 12px 0;
+        }
+
+        .button_wrapper {
+            @include flexbox(row, $center: false);
+            .button {
+                margin-left: auto;
+                padding: 6px 18px;
+                color: #EEE;
+                background-color: #00796B;
+                transition: background-color .3s;
+            }
+            cursor: pointer;
+            .button:hover {
+                background-color: #009688;
+            }
+        }
+
+    }
+
+}

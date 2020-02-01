@@ -4,7 +4,10 @@ import classnames from 'lib/classnames';
 import { TIME_FILTERS } from 'lib/DataManaging';
 import { Hover } from 'components/common';
 import { WebsocketController } from 'components/websocket';
-import { FilterSelector, DeviceSelector, DataPanel, DownloadPanel } from 'components/data';
+import { 
+    FilterSelector, DeviceSelector, DataPanel, 
+    DownloadPanel, DownloadDetailPanel
+} from 'components/data';
 import { DataContext } from 'components/provider/DataProvider';
 
 export default () => {
@@ -58,9 +61,9 @@ export default () => {
             </div>
             {
                 showHover && <Hover>
-                    <div>
-                        Hover panel
-                    </div>
+                    <DownloadDetailPanel 
+                        onEscape={() => setShowHover(false)}
+                    />
                 </Hover>
             }
         </div>
