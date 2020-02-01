@@ -22,6 +22,22 @@
             flex: 1;
             @include flexbox(column, $center: false);
         }
+        .download_wrapper {
+            background-color: #303F9F;
+            padding: 12px 24px;
+            .download {
+                border: 1px solid #7986CB;
+                background-color: #283593;
+                @include flexbox(column, $center: true);
+                padding: 6px 12px;
+                color: #EEE;
+                cursor: pointer;
+            }
+            .download:hover {
+                background-color: #1A237E;
+                transition: background-color .3s;
+            }
+        }
     }
 
 }

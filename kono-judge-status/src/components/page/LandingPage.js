@@ -48,6 +48,14 @@ export default () => {
                         setSelectedFilter={setSelectedFilter}
                     />
                 </div>
+                <div className={classnames([
+                    styles.sidebar_item,
+                    styles.download_wrapper
+                ])}>
+                    <div className={styles.download}>
+                        <span>Download Data</span>
+                    </div>
+                </div>
             </div>
         </div>
     );
