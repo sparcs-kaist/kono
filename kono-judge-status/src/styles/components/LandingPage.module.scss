@@ -1,0 +1,26 @@
+@import '../mixins/all';
+
+.LandingPage {
+
+    width: 100%;
+    height: 100%;
+
+    @include flexbox(row, $center: false);
+
+    .content {
+        flex: 1;
+    }
+
+    .sidebar {
+        width: 256px;
+        @include flexbox(column, $center: false);
+        .sidebar_item {
+            @include flexbox(column, $center: false);
+        }
+        .sidebar_item_stretch {
+            flex: 1;
+            @include flexbox(column, $center: false);
+        }
+    }
+
+}

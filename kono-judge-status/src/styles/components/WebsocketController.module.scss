@@ -5,8 +5,6 @@
     color: #EEE;
     background-color: #00695C;
 
-    width: 240px;
-
     @include flexbox(column, $center: false);
 
     padding: 12px 0;
