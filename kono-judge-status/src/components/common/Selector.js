@@ -5,6 +5,9 @@ import { MaterialIcon } from 'components/common';
 
 export default ({ elements, selected, setSelected, theme }) => {
     
+    if (!Array.isArray(elements))
+        return null;
+
     return (
         <div className={classnames([
             styles.Selector,
