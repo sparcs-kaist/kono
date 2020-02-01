@@ -7,6 +7,9 @@
     background-color: #263238;
     color: #EEE;
 
+    overflow-x: hidden;
+    overflow-y: auto;
+
     padding: 24px;
     @include flexbox(column, $center: true);
 

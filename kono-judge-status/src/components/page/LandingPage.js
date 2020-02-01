@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styles from 'styles/components/LandingPage.module.scss';
 import { WebsocketController } from 'components/websocket';
 import { FilterSelector, DeviceSelector, DataPanel } from 'components/data';
@@ -7,14 +7,24 @@ import classnames from 'lib/classnames';
 
 export default () => {
 
-    const { deviceIDs } = useContext(DataContext);
+    const { deviceIDs, fetch, isLoading } = useContext(DataContext);
     const [selectedDeviceID, setSelectedDeviceID] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState(TIME_FILTERS[0]);
+
+    useEffect(() => {
+        if (selectedDeviceID !== null) {
+            fetch(selectedDeviceID, selectedFilter);
+        }
+    }, [fetch, selectedDeviceID, selectedFilter]);
 
     return (
         <div className={styles.LandingPage}>
             <div className={styles.content}>
-                <DataPanel />
+                <DataPanel 
+                    isLoading={isLoading}
+                    selectedDeviceID={selectedDeviceID}
+                    selectedFilter={selectedFilter}
+                />
             </div>
             <div className={styles.sidebar}>
                 <div className={styles.sidebar_item}>
