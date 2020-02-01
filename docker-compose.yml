@@ -115,6 +115,16 @@ services:
       - nginx_log_stage:/var/log/nginx
       - app_static_stage:/usr/share/nginx/assets
 
+  nginx_judge_status:
+    depends_on:
+      - maintainer
+    restart: always
+    build:
+      context: nginx/
+      dockerfile: judge-status.Dockerfile
+    volumes:
+      - judge_status_build:/usr/share/nginx/html
+
   judge:
     depends_on:
       - maintainer
@@ -132,6 +142,7 @@ services:
     depends_on:
       - nginx_production
       - nginx_stage
+      - nginx_judge_status
       - judge
     ports:
       - "80:80"
@@ -156,6 +167,7 @@ services:
       - app_build_stage:/usr/src/app-stage/build
       - nginx_log_stage:/usr/src/log/nginx-stage
       - judge:/usr/src/judge
+      - judge_status_build:/usr/src/judge-status/build
 
 volumes:
   data_production:
@@ -171,6 +183,7 @@ volumes:
   nginx_log_stage:
   app_static_stage:
   judge:
+  judge_status_build:
 
 secrets:
   db_root_password_production:
@@ -191,4 +204,3 @@ secrets:
     file: config/stage/api_password_key
   api_jwt_key_stage:
     file: config/stage/api_jwt_key
-
