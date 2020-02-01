@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import * as API from 'api';
 import { useFetch } from 'lib/hooks'
-import { mergeData, processAPIData, generateFilter } from 'lib/DataManaging';
+import { parseData, mergeData, processAPIData, generateFilter } from 'lib/DataManaging';
 import { WebsocketContext } from 'components/provider/WebsocketProvider';
 
 export const DataContext = createContext();
@@ -54,10 +54,7 @@ export default ({ children }) => {
     useEffect(() => {
         try {
             if (data) {
-                const parsed = JSON.parse(data);
-                const { device_id: deviceID, timestamp, ...rest } = parsed;
-                const newData = { [deviceID]: { [timestamp]: rest } };
-                updateCache(newData);
+                updateCache(parseData(data));
             }
         } catch (e) { }
     }, [data]);

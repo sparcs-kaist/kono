@@ -1,4 +1,5 @@
 export const TIME_FILTERS = ['10sec', '1min', '10min', '1h', '6h', '24h'];
+export const DATA_KEYS = ['IR0', 'IR1', 'IR2', 'IR3']
 
 export function recent2millis(recent) {
     switch (recent) {
@@ -17,6 +18,24 @@ export function recent2millis(recent) {
         default:
             throw Error(`recent2millis: unsupported recent value ${recent}`);
     }
+}
+
+function formatData(rawData) {
+    const { timestamp, data: dataArray } = rawData;
+    return DATA_KEYS.reduce(
+        (prev, key, idx) => {
+            prev[key] = dataArray[idx];
+            return prev;
+        }, 
+        { timestamp }
+    );
+}
+
+export function parseData(jsonData) {
+    const parsed = JSON.parse(jsonData);
+    const { device_id: deviceID, ...rest } = parsed;
+    const { timestamp } = rest;
+    return { [deviceID]: { [timestamp]: formatData(rest) } };
 }
 
 export function filterData(data, lastUpdated, deviceID, recent) {
@@ -45,10 +64,11 @@ export function mergeData(data1, data2) {
 
 export function processAPIData(apiData) {
     return apiData.reduce(
-        (obj, { timestamp, device_id: deviceID, ...rest }) => {
+        (obj, { device_id: deviceID, ...rest }) => {
+            const { timestamp } = rest;
             if (!obj[deviceID])
                 obj[deviceID] = {};
-            obj[deviceID][timestamp] = rest;
+            obj[deviceID][timestamp] = formatData(rest);
             return obj;
         }, {}
     );
