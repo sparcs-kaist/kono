@@ -56,4 +56,4 @@ export function processAPIData(apiData) {
 
 export function generateFilter({ data, lastUpdated }) {
     return (deviceID, recent) => filterData(data, lastUpdated, deviceID, recent);
-};
+}
