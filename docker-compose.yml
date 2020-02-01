@@ -57,7 +57,7 @@ services:
     restart: always
     build:
       context: nginx/
-      dockerfile: Dockerfile-production
+      dockerfile: production.Dockerfile
     volumes:
       - app_build_production:/usr/share/nginx/html
       - nginx_log_production:/var/log/nginx
@@ -109,7 +109,7 @@ services:
     restart: always
     build:
       context: nginx/
-      dockerfile: Dockerfile-stage
+      dockerfile: stage.Dockerfile
     volumes:
       - app_build_stage:/usr/share/nginx/html
       - nginx_log_stage:/var/log/nginx
