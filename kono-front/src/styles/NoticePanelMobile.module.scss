@@ -1,0 +1,56 @@
+@import 'mixins/all';
+
+@include themed() {
+    .NoticePanelMobile {
+        width: 100vw;
+        @include flexbox(column, $center: true);
+        .header_wrapper {
+            width: calc(100% - 66px);
+            padding: 0 33px;
+        }
+        .grid_wrapper {
+            width: 100%;
+            overflow-x: auto;
+            @include flexbox(row, $center: false);
+            .grid_content {
+                padding: 0 33px;
+            }
+            .grid_item {
+                width: 100%;
+                height: 100%;
+                a {
+                    width: calc(100% - 16px);
+                    height: calc(100% - 16px);
+                    @include flexbox(column, $center: true);
+                    padding: 8px;
+                    text-decoration: none;
+                    svg {
+                        position: absolute;
+                    }
+                }
+                .grid_thumbnail {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    filter: blur(8px);
+                }
+                .grid_item_date {
+                    line-height: 18px;
+                    font-size: 15px;
+                    color: #FFF;
+                    z-index: 1;
+                    text-shadow: 0 0 15px #000;
+                }
+                .grid_item_title {
+                    margin-top: 10px;
+                    line-height: 24px;
+                    font-size: 20px;
+                    color: #FFF;
+                    z-index: 1;
+                    text-shadow: 0 0 20px #000;
+                    word-break: keep-all;
+                }
+            }
+        }
+    }
+}

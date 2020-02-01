@@ -19,3 +19,15 @@
     vertical-align: middle;
     cursor: pointer;
 }
+
+@mixin mobile_link {
+    a {
+        color: t(text-primary);
+        text-decoration: none;
+        vertical-align: middle;
+    }
+    
+    color: t(text-primary);
+    text-decoration: none;
+    vertical-align: middle;
+}

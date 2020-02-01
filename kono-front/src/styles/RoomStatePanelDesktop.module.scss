@@ -1,0 +1,98 @@
+@import 'mixins/all';
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+@keyframes fillColorChange {
+    
+    0%      {fill: #6078F5; transform: scale(1);}
+    12%     {fill: #4C82A2; transform: scale(1.03);}
+    25%     {fill: #47D2B1; transform: scale(1);}
+    37%     {fill: #FFF4E8; transform: scale(1.03);}
+    50%     {fill: #FFE44B; transform: scale(1);}
+    62%     {fill: #FF2369; transform: scale(1.03);}
+    75%     {fill: #A01789; transform: scale(1);}
+    87%     {fill: #6430B8; transform: scale(1.03);}
+    100%    {fill: #1B2272; transform: scale(1);}
+
+}
+
+@keyframes textFillColorChange {
+
+    0%      {fill: #333333;}
+    50%     {fill: #333333;}
+    75%     {fill: #EEEEEE;}
+    100%    {fill: #EEEEEE;}
+
+}
+
+@include themed() {
+
+    .RoomStatePanelDesktop {
+        overflow: visible;
+        position: absolute;
+        top: 0;
+        left: 30px;
+
+        .room_empty {
+            fill: t(theme-background);
+            transition: 0.3s;
+        }
+
+        .room_filled {
+            fill: t(panel-background);
+            transition: 0.3s;
+        }
+
+        .room_null {
+            fill: t(inactive-background);
+        }
+
+        .room_highlight {
+            filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2)) brightness(0.9);
+            transition: 0.3s;
+        }
+
+        .room_filled_animation {
+            animation: fillColorChange 2s infinite;
+            filter: drop-shadow(1px 4px 8px rgba(0,0,0,0.2));
+            transition: all 0.3s;
+        }
+
+        .room_svg {
+
+            position: absolute;
+            overflow: visible;
+            pointer-events: none;
+            width: 545px;
+            height: 604px;
+
+            path {
+                pointer-events: auto;
+            }
+
+            text {
+                text-anchor: middle;
+                fill: t(text-primary);
+                animation: fadeIn 0.3s;
+            }
+
+            tspan {
+                letter-spacing: -0.03em;
+            }
+
+        }
+        
+        .textEffect {
+            animation: textFillColorChange 2s infinite;
+        }
+
+    }
+
+}

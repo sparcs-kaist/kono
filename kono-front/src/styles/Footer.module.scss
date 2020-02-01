@@ -5,11 +5,20 @@
     .Footer {
 
         height: 50px;
-        @include flexbox(row, $center: false);
+        @include flexbox(row, $center: true);
+        z-index: 50;
+        bottom: 0;
+        width: 100vw;
+        background: t(background);
+
+        &.Footer__desktop {
+            .Footer__logo {
+                margin: 11px 0 12px 24px;
+            }
+        }
 
         .Footer__logo {
             
-            margin: 11px 0 12px 24px;
             @include flexbox(row, $center: true);
 
             .Footer__sparcs_logo {
@@ -20,6 +29,7 @@
                 font-family: "Raleway";
                 font-weight: 900;
                 margin-right: 16px;
+                margin-bottom: 4px;
                 color: t(text-primary);
                 @include flexbox(row, $center: true);
             }
@@ -32,9 +42,9 @@
         }
         
         .Footer__menu {
-            margin: 17px 0 18px 24px;
-            height: 15px;
-            font-size: 15px;
+            margin: 17px 0 18px 20px;
+            height: 16px;
+            font-size: 14px;
 
             @include flexbox(row, $center: true);
             @include link;
@@ -46,15 +56,15 @@
 
         .Footer__common_menu {
             margin: 17px 24px 18px auto;
-            height: 13px;
-            font-size: 13px;
+            height: 16px;
+            font-size: 14px;
             
             @include flexbox(row, $center: true);
             @include link;
         }
 
         .Footer__common_menu + .Footer__common_menu {
-            margin-left: 24px;
+            margin-left: -4px;
         }
 
     }

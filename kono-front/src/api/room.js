@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const { REACT_APP_KONO_API_URL: apiURL } = process.env;
+const { REACT_APP_KONO_API_URL: apiURL = '' } = process.env;
 
 export const recentList = () => {
     return axios.get(apiURL + '/api/v1/room/recent');

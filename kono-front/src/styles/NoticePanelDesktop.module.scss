@@ -1,0 +1,49 @@
+@import 'mixins/all';
+
+@include themed() {
+    .NoticePanelDesktop {
+
+        width: 100%;
+        min-height: 432px;
+        @include flexbox(column, $center: true);
+
+        ul {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 287px;
+            list-style-type: none;
+            li {
+                font-size: 10px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .item {
+
+            @include flexbox(row, $center: false);
+
+            .item_title {
+                width: calc(100% - 120px);
+                font-size: 15px;
+                line-height: 18px;
+                @include link;
+
+                /* Auto trimming of overflowing text */
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .item_date {
+                width: 90px;
+                margin-left: auto;
+                font-size: 15px;
+                line-height: 18px;
+                color: t(text-secondary);
+            }
+
+        }
+
+    }
+}

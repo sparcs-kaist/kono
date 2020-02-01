@@ -1,5 +1,8 @@
 import { request, expect } from 'chai';
 import { apiURL } from '../../../test/common';
+import { generateToken } from '../../../lib/token';
+import fs from 'fs';
+import path from 'path';
 
 describe('Testing GET /api/v1/image ...', () => {
 
@@ -226,6 +229,76 @@ describe('Testing GET /api/v1/image/count ...', () => {
 
     describe('General case.', () => {
         it('Test case 1', testGeneralCase());
+    });
+
+});
+
+describe('Testing POST /api/v1/image/upload ...', () => {
+
+    const testGeneralCase = () => async () => {
+
+        const token = await generateToken({ sid: 0 });
+        const filenames = ['test.png', 'test.jpg'];
+
+        const res = await request(apiURL)
+            .post('/api/v1/image/upload')
+            .attach('image', fs.readFileSync(path.join(__dirname, `../../../test/testdata/${filenames[0]}`)), filenames[0])
+            .attach('image', fs.readFileSync(path.join(__dirname, `../../../test/testdata/${filenames[1]}`)), filenames[1])
+            .set('Cookie', `access_token=${token}`);
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.be.length(2);
+
+        res.body.forEach((filepath, index) => {
+            expect(path.extname(filepath)).to.be.equal(path.extname(filenames[index]));
+            // NOTE: Assertion here fails if the server machine and testing machine is not identical.
+            if (process.env.NODE_ENV == 'development') {
+                const fullFilepath = path.join(process.env.UPLOAD_DIR_TEST, filepath);
+                fs.access(fullFilepath, fs.F_OK, (err) => {
+                    expect(err).to.be.equal(null);
+
+                    // Remove file which is uploaded to test env upload dir.
+                    // NOTE: If this the server machine and testing machine is not identical,
+                    // uploaded file due to this test remains undeleted in the server.
+                    // UPLOAD_DIR_TEST in .env.test.devlopment has to be set identical to
+                    // UPLOAD_DIR in .env file.
+                    try { fs.unlinkSync(fullFilepath); } catch (e) {}
+                });
+            }
+        });
+    };
+
+    const testUnsupportedType = () => async () => {
+        
+        const token = await generateToken({ sid: 0 });
+        
+        const res = await request(apiURL)
+            .post('/api/v1/image/upload')
+            .attach('image', fs.readFileSync(path.join(__dirname, '../../../test/testdata/test.txt')), 'test.txt')
+            .set('Cookie', `access_token=${token}`);
+
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.key('msg');
+    };
+
+    const testUnexpectedField = () => async () => {
+        const token = await generateToken({ sid: 0 });
+
+        const res = await request(apiURL)
+            .post('/api/v1/image/upload')
+            .attach('asdf', fs.readFileSync(path.join(__dirname, '../../../test/testdata/test.jpg')), 'test.jpg')
+            .set('Cookie', `access_token=${token}`);
+
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.key('msg');
+    };
+
+    describe('General case.', () => {
+        it('Test case 1', testGeneralCase());
+    });
+    describe('Error handling.', () => {
+        it('Unexpected field', testUnexpectedField());
+        it('Unsupported type', testUnsupportedType());
     });
 
 });

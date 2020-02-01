@@ -3,7 +3,7 @@
 @include themed() {
     .PanelFooter {
 
-        margin-top: 46px;
+        margin-top: auto;
 
         @include flexbox(row, $center: true);
 

@@ -3,7 +3,12 @@
 @include themed() {
     .PanelHeader {
 
+        width: 100%;
         margin-bottom: 46px;
+        @include mobile-screen {
+            margin-bottom: 15px;
+        }
+        @include flexbox(row, $center: false);
 
         color: t(text-primary);
 
@@ -12,6 +17,17 @@
             font-weight: 900;
             font-size: 30px;
             line-height: 35px;
+            @include mobile-screen {
+                font-size: 18px;
+                line-height: 21px;
+            }
+        }
+
+        .common_menu {
+            @include flexbox(column, $center: false);
+            margin-left: auto;
+            font-style: normal;
+            font-weight: 500;
         }
 
     }

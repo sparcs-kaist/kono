@@ -8,7 +8,7 @@ export const generateToken = (payload) => {
     return new Promise((resolve, reject) => {
         jwt.sign(payload, jwtKey(), {
             expiresIn: '1h',
-            issuer: 'api.kono.sparcs.org'
+            issuer: 'kono.sparcs.org'
         }, (error, token) => {
             if (error)
                 reject(error);

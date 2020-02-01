@@ -1,0 +1,4 @@
+websockets
+python-dotenv
+aiohttp
+aiohttp_cors

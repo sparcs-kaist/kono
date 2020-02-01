@@ -1,0 +1,54 @@
+@import 'mixins/all';
+
+@include themed() {
+    .HeaderDesktop {
+
+        z-index: 50;
+        @include flexbox(column, $center: false);
+        background-color: t(background);
+
+        .HeaderDesktop__bar {
+            height: 5px;
+            background-color: t(theme-background);
+        }
+
+        .HeaderDesktop__content {
+
+            height: 50px;
+            @include flexbox(row, $center: false);
+
+            .HeaderDesktop__logo {
+                margin: 11px 0 12px 24px;
+                @include flexbox(row, $center: false);
+            }
+            
+            .HeaderDesktop__menu {
+                margin: 17px 0 18px 24px;
+                height: 16px;
+                font-size: 14px;
+
+                @include flexbox(row, $center: true);
+                @include link;
+            }
+
+            .HeaderDesktop__menu + .HeaderDesktop__menu {
+                margin-right: 24px;
+            }
+        
+            .HeaderDesktop__common_menu {
+                margin: 17px 24px 17px auto;
+                height: 16px;
+                font-size: 14px;
+                
+                @include flexbox(row, $center: true);
+                @include link;
+            }
+
+            .HeaderDesktop__common_menu + .HeaderDesktop__common_menu {
+                margin-left: -4px;
+            }
+
+        }
+
+    }
+}
