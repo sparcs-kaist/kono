@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from 'styles/components/DownloadDetailPanel.module.scss';
 import { TIME_FILTERS } from 'lib/DataManaging';
 import { MaterialIcon } from 'components/common';
 
+const INPUT_NAME_DEVICE_ID = 'device_id';
+const INPUT_NAME_FILTER    = 'recent';
+
 export default ({ onEscape, deviceIDs }) => {
 
+    const [selectedDeviceID, setSelectedDeviceID] = useState(null);
+    const [selectedFilter, setSelectedFilter] = useState(null);
+
+    const onChangeInput = (e) => {
+        const { name, value, checked } = e.target;
+        switch (name) {
+            case INPUT_NAME_DEVICE_ID:
+                if (checked)
+                    setSelectedDeviceID(value);
+                else
+                    setSelectedDeviceID(null);
+                break;
+            case INPUT_NAME_FILTER:
+                setSelectedFilter(value);
+                break;
+            default:
+                throw Error(`DownloadDetailPanel: invalid input name ${name}`);
+        }
+    };
+    
     return (
         <div className={styles.DownloadDetailPanel}>
             <div className={styles.content}>
@@ -30,8 +53,9 @@ export default ({ onEscape, deviceIDs }) => {
                                             key={`column_item_${deviceID}`}>
                                             <input 
                                                 type="checkbox"
-                                                name="device_id"
-                                                value={deviceID} />
+                                                name={INPUT_NAME_DEVICE_ID}
+                                                value={deviceID} 
+                                                onChange={onChangeInput} />
                                             <span>{ deviceID }</span>
                                         </div>
                                     )
@@ -49,8 +73,9 @@ export default ({ onEscape, deviceIDs }) => {
                                             key={`column_item_${recent}`}>
                                             <input 
                                                 type="radio"
-                                                name="recent"
-                                                value={recent} />
+                                                name={INPUT_NAME_FILTER}
+                                                value={recent} 
+                                                onChange={onChangeInput} />
                                             <span>{ recent }</span>
                                         </div>
                                     )
