@@ -12,6 +12,17 @@ export default ({ onEscape, deviceIDs }) => {
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [errorString, setErrorString] = useState('');
 
+    const onDownload = () => {
+        if (selectedDeviceID === null) {
+            setErrorString('Select at least 1 device to download');
+            return;
+        }
+        if (selectedFilter === null) {
+            setErrorString('Time filter is not selected');
+            return;
+        }
+    }
+
     const onChangeInput = (e) => {
         const { name, value, checked } = e.target;
         switch (name) {
@@ -87,7 +98,10 @@ export default ({ onEscape, deviceIDs }) => {
                 </div>
                 <span className={styles.error}>{ errorString }</span>
                 <div className={styles.button_wrapper}>
-                    <div className={styles.button}>Download</div>
+                    <div className={styles.button}
+                        onClick={onDownload}>
+                        Download
+                    </div>
                 </div>
             </div>
         </div>
