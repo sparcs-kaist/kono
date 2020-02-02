@@ -10,6 +10,7 @@ export default ({ onEscape, deviceIDs }) => {
 
     const [selectedDeviceID, setSelectedDeviceID] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState(null);
+    const [errorString, setErrorString] = useState('');
 
     const onChangeInput = (e) => {
         const { name, value, checked } = e.target;
@@ -84,6 +85,7 @@ export default ({ onEscape, deviceIDs }) => {
                         </div>
                     </div>
                 </div>
+                <span className={styles.error}>{ errorString }</span>
                 <div className={styles.button_wrapper}>
                     <div className={styles.button}>Download</div>
                 </div>
