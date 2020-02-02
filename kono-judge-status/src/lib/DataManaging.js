@@ -20,7 +20,7 @@ export function recent2millis(recent) {
     }
 }
 
-function formatData(rawData) {
+export function formatData(rawData) {
     const { timestamp, data: dataArray } = rawData;
     return DATA_KEYS.reduce(
         (prev, key, idx) => {

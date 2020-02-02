@@ -70,6 +70,9 @@
             .button:hover {
                 background-color: #009688;
             }
+            .button + .button {
+                margin-left: 12px;
+            }
         }
 
     }

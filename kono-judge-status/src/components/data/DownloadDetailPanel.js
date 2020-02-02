@@ -1,19 +1,40 @@
 import React, { useState } from 'react';
 import styles from 'styles/components/DownloadDetailPanel.module.scss';
-import { TIME_FILTERS } from 'lib/DataManaging';
+import { TIME_FILTERS, formatData } from 'lib/DataManaging';
 import { MaterialIcon } from 'components/common';
+import * as API from 'api';
 
 const INPUT_NAME_DEVICE_ID = 'device_id';
 const INPUT_NAME_FILTER    = 'recent';
 
+const DOWNLOAD_FORMAT_CSV  = 'csv';
+const DOWNLOAD_FORMAT_JSON = 'json';
+
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`;
+}
+
+function processDownloadFormat(data, downloadFormat) {
+    switch (downloadFormat) {
+        case DOWNLOAD_FORMAT_CSV:
+            break;
+        case DOWNLOAD_FORMAT_JSON:
+            return new Blob([JSON.stringify(data)], { type: 'text/json' });
+        default:
+            throw Error(`DownloadDetailPanel: invalid format ${downloadFormat}`);
+    }
+}
+
 export default ({ onEscape, deviceIDs }) => {
 
-    const [selectedDeviceID, setSelectedDeviceID] = useState(null);
+    const [selectedDeviceIDs, setSelectedDeviceIDs] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [errorString, setErrorString] = useState('');
 
-    const onDownload = () => {
-        if (selectedDeviceID === null) {
+    const onDownload = async (downloadFormat) => {
+
+        if (selectedDeviceIDs.length === 0) {
             setErrorString('Select at least 1 device to download');
             return;
         }
@@ -21,16 +42,43 @@ export default ({ onEscape, deviceIDs }) => {
             setErrorString('Time filter is not selected');
             return;
         }
-    }
+        
+        setErrorString('');
+        const apiResults = await Promise.all(
+            selectedDeviceIDs.map(
+                deviceID => API.data(deviceID, selectedFilter)
+                    .then(({ data }) => data)
+            )
+        );
+        const downloadedData = selectedDeviceIDs.reduce(
+            (prev, deviceID, idx) => {
+                prev[deviceID] = apiResults[idx].map(rawData => formatData(rawData));
+                return prev;
+            }, {}
+        );
+        const blob = processDownloadFormat(downloadedData, downloadFormat);
+        const url = window.URL.createObjectURL(blob);
+
+        /* Create unseen a link to download file automatically. */
+        const a = document.createElement('a');
+        document.body.appendChild(a);
+        a.style = 'display: none';
+        a.href  = url;
+        a.download = `${formatTime(Date.now())}.${downloadFormat}`;
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+
+    };
 
     const onChangeInput = (e) => {
         const { name, value, checked } = e.target;
         switch (name) {
             case INPUT_NAME_DEVICE_ID:
                 if (checked)
-                    setSelectedDeviceID(value);
+                    setSelectedDeviceIDs(prev => [ ...prev, value ]);
                 else
-                    setSelectedDeviceID(null);
+                    setSelectedDeviceIDs(prev => prev.filter(x => x !== value));
                 break;
             case INPUT_NAME_FILTER:
                 setSelectedFilter(value);
@@ -99,8 +147,12 @@ export default ({ onEscape, deviceIDs }) => {
                 <span className={styles.error}>{ errorString }</span>
                 <div className={styles.button_wrapper}>
                     <div className={styles.button}
-                        onClick={onDownload}>
-                        Download
+                        onClick={() => onDownload(DOWNLOAD_FORMAT_CSV)}>
+                        CSV
+                    </div>
+                    <div className={styles.button}
+                        onClick={() => onDownload(DOWNLOAD_FORMAT_JSON)}>
+                        JSON
                     </div>
                 </div>
             </div>
