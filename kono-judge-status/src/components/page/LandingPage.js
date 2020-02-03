@@ -2,8 +2,12 @@ import React, { useState, useContext, useEffect } from 'react';
 import styles from 'styles/components/LandingPage.module.scss';
 import classnames from 'lib/classnames';
 import { TIME_FILTERS } from 'lib/DataManaging';
+import { Hover } from 'components/common';
 import { WebsocketController } from 'components/websocket';
-import { FilterSelector, DeviceSelector, DataPanel } from 'components/data';
+import { 
+    FilterSelector, DeviceSelector, DataPanel, 
+    DownloadPanel, DownloadDetailPanel
+} from 'components/data';
 import { DataContext } from 'components/provider/DataProvider';
 
 export default () => {
@@ -11,6 +15,7 @@ export default () => {
     const { deviceIDs, fetch, isLoading } = useContext(DataContext);
     const [selectedDeviceID, setSelectedDeviceID] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState(TIME_FILTERS[0]);
+    const [showHover, setShowHover] = useState(false);
 
     useEffect(() => {
         if (selectedDeviceID !== null) {
@@ -48,7 +53,20 @@ export default () => {
                         setSelectedFilter={setSelectedFilter}
                     />
                 </div>
+                <div className={styles.sidebar_item}>
+                    <DownloadPanel
+                        onClickDownload={() => setShowHover(true)}
+                    />
+                </div>
             </div>
+            {
+                showHover && <Hover>
+                    <DownloadDetailPanel 
+                        onEscape={() => setShowHover(false)}
+                        deviceIDs={deviceIDs}
+                    />
+                </Hover>
+            }
         </div>
     );
     
