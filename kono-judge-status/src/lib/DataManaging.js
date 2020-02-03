@@ -56,7 +56,12 @@ export function mergeData(data1, data2) {
     const deviceIDs = [...Object.keys(data1), ...Object.keys(data2)];
     return deviceIDs.reduce(
         (obj, deviceID) => {
-            obj[deviceID] = { ...data1[deviceID], ...data2[deviceID] };
+            const unordered = { ...data1[deviceID], ...data2[deviceID] };
+            obj[deviceID] = Object.keys(unordered).sort()
+                .reduce((prev, key) => { 
+                    prev[key] = unordered[key]; 
+                    return prev; 
+                }, {});
             return obj;
         }, {}
     );
