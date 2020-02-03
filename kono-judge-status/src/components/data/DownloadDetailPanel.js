@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from 'styles/components/DownloadDetailPanel.module.scss';
 import { TIME_FILTERS, formatData } from 'lib/DataManaging';
+import { convertToCSVString } from 'lib/csv';
 import { MaterialIcon } from 'components/common';
 import * as API from 'api';
 
@@ -12,13 +13,15 @@ const DOWNLOAD_FORMAT_JSON = 'json';
 
 function formatTime(timestamp) {
     const date = new Date(timestamp);
-    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`;
+    const to2digits = (x) => (x >= 10 ? x : '0' + x);
+    return `${date.getFullYear()}-${to2digits(date.getMonth())}-${to2digits(date.getDate())}`
+        + `-${to2digits(date.getHours())}-${to2digits(date.getMinutes())}-${to2digits(date.getSeconds())}`;
 }
 
 function processDownloadFormat(data, downloadFormat) {
     switch (downloadFormat) {
         case DOWNLOAD_FORMAT_CSV:
-            break;
+            return new Blob([convertToCSVString(data)], { type: 'text/csv' });
         case DOWNLOAD_FORMAT_JSON:
             return new Blob([JSON.stringify(data)], { type: 'text/json' });
         default:
@@ -28,14 +31,14 @@ function processDownloadFormat(data, downloadFormat) {
 
 export default ({ onEscape, deviceIDs }) => {
 
-    const [selectedDeviceIDs, setSelectedDeviceIDs] = useState([]);
+    const [selectedDeviceID, setSelectedDeviceID] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [errorString, setErrorString] = useState('');
 
     const onDownload = async (downloadFormat) => {
 
-        if (selectedDeviceIDs.length === 0) {
-            setErrorString('Select at least 1 device to download');
+        if (selectedDeviceID === null) {
+            setErrorString('Device is not selected');
             return;
         }
         if (selectedFilter === null) {
@@ -44,18 +47,9 @@ export default ({ onEscape, deviceIDs }) => {
         }
         
         setErrorString('');
-        const apiResults = await Promise.all(
-            selectedDeviceIDs.map(
-                deviceID => API.data(deviceID, selectedFilter)
-                    .then(({ data }) => data)
-            )
-        );
-        const downloadedData = selectedDeviceIDs.reduce(
-            (prev, deviceID, idx) => {
-                prev[deviceID] = apiResults[idx].map(rawData => formatData(rawData));
-                return prev;
-            }, {}
-        );
+        const apiResult = await API.data(selectedDeviceID, selectedFilter)
+            .then(({ data }) => data)
+        const downloadedData = apiResult.map(formatData);
         const blob = processDownloadFormat(downloadedData, downloadFormat);
         const url = window.URL.createObjectURL(blob);
 
@@ -64,7 +58,7 @@ export default ({ onEscape, deviceIDs }) => {
         document.body.appendChild(a);
         a.style = 'display: none';
         a.href  = url;
-        a.download = `${formatTime(Date.now())}.${downloadFormat}`;
+        a.download = `${formatTime(Date.now())}_${selectedDeviceID}.${downloadFormat}`;
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
@@ -76,9 +70,9 @@ export default ({ onEscape, deviceIDs }) => {
         switch (name) {
             case INPUT_NAME_DEVICE_ID:
                 if (checked)
-                    setSelectedDeviceIDs(prev => [ ...prev, value ]);
+                    setSelectedDeviceID(value);
                 else
-                    setSelectedDeviceIDs(prev => prev.filter(x => x !== value));
+                    setSelectedDeviceID(null);
                 break;
             case INPUT_NAME_FILTER:
                 setSelectedFilter(value);
@@ -112,7 +106,7 @@ export default ({ onEscape, deviceIDs }) => {
                                         <div className={styles.column_item}
                                             key={`column_item_${deviceID}`}>
                                             <input 
-                                                type="checkbox"
+                                                type="radio"
                                                 name={INPUT_NAME_DEVICE_ID}
                                                 value={deviceID} 
                                                 onChange={onChangeInput} />
