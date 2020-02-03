@@ -1,11 +1,29 @@
+@import '../mixins/all';
+
 .HistoryEditor {
 
     flex: 1;
-    background-color: #7CB342;
+    background-color: #01579B;
     color: #EEE;
 
     .content_wrapper {
         padding: 12px;
+
+        .item {
+            @include flexbox(row, $center: false);
+            .item_button {
+                padding: 3px 6px;
+            }
+            .item_button + .item_button {
+                margin-left: 6px;
+            }
+            .button_occupied {
+                background-color: #373751;
+            }
+            .button_vacant {
+                background-color: #6078F5;
+            }
+        }
     }
 
 }
