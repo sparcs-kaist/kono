@@ -7,22 +7,21 @@ export default ({ deviceIDs }) => {
     return (
         <div className={styles.HistoryEditor}>
             <div className={styles.content_wrapper}>
+                <span className={styles.title}>State Editor</span>
                 {
                     deviceIDs.map(deviceID => {
                         return (
                             <div
                                 className={styles.item}
                                 key={`history-${deviceID}`}>
-                                <span>{ deviceID }</span>
+                                <span>{ deviceID }:</span>
                                 <div className={classnames([
-                                    styles.item_button,
-                                    styles.button_occupied
+                                    styles.item_button
                                 ])}>
                                     Occupied
                                 </div>
                                 <div className={classnames([
-                                    styles.item_button,
-                                    styles.button_vacant
+                                    styles.item_button
                                 ])}>
                                     Vacant
                                 </div>

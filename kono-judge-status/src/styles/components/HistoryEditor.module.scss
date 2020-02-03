@@ -8,19 +8,29 @@
 
     .content_wrapper {
         padding: 12px;
-
+        @include flexbox(column, $center: false);
+        .title {
+            margin-bottom: 12px;
+        }
         .item {
-            @include flexbox(row, $center: false);
+            padding-left: 12px;
+            @include flexbox(row, $center: true);
+            span {
+                flex: 1;
+            }
             .item_button {
                 padding: 3px 6px;
+                cursor: pointer;
+                background-color: #373751;
+                transition: background-color .15s;
+            }
+            .item_button:hover {
+                background-color: #6078F5;
             }
             .item_button + .item_button {
                 margin-left: 6px;
             }
-            .button_occupied {
-                background-color: #373751;
-            }
-            .button_vacant {
+            .button_selected {
                 background-color: #6078F5;
             }
         }
