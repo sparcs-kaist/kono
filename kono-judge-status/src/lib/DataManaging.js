@@ -53,15 +53,52 @@ export function filterData(data, lastUpdated, deviceID, recent) {
 }
 
 export function mergeData(data1, data2) {
-    const deviceIDs = [...Object.keys(data1), ...Object.keys(data2)];
+    const deviceIDs = Object.keys(data1);
+    for (var deviceID in data2) {
+        if (deviceIDs.indexOf(deviceID) === -1)
+            deviceIDs.push(deviceID);
+    }
     return deviceIDs.reduce(
         (obj, deviceID) => {
-            const unordered = { ...data1[deviceID], ...data2[deviceID] };
-            obj[deviceID] = Object.keys(unordered).sort()
-                .reduce((prev, key) => { 
-                    prev[key] = unordered[key]; 
-                    return prev; 
-                }, {});
+            const timestamps1 = data1[deviceID] ? Object.keys(data1[deviceID]) : [];
+            const timestamps2 = data2[deviceID] ? Object.keys(data2[deviceID]) : [];
+            if (timestamps2.length === 1) {
+                if (data1[deviceID]) {
+                    obj[deviceID] = data1[deviceID];
+                    obj[deviceID][timestamps2[0]] = data2[deviceID][timestamps2[0]];
+                }
+                else {
+                    obj[deviceID] = data2[deviceID];
+                }
+            }
+            else {
+                obj[deviceID] = {};
+                let idx1 = 0;
+                let idx2 = 0;
+                while (idx1 < timestamps1.length && idx2 < timestamps2.length) {
+                    if (timestamps1[idx1] < timestamps2[idx2]) {
+                        obj[deviceID][timestamps1[idx1]] = data1[deviceID][timestamps1[idx1]];
+                        idx1++;
+                    }
+                    else if (timestamps1[idx1] > timestamps2[idx2]) {
+                        obj[deviceID][timestamps2[idx2]] = data2[deviceID][timestamps2[idx2]];
+                        idx2++;
+                    }
+                    else {
+                        obj[deviceID][timestamps1[idx1]] = data1[deviceID][timestamps1[idx1]];
+                        idx1++;
+                        idx2++;
+                    }
+                }
+                while (idx1 < timestamps1.length) {
+                    obj[deviceID][timestamps1[idx1]] = data1[deviceID][timestamps1[idx1]];
+                    idx1++;
+                }
+                while (idx2 < timestamps2.length) {
+                    obj[deviceID][timestamps2[idx2]] = data2[deviceID][timestamps2[idx2]];
+                    idx2++;
+                }
+            }
             return obj;
         }, {}
     );
