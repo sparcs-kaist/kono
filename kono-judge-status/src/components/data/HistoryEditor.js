@@ -7,6 +7,8 @@ export default ({ deviceIDs }) => {
 
     const [selectedDropdown, setSelectedDropdown] = useState(null);
 
+    const showDetail = selectedDropdown !== null;
+
     return (
         <div className={styles.HistoryEditor}>
             <div className={styles.content_wrapper}>
@@ -51,6 +53,14 @@ export default ({ deviceIDs }) => {
                             </div>
                         )
                     })
+                }
+                {
+                    <div className={classnames([
+                        styles.item_detail,
+                        !showDetail && styles.item_hide
+                    ])}>
+
+                    </div>
                 }
             </div>
         </div>

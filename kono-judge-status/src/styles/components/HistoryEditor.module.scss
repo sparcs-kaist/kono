@@ -5,8 +5,10 @@
     flex: 1;
     background-color: #01579B;
     color: #EEE;
+    @include flexbox(column, $center: false);
 
     .content_wrapper {
+        flex: 1;
         padding: 12px;
         @include flexbox(column, $center: false);
         .title {
@@ -47,11 +49,23 @@
         .item_hide + .item_selected {
             margin-top: 0;
         }
+        .item_selected + .item_hide {
+            margin-top: 0;
+        }
+        .item_hide + .item_hide {
+            margin-top: 0;
+        }
         .item_hide {
             margin-top: 0;
             max-height: 0;
             overflow: hidden;
         }
+        .item_detail {
+            background-color: #EEE;
+            flex: 1;
+            margin-top: 6px;
+        }
+        
     }
 
 }
