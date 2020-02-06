@@ -13,13 +13,19 @@
             margin-bottom: 12px;
         }
         .item {
-            padding-left: 12px;
+            transition: max-height .15s, margin-top .15s;
+            max-height: 25px;
             @include flexbox(row, $center: true);
             span {
-                flex: 1;
+                font-size: 14px;
+                background-color: #0277BD;
+                padding: 0 4px;
+                border-radius: 2px;
             }
             .item_button {
                 padding: 3px 6px;
+                margin-left: 6px;
+                border-radius: 3px;
                 cursor: pointer;
                 background-color: #373751;
                 transition: background-color .15s;
@@ -27,12 +33,24 @@
             .item_button:hover {
                 background-color: #6078F5;
             }
-            .item_button + .item_button {
-                margin-left: 6px;
-            }
             .button_selected {
                 background-color: #6078F5;
             }
+            .dropdown {
+                margin-left: 3px;
+                cursor: pointer;
+            }
+        }
+        .item + .item {
+            margin-top: 6px;
+        }
+        .item_hide + .item_selected {
+            margin-top: 0;
+        }
+        .item_hide {
+            margin-top: 0;
+            max-height: 0;
+            overflow: hidden;
         }
     }
 
