@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from 'styles/components/HistoryEditor.module.scss';
 import classnames from 'lib/classnames';
 import { MaterialIcon } from 'components/common';
+import { HistoryContext } from 'components/provider/HistoryProvider';
 
 export default ({ deviceIDs }) => {
+
+    const { history, push } = useContext(HistoryContext);
+
+    console.log(history);
 
     const [selectedDropdown, setSelectedDropdown] = useState(null);
     const [roomStates, setRoomStates] = useState({});
@@ -85,6 +90,10 @@ export default ({ deviceIDs }) => {
 
                     </div>
                 }
+                <div className={styles.warning}>
+                    <MaterialIcon fontSize={12}>warning</MaterialIcon>
+                    <span>Refreshing will not preserve history!</span>
+                </div>
             </div>
         </div>
     )

@@ -61,9 +61,18 @@
             overflow: hidden;
         }
         .item_detail {
-            background-color: #EEE;
+            background-color: #1A237E;
             flex: 1;
-            margin-top: 6px;
+            margin: 12px 0;
+        }
+        .warning {
+            margin-top: auto;
+            font-size: 11px;
+            font-weight: bold;
+            @include flexbox(row, $center: true);
+            span {
+                margin-left: 6px;
+            }
         }
         
     }
