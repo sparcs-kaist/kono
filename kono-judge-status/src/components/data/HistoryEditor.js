@@ -8,8 +8,6 @@ export default ({ deviceIDs }) => {
 
     const { history, push } = useContext(HistoryContext);
 
-    console.log(history);
-
     const [selectedDropdown, setSelectedDropdown] = useState(null);
     const [roomStates, setRoomStates] = useState({});
 
@@ -33,17 +31,22 @@ export default ({ deviceIDs }) => {
 
                         const occupiedSelected = (roomStates[deviceID] === true);
                         const vacantSelected = (roomStates[deviceID] === false);
+                        const updateRoomState = (deviceID, value) => {
+                            const newRoomStates = { ...roomStates, [deviceID]: value }
+                            setRoomStates(newRoomStates);
+                            push(newRoomStates, Date.now(), deviceID, value);
+                        };
                         const onClickOccupied = () => {
-                            if (occupiedSelected)
-                                setRoomStates(prev => ({ ...prev, [deviceID]: undefined }));
+                            if (occupiedSelected) 
+                                updateRoomState(deviceID, undefined);
                             else
-                                setRoomStates(prev => ({ ...prev, [deviceID]: true }));
+                                updateRoomState(deviceID, true);
                         }
                         const onClickVacant = () => {
                             if (vacantSelected)
-                                setRoomStates(prev => ({ ...prev, [deviceID]: undefined }));
+                                updateRoomState(deviceID, undefined);
                             else
-                                setRoomStates(prev => ({ ...prev, [deviceID]: false }));
+                                updateRoomState(deviceID, false);
                         }
 
                         return (

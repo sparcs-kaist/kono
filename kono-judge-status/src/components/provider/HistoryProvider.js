@@ -6,14 +6,13 @@ export default ({ children }) => {
 
     const [history, setHistory] = useState({});
 
-    const push = (deviceID, timestamp, newValue) => {
-        setHistory(prev => {
-            const prevList = prev[deviceID] || [];
-            return {
-                ...prev,
-                [deviceID]: [ ...prevList, [timestamp, newValue] ]
-            };
-        });
+    const push = (newState, timestamp, deviceID, change) => {
+        setHistory(prev => ({ ...prev, [timestamp]: {
+            state: newState,
+            timestamp,
+            deviceID,
+            change
+        } }));
     }
 
     const initialContext = { history, push };
