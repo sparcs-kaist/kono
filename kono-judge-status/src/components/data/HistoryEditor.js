@@ -6,6 +6,7 @@ import { MaterialIcon } from 'components/common';
 export default ({ deviceIDs }) => {
 
     const [selectedDropdown, setSelectedDropdown] = useState(null);
+    const [roomStates, setRoomStates] = useState({});
 
     const showDetail = selectedDropdown !== null;
 
@@ -15,6 +16,7 @@ export default ({ deviceIDs }) => {
                 <span className={styles.title}>State Editor</span>
                 {
                     deviceIDs.map(deviceID => {
+
                         const hide = (selectedDropdown !== null) && (selectedDropdown !== deviceID);
                         const selected = (selectedDropdown === deviceID);
                         const onToggleHide = () => {
@@ -22,7 +24,23 @@ export default ({ deviceIDs }) => {
                                 setSelectedDropdown(null);
                             else
                                 setSelectedDropdown(deviceID);
+                        };
+
+                        const occupiedSelected = (roomStates[deviceID] === true);
+                        const vacantSelected = (roomStates[deviceID] === false);
+                        const onClickOccupied = () => {
+                            if (occupiedSelected)
+                                setRoomStates(prev => ({ ...prev, [deviceID]: undefined }));
+                            else
+                                setRoomStates(prev => ({ ...prev, [deviceID]: true }));
                         }
+                        const onClickVacant = () => {
+                            if (vacantSelected)
+                                setRoomStates(prev => ({ ...prev, [deviceID]: undefined }));
+                            else
+                                setRoomStates(prev => ({ ...prev, [deviceID]: false }));
+                        }
+
                         return (
                             <div
                                 className={classnames([
@@ -33,13 +51,17 @@ export default ({ deviceIDs }) => {
                                 key={`history-${deviceID}`}>
                                 <span>{ deviceID }</span>
                                 <div className={classnames([
-                                    styles.item_button
-                                ])}>
+                                    styles.item_button,
+                                    occupiedSelected && styles.button_selected
+                                ])}
+                                    onClick={onClickOccupied}>
                                     Occupied
                                 </div>
                                 <div className={classnames([
-                                    styles.item_button
-                                ])}>
+                                    styles.item_button,
+                                    vacantSelected && styles.button_selected
+                                ])}
+                                    onClick={onClickVacant}>
                                     Vacant
                                 </div>
                                 <div className={styles.dropdown}
@@ -52,6 +74,7 @@ export default ({ deviceIDs }) => {
                                 </div>
                             </div>
                         )
+
                     })
                 }
                 {
