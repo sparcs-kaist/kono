@@ -13,7 +13,7 @@ export default ({ children }) => {
             deviceID,
             change
         } }));
-    }
+    };
 
     const initialContext = { history, push };
     const [context, setContext] = useState(initialContext);

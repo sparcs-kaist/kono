@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import styles from 'styles/components/HistoryEditor.module.scss';
 import classnames from 'lib/classnames';
 import { MaterialIcon } from 'components/common';
+import { HistoryDetail } from 'components/data';
 import { HistoryContext } from 'components/provider/HistoryProvider';
 
 export default ({ deviceIDs }) => {
@@ -89,8 +90,10 @@ export default ({ deviceIDs }) => {
                     <div className={classnames([
                         styles.item_detail,
                         !showDetail && styles.item_hide
-                    ])}>
-
+                    ])}> 
+                        <HistoryDetail
+                            deviceID={selectedDropdown}
+                        />
                     </div>
                 }
                 <div className={styles.warning}>
