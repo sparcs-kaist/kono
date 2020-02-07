@@ -1,5 +1,14 @@
 @import '../mixins/all';
 
 .HistoryDetail {
-    
+
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 0px;
+
+    .content {
+
+    }
+
 }

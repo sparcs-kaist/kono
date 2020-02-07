@@ -64,6 +64,7 @@
             background-color: #1A237E;
             flex: 1;
             margin: 12px 0;
+            @include flexbox(column, $center: false);
         }
         .warning {
             margin-top: auto;

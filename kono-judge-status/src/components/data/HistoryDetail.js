@@ -3,7 +3,13 @@ import styles from 'styles/components/HistoryDetail.module.scss';
 import { HistoryContext } from 'components/provider/HistoryProvider';
 
 function filterHistory(history, deviceID) {
-
+    const filtered = [];
+    for (var timestamp in history) {
+        const { deviceID: _deviceID, change } = history[timestamp];
+        if (deviceID === _deviceID)
+            filtered.push({ timestamp, change });
+    }
+    return filtered;
 }
 
 export default ({ deviceID }) => {
@@ -15,7 +21,9 @@ export default ({ deviceID }) => {
 
     return (
         <div className={styles.HistoryDetail}>
-            { deviceID }
+            <div className={styles.content}>  
+                { JSON.stringify(filterHistory(history, deviceID)) }
+            </div>
         </div>
     )
 
