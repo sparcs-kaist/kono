@@ -8,7 +8,20 @@
     height: 0px;
 
     .content {
-
+        display: grid;
+        grid-template-columns: 1 1;
+        .grid_item {
+            
+        }
+        .grid_item_time {
+            grid-column: 1;
+        }
+        .grid_item_change {
+            grid-column: 2;
+        }
+        .grid_item_delete {
+            grid-column: 3;
+        }
     }
 
 }
