@@ -1,17 +1,7 @@
 import React, { useContext, Fragment } from 'react';
 import styles from 'styles/components/HistoryDetail.module.scss';
-import { HistoryContext } from 'components/provider/HistoryProvider';
+import { HistoryContext, filterHistory } from 'components/provider/HistoryProvider';
 import classnames from 'lib/classnames';
-
-function filterHistory(history, deviceID) {
-    const filtered = [];
-    for (var timestamp in history) {
-        const { deviceID: _deviceID, change } = history[timestamp];
-        if (deviceID === _deviceID)
-            filtered.push({ timestamp, change });
-    }
-    return filtered;
-}
 
 function timestampToString(timestamp) {
     const date = new Date(Number(timestamp));
