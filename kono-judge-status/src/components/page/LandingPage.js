@@ -5,8 +5,8 @@ import { TIME_FILTERS } from 'lib/DataManaging';
 import { Hover } from 'components/common';
 import { WebsocketController } from 'components/websocket';
 import { 
-    FilterSelector, DeviceSelector, DataPanel, 
-    DownloadPanel, DownloadDetailPanel
+    FilterSelector, DeviceSelector, HistoryEditor,
+    DataPanel, DownloadPanel, DownloadDetailPanel
 } from 'components/data';
 import { DataContext } from 'components/provider/DataProvider';
 
@@ -45,6 +45,13 @@ export default () => {
                         selectedDeviceID={selectedDeviceID}
                         setSelectedDeviceID={setSelectedDeviceID}
                     />
+                </div>
+                <div className={classnames([
+                    styles.sidebar_item,
+                    styles.sidebar_item_stretch
+                ])}>
+                    <HistoryEditor
+                        deviceIDs={deviceIDs} />
                 </div>
                 <div className={styles.sidebar_item}>
                     <FilterSelector 

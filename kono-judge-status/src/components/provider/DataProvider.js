@@ -72,7 +72,7 @@ export default ({ children }) => {
 
     /* Fetch device ID list at first render */
     useEffect(() => {
-        fetchDeviceIDs(API.devices, []);
+        fetchDeviceIDs(API.devices, [], deviceIDs => deviceIDs.map(id => Number(id)));
     }, [fetchDeviceIDs]);
 
     return (

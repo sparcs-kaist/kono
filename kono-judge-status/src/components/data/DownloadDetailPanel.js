@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from 'styles/components/DownloadDetailPanel.module.scss';
-import { TIME_FILTERS, formatData } from 'lib/DataManaging';
+import { TIME_FILTERS, formatData, addLabel } from 'lib/DataManaging';
 import { convertToCSVString } from 'lib/csv';
 import { MaterialIcon } from 'components/common';
+import { HistoryContext, filterHistory } from 'components/provider/HistoryProvider';
 import * as API from 'api';
 
 const INPUT_NAME_DEVICE_ID = 'device_id';
@@ -31,9 +32,12 @@ function processDownloadFormat(data, downloadFormat) {
 
 export default ({ onEscape, deviceIDs }) => {
 
+    const { history } = useContext(HistoryContext);
     const [selectedDeviceID, setSelectedDeviceID] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [errorString, setErrorString] = useState('');
+
+    const filteredHistory = filterHistory(history, selectedDeviceID);
 
     const onDownload = async (downloadFormat) => {
 
@@ -48,9 +52,10 @@ export default ({ onEscape, deviceIDs }) => {
         
         setErrorString('');
         const apiResult = await API.data(selectedDeviceID, selectedFilter)
-            .then(({ data }) => data)
+            .then(({ data }) => data);
         const downloadedData = apiResult.map(formatData);
-        const blob = processDownloadFormat(downloadedData, downloadFormat);
+        const labeledData = addLabel(downloadedData, filteredHistory);
+        const blob = processDownloadFormat(labeledData, downloadFormat);
         const url = window.URL.createObjectURL(blob);
 
         /* Create unseen a link to download file automatically. */
@@ -70,7 +75,7 @@ export default ({ onEscape, deviceIDs }) => {
         switch (name) {
             case INPUT_NAME_DEVICE_ID:
                 if (checked)
-                    setSelectedDeviceID(value);
+                    setSelectedDeviceID(Number(value));
                 else
                     setSelectedDeviceID(null);
                 break;

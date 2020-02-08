@@ -2,8 +2,12 @@ import React, { useContext } from 'react';
 import styles from 'styles/components/DataPanel.module.scss';
 import { TIME_FILTERS } from 'lib/DataManaging';
 import { DataContext } from 'components/provider/DataProvider';
+import { HistoryContext, filterHistory } from 'components/provider/HistoryProvider';
 import { Spinner } from 'components/common';
-import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Legend, Line } from 'recharts';
+import {
+    ResponsiveContainer, LineChart, CartesianGrid, 
+    XAxis, YAxis, Legend, Line, ReferenceArea
+} from 'recharts';
 
 function getTimeString(timestamp, showSeconds) {
     const date = new Date(timestamp);
@@ -17,6 +21,11 @@ function getTimeString(timestamp, showSeconds) {
 export default ({ isLoading, selectedDeviceID, selectedFilter }) => {
 
     const { filter } = useContext(DataContext);
+    const { history } = useContext(HistoryContext);
+
+    const filteredHistory = selectedDeviceID
+        ? filterHistory(history, selectedDeviceID)
+        : [];
 
     const showSpinner = isLoading;
     const showData = selectedDeviceID !== null;
@@ -39,11 +48,13 @@ export default ({ isLoading, selectedDeviceID, selectedFilter }) => {
                     <ResponsiveContainer width="100%" height="100%" >
                         <LineChart data={dataArray}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis 
+                            <XAxis
+                                type="number" domain={['dataMin', 'dataMax']}
                                 dataKey="timestamp" 
                                 tickFormatter={(time) => getTimeString(time, showSeconds)}    
                             />
-                            <YAxis />
+                            <YAxis 
+                                type="number" domain={['dataMin', 'dataMax']} />
                             <Legend />
                             <Line type="linear" dataKey="IR0" stroke="#BBDEFB" 
                                 isAnimationActive={false} dot={false}
@@ -57,6 +68,28 @@ export default ({ isLoading, selectedDeviceID, selectedFilter }) => {
                             <Line type="linear" dataKey="IR3" stroke="#B2EBF2" 
                                 isAnimationActive={false} dot={false}
                             />
+                            {
+                                filteredHistory.map(({ timestamp, change }, idx) => {
+                                    let x1 = Number(timestamp);
+                                    let x2 = (idx === filteredHistory.length - 1)
+                                        ? Date.now()
+                                        : Number(filteredHistory[idx + 1]['timestamp']);
+                                    if (dataArray.length === 0 || x2 < dataArray[0]['timestamp'])
+                                        return null;
+                                    x1 = Math.max(x1, dataArray[0]['timestamp']);
+                                    x2 = Math.min(x2, dataArray[dataArray.length - 1]['timestamp']);
+                                    const color = (change === undefined)
+                                        ? "#263238"
+                                        : (change === true) ? "#5C6BC0" : "#EF5350";
+                                    return (
+                                        <ReferenceArea
+                                            key={`reference-${timestamp}`}
+                                            x1={x1} x2={x2}
+                                            fill={color} fillOpacity={.3}
+                                        />
+                                    )
+                                })
+                            }
                         </LineChart>
                     </ResponsiveContainer>
                 }
