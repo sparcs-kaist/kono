@@ -7,7 +7,7 @@ export function filterHistory(history, deviceID) {
     for (var timestamp in history) {
         const { deviceID: _deviceID, change } = history[timestamp];
         if (deviceID === _deviceID)
-            filtered.push({ timestamp, change });
+            filtered.push({ timestamp: Number(timestamp), change });
     }
     return filtered;
 }

@@ -1,5 +1,6 @@
 export const TIME_FILTERS = ['10sec', '1min', '10min', '1h', '6h', '24h'];
-export const DATA_KEYS = ['IR0', 'IR1', 'IR2', 'IR3']
+export const DATA_KEYS = ['IR0', 'IR1', 'IR2', 'IR3'];
+export const LABEL_KEY = 'state';
 
 export function recent2millis(recent) {
     switch (recent) {
@@ -118,4 +119,35 @@ export function processAPIData(apiData) {
 
 export function generateFilter({ data, lastUpdated }) {
     return (deviceID, recent) => filterData(data, lastUpdated, deviceID, recent);
+}
+
+export function addLabel(data, history) {
+    if (history.length === 0)
+        return data;
+
+    const labeledData = [];
+    let lastHistoryIndex = -1;
+
+    for (var idx in data) {
+        const { timestamp } = data[idx];
+        while (lastHistoryIndex + 1 < history.length
+            && history[lastHistoryIndex + 1].timestamp < timestamp) {
+            lastHistoryIndex++;
+        }
+        if (lastHistoryIndex === -1 
+            || history[lastHistoryIndex].timestamp === undefined) {
+            labeledData.push({
+                ...data[idx],
+                [LABEL_KEY]: ''
+            });
+        }
+        else {
+            labeledData.push({
+                ...data[idx],
+                [LABEL_KEY]: history[lastHistoryIndex].change ? 1 : 0
+            });
+        }
+    }
+
+    return labeledData;
 }

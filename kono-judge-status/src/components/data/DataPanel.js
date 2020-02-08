@@ -74,7 +74,7 @@ export default ({ isLoading, selectedDeviceID, selectedFilter }) => {
                                     let x2 = (idx === filteredHistory.length - 1)
                                         ? Date.now()
                                         : Number(filteredHistory[idx + 1]['timestamp']);
-                                    if (x2 < dataArray[0]['timestamp'])
+                                    if (dataArray.length === 0 || x2 < dataArray[0]['timestamp'])
                                         return null;
                                     x1 = Math.max(x1, dataArray[0]['timestamp']);
                                     x2 = Math.min(x2, dataArray[dataArray.length - 1]['timestamp']);
