@@ -1,0 +1,32 @@
+@import '../mixins/all';
+
+.HistoryDetail {
+
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 0px;
+
+    .content {
+        display: grid;
+        grid-template-columns: 1 1;
+        .grid_item {
+            @include flexbox(row, $center: true);
+            span {
+                text-align: center;
+            }
+            padding: 3px 0;
+            font-size: 14px;
+        }
+        .grid_item_colored {
+            background-color: #283593;
+        }
+        .grid_item_time {
+            grid-column: 1;
+        }
+        .grid_item_change {
+            grid-column: 2;
+        }
+    }
+
+}

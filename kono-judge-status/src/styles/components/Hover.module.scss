@@ -1,0 +1,14 @@
+@import '../mixins/all';
+
+.Hover {
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    width: 100vw;
+    height: 100vh;
+    
+    background-color: rgba(#212121, .7);
+
+}

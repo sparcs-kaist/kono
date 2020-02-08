@@ -1,0 +1,21 @@
+@import '../mixins/all';
+
+.DownloadPanel {
+
+    background-color: #33691E;
+    padding: 12px 24px;
+
+    .button {
+        border: 1px solid #9CCC65;
+        background-color: #558B2F;
+        @include flexbox(column, $center: true);
+        padding: 6px 12px;
+        color: #EEE;
+        cursor: pointer;
+    }
+    .button:hover {
+        background-color: #7CB342;
+        transition: background-color .3s;
+    }
+
+}
