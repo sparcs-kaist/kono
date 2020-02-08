@@ -2,7 +2,6 @@ import React, { useContext, Fragment } from 'react';
 import styles from 'styles/components/HistoryDetail.module.scss';
 import { HistoryContext } from 'components/provider/HistoryProvider';
 import classnames from 'lib/classnames';
-import MaterialIcon from 'components/common/MaterialIcon';
 
 function filterHistory(history, deviceID) {
     const filtered = [];
@@ -34,7 +33,7 @@ export default ({ deviceID }) => {
     if (deviceID === null)
         return null;
 
-    const { history, erase } = useContext(HistoryContext);
+    const { history } = useContext(HistoryContext);
     const filteredHistory = filterHistory(history, deviceID);
 
     return (
@@ -72,16 +71,6 @@ export default ({ deviceID }) => {
                                     <span>
                                         { changeToString(change) }
                                     </span>
-                                </div>
-                                <div className={classnames([
-                                    styles.grid_item,
-                                    coloredItem && styles.grid_item_colored,
-                                    styles.grid_item_delete
-                                ])}
-                                    key={`grid-${timestamp}-delete`}>
-                                    <div onClick={() => erase(timestamp)}>
-                                        <MaterialIcon fontSize={14}>delete</MaterialIcon>                                        
-                                    </div>
                                 </div>
                             </Fragment>
                         )
