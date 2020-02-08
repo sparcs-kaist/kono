@@ -86,16 +86,14 @@ export default ({ deviceIDs }) => {
 
                     })
                 }
-                {
-                    <div className={classnames([
-                        styles.item_detail,
-                        !showDetail && styles.item_hide
-                    ])}> 
-                        <HistoryDetail
-                            deviceID={selectedDropdown}
-                        />
-                    </div>
-                }
+                <div className={classnames([
+                    styles.item_detail,
+                    !showDetail && styles.item_hide
+                ])}> 
+                    <HistoryDetail
+                        deviceID={selectedDropdown}
+                    />
+                </div>
                 <div className={styles.warning}>
                     <MaterialIcon fontSize={12}>warning</MaterialIcon>
                     <span>Refreshing will not preserve history!</span>

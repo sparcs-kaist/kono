@@ -9,9 +9,17 @@
 
     .content {
         display: grid;
-        grid-template-columns: 1 1;
+        grid-template-columns: 1 1 0;
         .grid_item {
-            
+            @include flexbox(row, $center: true);
+            span {
+                text-align: center;
+            }
+            padding: 3px 0;
+            font-size: 14px;
+        }
+        .grid_item_colored {
+            background-color: #283593;
         }
         .grid_item_time {
             grid-column: 1;
@@ -21,6 +29,14 @@
         }
         .grid_item_delete {
             grid-column: 3;
+            @include flexbox(row, $center: true);
+            div {
+                color: #EEE;
+                cursor: pointer;
+            }
+            div:hover {
+                color: #E53935;
+            }
         }
     }
 
