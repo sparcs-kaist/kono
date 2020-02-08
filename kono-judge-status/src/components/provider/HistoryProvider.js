@@ -15,7 +15,11 @@ export default ({ children }) => {
         } }));
     };
 
-    const initialContext = { history, push };
+    const erase = (timestamp) => {
+        setHistory(({ [timestamp]: drop, ...rest }) => rest);
+    }
+
+    const initialContext = { history, push, erase };
     const [context, setContext] = useState(initialContext);
 
     useEffect(() => { setContext(prev => ({ ...prev, history })) }, [history]);

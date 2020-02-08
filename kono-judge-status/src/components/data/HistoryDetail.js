@@ -34,7 +34,7 @@ export default ({ deviceID }) => {
     if (deviceID === null)
         return null;
 
-    const { history } = useContext(HistoryContext);
+    const { history, erase } = useContext(HistoryContext);
     const filteredHistory = filterHistory(history, deviceID);
 
     return (
@@ -50,7 +50,7 @@ export default ({ deviceID }) => {
                 ])}>Change</div>
                 {
                     filteredHistory.map(({ timestamp, change }, idx) => {
-                        const coloredItem = (idx % 2) == 0;
+                        const coloredItem = (idx % 2) === 0;
                         return (
                             <Fragment key={`grid-${timestamp}`}>
                                 <div className={classnames([
@@ -79,7 +79,9 @@ export default ({ deviceID }) => {
                                     styles.grid_item_delete
                                 ])}
                                     key={`grid-${timestamp}-delete`}>
-                                    <MaterialIcon fontSize={14}>delete</MaterialIcon>
+                                    <div onClick={() => erase(timestamp)}>
+                                        <MaterialIcon fontSize={14}>delete</MaterialIcon>                                        
+                                    </div>
                                 </div>
                             </Fragment>
                         )

@@ -7,7 +7,7 @@ import { HistoryContext } from 'components/provider/HistoryProvider';
 
 export default ({ deviceIDs }) => {
 
-    const { history, push } = useContext(HistoryContext);
+    const { push } = useContext(HistoryContext);
 
     const [selectedDropdown, setSelectedDropdown] = useState(null);
     const [roomStates, setRoomStates] = useState({});
