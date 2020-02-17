@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styles from 'styles/components/DataPanel.module.scss';
-import { TIME_FILTERS } from 'lib/DataManaging';
+import { TIME_FILTERS, sampleFromData } from 'lib/DataManaging';
 import { DataContext } from 'components/provider/DataProvider';
 import { HistoryContext, filterHistory } from 'components/provider/HistoryProvider';
 import { Spinner } from 'components/common';
@@ -35,7 +35,11 @@ export default ({ isLoading, selectedDeviceID, selectedFilter }) => {
     const data = showData
         ? filter(selectedDeviceID, selectedFilter)
         : {};
-    const dataArray = Object.values(data);
+    /* Show less data points for large time scale */
+    const isLargeTimeScale = (selectedFilter === TIME_FILTERS[4]) || (selectedFilter === TIME_FILTERS[5])
+    const dataArray = isLargeTimeScale
+        ? sampleFromData(Object.values(data), 10)
+        : Object.values(data);
 
     return (
         <div className={styles.DataPanel}>
