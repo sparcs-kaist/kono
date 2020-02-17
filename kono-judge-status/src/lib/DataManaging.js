@@ -151,3 +151,24 @@ export function addLabel(data, history) {
 
     return labeledData;
 }
+
+export function sampleFromData(dataArray, sampleFrequency) {
+    if (sampleFrequency === 1 || dataArray.length <= 1)
+        return dataArray;
+
+    const sampledArray = [], sum = {};
+    const keys = Object.keys(dataArray[0]);
+    keys.forEach(key => { sum[key] = 0.; });
+
+    for (var i = 0; i < dataArray.length; i++) {
+        const currentData = dataArray[i];
+        keys.forEach(key => { sum[key] += currentData[key] / sampleFrequency; })
+        if ((i + 1) % sampleFrequency === 0) {
+            const sampled = {};
+            keys.forEach(key => { sampled[key] = sum[key]; sum[key] = 0.; });
+            sampledArray.push(sampled);
+        }
+    }
+    
+    return sampledArray;
+}
