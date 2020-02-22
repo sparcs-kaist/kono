@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ResponsiveComponent } from 'components/layout';
-import { NotiEditorDesktop } from 'components/noti';
+import { NotiEditorDesktop, NotiEditorMobile } from 'components/noti';
+import text from 'res/texts/NotiEditor.text.json';
 
 export default ({ initialActive = false }) => {
 
@@ -11,7 +12,8 @@ export default ({ initialActive = false }) => {
     return (
         <ResponsiveComponent 
             DesktopComponent={NotiEditorDesktop}
-            MobileComponent={() => null}
+            MobileComponent={NotiEditorMobile}
+            text={text}
             active={active}
             setActive={setActive}
             setNotiKR={setNotiKR}

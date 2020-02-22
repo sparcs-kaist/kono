@@ -28,6 +28,7 @@ export default () => {
         ,
     ] = useFetch([]);
 
+    const refreshNotis = () => fetchNotis(NotiAPI.retrieve, [{ max_size: MAX_DISPLAY_NOTIS }]);
     useEffect(() => {
         fetchNotis(NotiAPI.retrieve, [{ max_size: MAX_DISPLAY_NOTIS }]);
     }, [fetchNotis]);
@@ -77,7 +78,7 @@ export default () => {
                                 <>
                                     <RoomStatePanelMobile rooms={rooms} />
                                     <div className={styles.mobile_legend}>
-                                        <NotiPanel notis={notis}/>
+                                        <NotiPanel notis={notis} refresh={refreshNotis}/>
                                     </div>
                                 </>
                             )

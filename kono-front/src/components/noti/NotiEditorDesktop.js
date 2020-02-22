@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import styles from 'styles/NotiEditorDesktop.module.scss';
 import { MaterialIcon, Input } from 'components/common';
 import classnames from 'lib/classnames';
-import text from 'res/texts/NotiEditor.text.json';
 
 const TRANSITION_ANIMATION_DELAY_MS = 300;
 
-export default ({ active, setActive, setNotiKR, setNotiEN }) => {
+export default ({ text, active, setActive, setNotiKR, setNotiEN }) => {
 
     const [activeStyle, setActiveStyle] = useState(active);
 
@@ -22,7 +21,7 @@ export default ({ active, setActive, setNotiKR, setNotiEN }) => {
     };
 
     return (
-        <div className={styles.NotiEditor}>
+        <div className={styles.NotiEditorDesktop}>
             <div className={classnames([
                 styles.container,
                 activeStyle && styles.active,

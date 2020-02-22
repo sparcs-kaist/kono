@@ -4,12 +4,20 @@
     .Input {
         
         margin: 0;
-        padding: 2px 4px;
-        border-radius: 2px;
+        @include desktop-screen {
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-size: 12px;
+            line-height: 15px;
+        }
+        @include mobile-screen {
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 16px;
+            line-height: 20px;
+        }
         color: t(text-primary);
         background-color: t(background);
-        font-size: 12px;
-        line-height: 15px;
         flex: 1;
 
         border: none;
@@ -17,7 +25,12 @@
         &::placeholder {
             font-style: italic;
             color: t(text-secondary);
-            font-size: 11px;
+            @include desktop-screen {
+                font-size: 11px;
+            }
+            @include mobile-screen {
+                font-size: 14px;
+            }
         }
 
         &:focus {

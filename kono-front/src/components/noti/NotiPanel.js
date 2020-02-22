@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { NotiItem, NotiEditor } from 'components/noti';
 
-export default ({ notis }) => {
+export default ({ notis, refresh }) => {
 
     const login = useSelector(state => state.auth.login, []);
 
