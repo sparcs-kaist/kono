@@ -9,30 +9,58 @@
         }
 
         .container {
-            margin: 4px auto 4px 10px;
-            &.background {
-                margin: 0 auto 0 6px;
+            margin: 4px auto 4px 8px;
+            padding: 0;
+            @include flexbox(row, $center: false);
+            align-items: flex-start;
+            max-width: 24px;
+            max-height: 24px;
+            overflow: hidden;
+            transition: margin .3s ease-in-out,
+                        padding .3s ease-in-out,
+                        max-width .3s ease-in-out,
+                        max-height .3s ease-in-out;
+            &.active {
+                max-width: 240px;
+                max-height: 50px;
+                margin: 0 auto 0 4px;
                 padding: 4px;
                 border-radius: 14px;
                 background-color: rgba(t(text-secondary), 0.5);
             }
             .icon {
                 border-radius: 10px;
-                width: 20px;
-                height: 20px;
-                color: t(text-secondary);
-                background-color: rgba(t(text-primary), 0.7);
+                font-size: 24px;
+                color: t(text-primary);
                 @include flexbox(row, $center: true);
                 @include wide-screen {
                     border-radius: 15px;
                     width: 30px;
                     height: 30px;
                 }
-                &.clickable {
-                    cursor: pointer;
-                    &:hover {
-                        background-color: t(theme-background);
-                    }
+            }
+            .clickable {
+                cursor: pointer;
+                &:hover {
+                    color: t(theme-background);
+                }
+            }
+            .item {
+                padding-left: 9px;
+            }
+            .edit_wrapper {
+                p {
+                    margin: 0;
+                    padding: 2px 4px;
+                    border-radius: 2px;
+                    background-color: t(panel-background);
+                    font-size: 13px;
+                    line-height: 15px;
+                    width: 150px;
+                    height: 15px;
+                }
+                p + p {
+                    margin-top: 4px;
                 }
             }
         }
