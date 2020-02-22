@@ -1,0 +1,29 @@
+@import 'mixins/all';
+
+@include themed () {
+    .Input {
+        
+        margin: 0;
+        padding: 2px 4px;
+        border-radius: 2px;
+        color: t(text-primary);
+        background-color: t(background);
+        font-size: 12px;
+        line-height: 15px;
+        width: 150px;
+        height: 15px;
+
+        border: none;
+
+        &::placeholder {
+            font-style: italic;
+            color: t(text-secondary);
+            font-size: 11px;
+        }
+
+        &:focus {
+            outline-color: t(text-highlight-on);
+        }
+
+    }
+}

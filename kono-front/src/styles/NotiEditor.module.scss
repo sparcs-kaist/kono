@@ -47,19 +47,10 @@
             }
             .item {
                 padding-left: 9px;
+                color: t(text-primary);
             }
             .edit_wrapper {
-                p {
-                    margin: 0;
-                    padding: 2px 4px;
-                    border-radius: 2px;
-                    background-color: t(panel-background);
-                    font-size: 13px;
-                    line-height: 15px;
-                    width: 150px;
-                    height: 15px;
-                }
-                p + p {
+                input + input {
                     margin-top: 4px;
                 }
             }

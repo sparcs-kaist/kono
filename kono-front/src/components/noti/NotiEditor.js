@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styles from 'styles/NotiEditor.module.scss';
-import { MaterialIcon } from 'components/common';
+import { MaterialIcon, Input } from 'components/common';
 import classnames from 'lib/classnames';
+import text from 'res/texts/NotiEditor.text.json';
 
 const TRANSITION_ANIMATION_DELAY_MS = 300;
 
@@ -45,8 +46,8 @@ export default ({ initialActive = false }) => {
                 {
                     active && (
                         <div className={classnames([styles.item, styles.edit_wrapper])}>
-                            <p>적을 내용</p>
-                            <p>Some Stuff</p>
+                            <Input placeholder={text.input_placeholder_kr} />
+                            <Input placeholder={text.input_placeholder_en} />
                         </div>
                     )
                 }
