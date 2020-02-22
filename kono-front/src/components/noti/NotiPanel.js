@@ -8,9 +8,9 @@ export default ({ notis }) => {
 
     return (
         <div>
-            <span>NotiPanel</span>
             {
-                login && <NotiEditor />
+                // login && <NotiEditor />
+                <NotiEditor />
             }
             {
                 notis.map(noti => {
