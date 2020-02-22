@@ -35,8 +35,7 @@ export default () => {
     const [highlight, setHighlight] = useState('none');
     const [lastUpdatedTime, setLastUpdatedTime] = useState(Date.now());
 
-    const { width } = useWindowDimension();
-    const showDesktopLayout = width >= 800;
+    const { isDesktop } = useWindowDimension();
 
     const [text] = useLanguages(Text);
 
@@ -47,9 +46,9 @@ export default () => {
 
     useEffect(refreshRooms, [fetchRooms]);
 
-    const panelWidth = showDesktopLayout ? 600 : 'calc(100vw - 64px)';
-    const panelHeight = showDesktopLayout ? 600 : 'calc(100vw - 64px)';
-    const containerStyle = showDesktopLayout ? {
+    const panelWidth = isDesktop ? 600 : 'calc(100vw - 64px)';
+    const panelHeight = isDesktop ? 600 : 'calc(100vw - 64px)';
+    const containerStyle = isDesktop ? {
         width: panelWidth, 
         height: panelHeight
     } : {};
@@ -63,7 +62,7 @@ export default () => {
         <div className={styles.RoomPanel}
             style={containerStyle}>
             {
-                !showDesktopLayout && (
+                !isDesktop && (
                     <>
                         <PanelHeader title={text.title}>
                             <RoomRefreshButton 
@@ -87,7 +86,7 @@ export default () => {
                 )
             }
             {
-                showDesktopLayout && (
+                isDesktop && (
                     <>
                         <RoomStatePanelDesktop rooms={rooms} highlight={highlight}/>
                         <div className={styles.desktop_legend}>
@@ -107,7 +106,7 @@ export default () => {
                 height={panelHeight}
                 showSpinner
                 showErrorText
-                showBackground={!showDesktopLayout}
+                showBackground={!isDesktop}
             />
         </div>
     );

@@ -16,7 +16,10 @@ export default ({ notis }) => {
                 notis.map(noti => {
                     const { sid } = noti;
                     return (
-                        <NotiItem key={`noti_item_${sid}`} noti={noti} />
+                        <NotiItem
+                            key={`noti-item-${sid}`}
+                            noti={noti}
+                        />
                     );
                 })
             }

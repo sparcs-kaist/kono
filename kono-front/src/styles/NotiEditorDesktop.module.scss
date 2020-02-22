@@ -4,30 +4,15 @@
     .NotiEditor {
 
         @include flexbox(column, $center: false);
-        @include mobile-screen {
-            margin-bottom: 0;
-        }
 
         .container {
-            margin: 4px auto 4px 8px;
-            padding: 0;
             @include flexbox(row, $center: false);
             align-items: flex-start;
-            max-width: 24px;
-            max-height: 24px;
             overflow: hidden;
             transition: margin .3s ease-in-out,
                         padding .3s ease-in-out,
                         max-width .3s ease-in-out,
                         max-height .3s ease-in-out;
-            &.active {
-                max-width: 240px;
-                max-height: 50px;
-                margin: 0 auto 0 4px;
-                padding: 4px;
-                border-radius: 14px;
-                background-color: rgba(t(text-secondary), 0.5);
-            }
             .icon {
                 border-radius: 10px;
                 font-size: 24px;
@@ -50,6 +35,8 @@
                 color: t(text-primary);
             }
             .edit_wrapper {
+                @include flexbox(column, $center: false);
+                align-items: stretch;
                 input + input {
                     margin-top: 4px;
                 }
@@ -57,11 +44,19 @@
         }
 
         .non_active {
-
+            max-width: 24px;
+            max-height: 24px;
+            margin: 4px auto 4px 8px;
+            padding: 0;
         }
 
         .active {
-
+            max-width: 240px;
+            max-height: 50px;
+            margin: 0 auto 0 4px;
+            padding: 4px;
+            border-radius: 14px;
+            background-color: rgba(t(text-secondary), 0.5);
         }
 
     }
