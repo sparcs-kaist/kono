@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import styles from 'styles/RoomPanel.module.scss';
 import { PanelHeader } from 'components/common';
 import { RoomStatePanelDesktop, RoomStatePanelMobile, RoomLegendPanel, RoomRefreshButton } from 'components/room';
+import { NotiPanel } from 'components/noti';
 import { useFetch, useLanguages, useWindowDimension } from 'lib/hooks';
 import * as RoomAPI from 'api/room';
+import * as NotiAPI from 'api/noti';
 import Text from 'res/texts/RoomPanel.text.json';
+
+const MAX_DISPLAY_NOTIS = 8;
 
 export default () => {
 
@@ -15,6 +19,18 @@ export default () => {
         isErrorRooms,
         RoomsErrorHandler,
     ] = useFetch([]);
+
+    const [
+        notis,
+        fetchNotis,
+        , // isLoading,
+        isErrorNotis,
+        ,
+    ] = useFetch([]);
+
+    useEffect(() => {
+        fetchNotis(NotiAPI.retrieve, [{ max_size: MAX_DISPLAY_NOTIS }]);
+    }, [fetchNotis]);
 
     const [highlight, setHighlight] = useState('none');
     const [lastUpdatedTime, setLastUpdatedTime] = useState(Date.now());
@@ -59,7 +75,12 @@ export default () => {
                         </PanelHeader>
                         {
                             !isErrorRooms && (
-                                <RoomStatePanelMobile rooms={rooms} />
+                                <>
+                                    <RoomStatePanelMobile rooms={rooms} />
+                                    <div className={styles.mobile_legend}>
+                                        <NotiPanel notis={notis}/>
+                                    </div>
+                                </>
                             )
                         }
                     </>
@@ -69,12 +90,15 @@ export default () => {
                 showDesktopLayout && (
                     <>
                         <RoomStatePanelDesktop rooms={rooms} highlight={highlight}/>
-                        <RoomLegendPanel 
-                            isLoadingRooms={isLoadingRooms}
-                            lastUpdatedTime={lastUpdatedTime}
-                            refreshRooms={refreshRooms}
-                            setHighlight={setHighlight}
-                        />
+                        <div className={styles.desktop_legend}>
+                            <NotiPanel notis={notis}/>
+                            <RoomLegendPanel 
+                                isLoadingRooms={isLoadingRooms}
+                                lastUpdatedTime={lastUpdatedTime}
+                                refreshRooms={refreshRooms}
+                                setHighlight={setHighlight}
+                            />
+                        </div>
                     </>
                 )
             }

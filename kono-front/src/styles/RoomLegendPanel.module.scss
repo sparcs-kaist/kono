@@ -2,12 +2,7 @@
 
 @include themed() {
     .RoomLegendPanel {
-
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        padding: 10px;
-        margin: 5px;
+        
         @include flexbox(column, $center: true);
 
         .RoomLegendPanel__row {
