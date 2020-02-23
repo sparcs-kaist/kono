@@ -6,9 +6,13 @@ import { useLanguages } from 'lib/hooks';
 export default ({ noti, refresh, ...rest }) => {
 
     const { noti_kr: notiKR, noti_en: notiEN } = noti;
+    const _noti = {
+        kr: notiKR ? notiKR : notiEN,
+        en: notiEN ? notiEN : notiKR
+    };
 
     const [edit, setEdit] = useState(false);
-    const [text] = useLanguages({ kr: notiKR, en: notiEN });
+    const [text] = useLanguages(_noti);
 
     return edit
     ? (

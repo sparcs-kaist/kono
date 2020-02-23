@@ -5,7 +5,7 @@
         background-color: t(panel-background);
         padding: 6px;
         border-radius: 6px;
-        margin-top: 6px;
+        margin: 6px 0;
         @include flexbox(row, $center: false);
         .text {
             color: t(text-primary);
