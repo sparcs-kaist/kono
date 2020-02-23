@@ -4,7 +4,7 @@ import { MaterialIcon } from 'components/common';
 
 export default ({ noti }) => {
 
-    const { sid, text, created_time: createdTime } = noti;
+    const { sid, text } = noti;
 
     return (
         <div className={styles.NotiItemDesktop}>

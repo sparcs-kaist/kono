@@ -10,6 +10,7 @@
         padding: 1px;
         border-radius: 11px;
         @include wide-screen {
+            max-width: 360px;
             margin: 6px auto 0 7px;
             padding: 3px;
             border-radius: 16px;
