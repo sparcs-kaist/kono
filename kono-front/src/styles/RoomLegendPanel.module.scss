@@ -8,8 +8,10 @@
         .RoomLegendPanel__row {
             align-self: stretch;
             padding: 4px 10px;
+            margin-right: auto;
             @include flexbox(row, $center: false);
             align-items: center;
+            pointer-events: auto;
             .RoomLegendPanel__square {
                 border-radius: 10px;
                 width: 20px;

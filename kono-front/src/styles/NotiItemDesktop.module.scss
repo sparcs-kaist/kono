@@ -9,6 +9,7 @@
         margin: 4px auto 0 7px;
         padding: 1px;
         border-radius: 11px;
+        pointer-events: auto;
         @include wide-screen {
             max-width: 360px;
             margin: 6px auto 0 7px;

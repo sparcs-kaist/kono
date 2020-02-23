@@ -16,7 +16,6 @@ export default ({ notis, refresh, closeNoti }) => {
                 notis.map(noti => {
                     const { sid } = noti;
                     const close = () => {
-                        console.log(`close: ${sid}`)
                         if (closeNoti)
                             closeNoti(sid);
                     };

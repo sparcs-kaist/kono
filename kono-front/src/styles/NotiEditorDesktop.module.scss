@@ -4,6 +4,7 @@
     .NotiEditorDesktop {
 
         @include flexbox(column, $center: false);
+        pointer-events: auto;
 
         .container {
             @include flexbox(row, $center: false);
