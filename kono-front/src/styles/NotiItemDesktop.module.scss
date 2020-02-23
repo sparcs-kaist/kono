@@ -6,13 +6,19 @@
         align-items: center;
         background-color: rgba(t(text-secondary), 0.5);
         max-width: 250px;
-        margin: 4px auto 0 7px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        @include wide-screen {
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+        margin-left: 7px;
+        margin-right: auto;
         padding: 1px;
         border-radius: 11px;
         pointer-events: auto;
         @include wide-screen {
             max-width: 360px;
-            margin: 6px auto 0 7px;
             padding: 3px;
             border-radius: 16px;
         }

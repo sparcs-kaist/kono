@@ -5,11 +5,13 @@ import * as NotiAPI from 'api/noti';
 import { useLanguages } from 'lib/hooks';
 import Text from 'res/texts/NotiEditor.text.json';
 
-export default ({ initialActive = false, refresh, sid }) => {
+export default ({ initialActive = false, refresh, noti, exit }) => {
+
+    const { sid, noti_kr: _notiKR = '', noti_en: _notiEN = '' } = noti || {};
 
     const [active, setActive] = useState(initialActive);
-    const [notiKR, setNotiKR] = useState('');
-    const [notiEN, setNotiEN] = useState('');
+    const [notiKR, setNotiKR] = useState(_notiKR);
+    const [notiEN, setNotiEN] = useState(_notiEN);
 
     const [submitLoading, setSubmitLoading] = useState(false);
     const [submitErrorKey, setSubmitErrorKey] = useState(null);
@@ -73,8 +75,11 @@ export default ({ initialActive = false, refresh, sid }) => {
             DesktopComponent={NotiEditorDesktop}
             MobileComponent={NotiEditorMobile}
             text={text}
+            exit={exit}
             active={active}
             setActive={setActive}
+            initialNotiKR={_notiKR}
+            initialNotiEN={_notiEN}
             setNotiKR={setNotiKR}
             setNotiEN={setNotiEN}
             onSubmit={onSubmit}

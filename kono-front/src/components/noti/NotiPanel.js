@@ -59,6 +59,7 @@ export default ({ notis, refresh }) => {
                             key={`noti-item-${sid}`}
                             noti={noti}
                             login={login}
+                            refresh={refresh}
                             close={close}
                             remove={remove}
                         />

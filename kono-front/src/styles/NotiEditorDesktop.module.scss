@@ -5,6 +5,10 @@
 
         @include flexbox(column, $center: false);
         pointer-events: auto;
+        margin: 4px 0;
+        @include wide-screen {
+            margin: 6px 0;
+        }
 
         .container {
             @include flexbox(row, $center: false);
@@ -93,4 +97,5 @@
         }
 
     }
+
 }

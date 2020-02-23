@@ -4,4 +4,9 @@
 
     @include flexbox(column, $center: false);
 
+    padding: 4px 0;
+    @include wide-screen {
+        padding: 6px 0;
+    }
+
 }

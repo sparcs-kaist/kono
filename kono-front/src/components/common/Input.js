@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from 'styles/Input.module.scss';
 
-export default ({ placeholder, setValue }) => {
+export default ({ setValue, ...rest }) => {
 
     const onChange = (e) => {
         if (setValue)
@@ -9,9 +9,10 @@ export default ({ placeholder, setValue }) => {
     }
 
     return (
-        <input type="text" placeholder={placeholder} 
+        <input type="text"
             onChange={onChange}
-            className={styles.Input} />
+            className={styles.Input} 
+            {...rest} />
     )
 
 }

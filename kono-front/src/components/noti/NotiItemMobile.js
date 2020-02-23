@@ -2,7 +2,7 @@ import React from 'react';
 import styles from 'styles/NotiItemMobile.module.scss';
 import { MaterialIcon } from 'components/common';
 
-export default ({ noti, close, remove, login }) => {
+export default ({ noti, edit, close, remove, login }) => {
 
     const { text } = noti;
 
@@ -14,7 +14,7 @@ export default ({ noti, close, remove, login }) => {
             {
                 login && (
                     <>
-                        <div className={styles.right_icon}>
+                        <div className={styles.right_icon} onClick={edit}>
                             <MaterialIcon>create</MaterialIcon>
                         </div>
                         <div className={styles.right_icon} onClick={remove}>
