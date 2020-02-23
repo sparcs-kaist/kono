@@ -24,6 +24,7 @@ export default ({ notis, refresh, closeNoti }) => {
                             key={`noti-item-${sid}`}
                             noti={noti}
                             close={close}
+                            login={login}
                         />
                     );
                 })

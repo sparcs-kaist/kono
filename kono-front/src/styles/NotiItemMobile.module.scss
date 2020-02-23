@@ -11,10 +11,14 @@
             color: t(text-primary);
             padding: 0 2px;
         }
-        .clear {
+        .right_icon {
+            font-size: 20px;
             margin-left: auto;
             align-self: flex-start;
             color: t(text-primary);
+        }
+        .right_icon + .right_icon {
+            margin-left: 5px;
         }
     }
 }
