@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from 'styles/NotiPanel.module.scss';
 import { useSelector } from 'react-redux';
 import { NotiItem, NotiEditor } from 'components/noti';
 
@@ -7,7 +8,7 @@ export default ({ notis, refresh }) => {
     const login = useSelector(state => state.auth.login, []);
 
     return (
-        <div>
+        <div className={styles.NotiPanel}>
             {
                 login && <NotiEditor refresh={refresh}/>
             }

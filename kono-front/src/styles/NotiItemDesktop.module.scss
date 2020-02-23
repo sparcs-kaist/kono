@@ -1,0 +1,63 @@
+@import 'mixins/all';
+
+@include themed() {
+    .NotiItemDesktop {
+        @include flexbox(row, $center: false);
+        align-items: center;
+        background-color: rgba(t(text-secondary), 0.5);
+        max-width: 250px;
+        margin: 4px auto 0 7px;
+        padding: 1px;
+        border-radius: 11px;
+        @include wide-screen {
+            margin: 6px auto 0 7px;
+            padding: 3px;
+            border-radius: 16px;
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            font-size: 24px;
+            color: t(text-primary);
+            align-self: flex-start;
+            @include flexbox(row, $center: true);
+            @include wide-screen {
+                border-radius: 15px;
+                width: 30px;
+                height: 30px;
+                font-size: 36px;
+            }
+        }
+        .text {
+            padding: 2px 0;
+            margin-left: 11px;
+            @include wide-screen {
+                margin-left: 20px;
+            }
+            @include flexbox(row, $center: true);
+            span {
+                color: t(text-primary);
+                font-size: 13px;
+                line-height: 15px;
+                @include wide-screen {
+                    font-size: 20px;
+                    line-height: 23px;
+                }
+            }
+        }
+        .clear {
+            align-self: flex-start;
+            margin-left: 11px;
+            margin-right: 5px;
+            @include wide-screen {
+                margin-left: 20px;
+            }
+            color: t(text-primary);
+            cursor: pointer;
+            &:hover {
+                color: t(theme-background);
+            }
+        }
+    }
+}

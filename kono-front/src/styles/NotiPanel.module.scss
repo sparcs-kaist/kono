@@ -1,0 +1,7 @@
+@import 'mixins/all';
+
+.NotiPanel {
+
+    @include flexbox(column, $center: false);
+
+}

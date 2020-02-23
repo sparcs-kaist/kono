@@ -1,14 +1,22 @@
 import React from 'react';
+import styles from 'styles/NotiItemDesktop.module.scss';
+import { MaterialIcon } from 'components/common';
 
 export default ({ noti }) => {
 
     const { sid, text, created_time: createdTime } = noti;
 
     return (
-        <div>
-            <span>{ sid }</span>
-            <span>{ text }</span>
-            <span>{ createdTime }</span>
+        <div className={styles.NotiItemDesktop}>
+            <div className={styles.icon}>
+                <MaterialIcon>info</MaterialIcon>
+            </div>
+            <div className={styles.text}>
+                <span>{ text }</span>
+            </div>
+            <div className={styles.clear}>
+                <MaterialIcon>clear</MaterialIcon>
+            </div>
         </div>
     )
 
