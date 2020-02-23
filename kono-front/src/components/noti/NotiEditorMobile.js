@@ -5,7 +5,8 @@ import classnames from 'lib/classnames';
 
 const TRANSITION_ANIMATION_DELAY_MS = 300;
 
-export default ({ text, active, setActive, setNotiKR, setNotiEN, 
+export default ({ text, exit, active, setActive, 
+    initialNotiKR, initialNotiEN, setNotiKR, setNotiEN, 
     onSubmit, submitLoading, submitErrorMsg, setSubmitErrorKey }) => {
 
     const [activeStyle, setActiveStyle] = useState(active);
@@ -20,11 +21,15 @@ export default ({ text, active, setActive, setNotiKR, setNotiEN,
     };
 
     const onExit = () => {
-        setActiveStyle(false);
-        setTimeout(() => {
-            setActive(false);
-            setSubmitErrorKey(null);
-        }, TRANSITION_ANIMATION_DELAY_MS)
+        if (exit)
+            exit();
+        else {
+            setActiveStyle(false);
+            setTimeout(() => {
+                setActive(false);
+                setSubmitErrorKey(null);
+            }, TRANSITION_ANIMATION_DELAY_MS);
+        }
     };
 
     const onClickSubmit = () => {
@@ -49,8 +54,10 @@ export default ({ text, active, setActive, setNotiKR, setNotiEN,
                 {
                     active && (
                         <>
-                            <Input placeholder={text.input_placeholder_kr} setValue={setNotiKR}/>
-                            <Input placeholder={text.input_placeholder_en} setValue={setNotiEN}/>
+                            <Input placeholder={text.input_placeholder_kr} 
+                                defaultValue={initialNotiKR} setValue={setNotiKR}/>
+                            <Input placeholder={text.input_placeholder_en} 
+                                defaultValue={initialNotiEN} setValue={setNotiEN}/>
                             { submitErrorMsg && <span>{ submitErrorMsg }</span> }
                             <div className={styles.button_wrapper}>
                                 <div className={classnames([styles.button, styles.background])}
