@@ -3,6 +3,7 @@
 @include themed() {
     .NotiEditorMobile {
         @include flexbox(column, $center: false);
+        margin: 6px 0;
         .container {
             background-color: t(panel-background);
             padding: 6px;
