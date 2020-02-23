@@ -13,7 +13,7 @@
     .LandingPage__container {
         width: 100%;
         min-height: calc(100vh - 150px);
-        padding-bottom: 50px;
+        // padding-bottom: 50px;
         @include flexbox(row, $center: true);
         @include mobile-screen {
             height: auto;
