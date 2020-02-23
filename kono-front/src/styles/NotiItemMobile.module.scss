@@ -1,0 +1,24 @@
+@import 'mixins/all';
+
+@include themed() {
+    .NotiItemMobile {
+        background-color: t(panel-background);
+        padding: 6px;
+        border-radius: 6px;
+        margin-top: 6px;
+        @include flexbox(row, $center: false);
+        .text {
+            color: t(text-primary);
+            padding: 0 2px;
+        }
+        .right_icon {
+            font-size: 20px;
+            margin-left: auto;
+            align-self: flex-start;
+            color: t(text-primary);
+        }
+        .right_icon + .right_icon {
+            margin-left: 5px;
+        }
+    }
+}

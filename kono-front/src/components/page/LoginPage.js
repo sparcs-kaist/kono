@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import queryString from 'query-string';
+import { ResponsiveComponent } from 'components/layout';
 import { LoginPageDesktop, LoginPageMobile } from 'components/page';
 import { login } from 'api/auth';
 import * as AuthActions from 'store/modules/auth';
 import * as LayoutActions from 'store/modules/layout';
 import Text from 'res/texts/LoginPage.text.json';
-import { useLanguages, useWindowDimension } from 'lib/hooks';
+import { useLanguages } from 'lib/hooks';
 
 const getInitialLoginErrorMsg = (query) => {
     switch (query.state) {
@@ -27,9 +28,6 @@ export default ({ location }) => {
     const [password, setPassword] = useState('');
     const [loginErrorMsg, setLoginErrorMsg] = useState(getInitialLoginErrorMsg(query));
     const [text] = useLanguages(Text);
-    const { width } = useWindowDimension();
-
-    const showDesktopPage = width >= 600;
 
     const onLogin = async () => {
         await login({ password })
@@ -69,16 +67,11 @@ export default ({ location }) => {
     const onChangePassword = (e) => { setPassword(e.target.value); };
     const onKeyDown = (e) => { e.keyCode === 13 && onLogin(); };
 
-    return showDesktopPage ? (
-        <LoginPageDesktop 
-            text={text}
-            loginErrorMsg={loginErrorMsg}
-            onChangePassword={onChangePassword}
-            onKeyDown={onKeyDown}
-            onLogin={onLogin}
-        />
-    ) : (
-        <LoginPageMobile 
+    return (
+        <ResponsiveComponent
+            DesktopComponent={LoginPageDesktop}
+            MobileComponent={LoginPageMobile}
+            threshold={600}
             text={text}
             loginErrorMsg={loginErrorMsg}
             onChangePassword={onChangePassword}

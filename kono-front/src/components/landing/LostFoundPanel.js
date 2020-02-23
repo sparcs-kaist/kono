@@ -3,13 +3,13 @@ import { LostFoundPanelDesktop, LostFoundPanelMobile } from 'components/landing'
 import * as ImageAPI from 'api/image';
 import Text from 'res/texts/LostFoundPanel.text.json';
 import { useWindowDimension, useLanguages, useFetch } from 'lib/hooks'
+import ResponsiveComponent from 'components/layout/ResponsiveComponent';
 
 export default () => {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const { width } = useWindowDimension();
 
-    const showDesktopLayout = width >= 800;
+    const { width, isDesktop } = useWindowDimension();
     const showNarrowLayout = width < 1080;
     
     const [pagination, setPagination] = useState(0);
@@ -35,10 +35,10 @@ export default () => {
     const [text] = useLanguages(Text);
 
     const numPages = Math.max(1, Math.ceil(numImages / pagination));
-    const imageURLs = showDesktopLayout
+    const imageURLs = isDesktop
         ? images.map(image => image.url)
         : imageList.map(image => image.url);
-    const imageLinks = showDesktopLayout
+    const imageLinks = isDesktop
         ? images.map(image => `/post/${image.post_sid}`)
         : imageList.map(image => `/post/${image.post_sid}`);
 
@@ -86,21 +86,10 @@ export default () => {
         setImageList(imageList => imageList.concat(images));
     }, [images])
 
-    return showDesktopLayout ? (
-        <LostFoundPanelDesktop
-            imageURLs={imageURLs}
-            imageLinks={imageLinks}
-            numPages={numPages}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPageWithSideEffect}
-            isError={isError}
-            ErrorHandler={ErrorHandlerComponent}
-            text={text}
-            showNarrowLayout={showNarrowLayout}
-            setPagination={setPagination}
-        />
-    ) : (
-        <LostFoundPanelMobile
+    return (
+        <ResponsiveComponent
+            DesktopComponent={LostFoundPanelDesktop}
+            MobileComponent={LostFoundPanelMobile}
             imageURLs={imageURLs}
             imageLinks={imageLinks}
             numPages={numPages}
