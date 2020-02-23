@@ -60,12 +60,14 @@ export const createNoti = async (req, res) => {
         if (typeof noti_kr !== 'string' || noti_kr.length > 40) {
             res.status(400);
             res.send({ msg: 'invalid noti_kr' });
+            return;
         }
     }
     if (noti_en) {
         if (typeof noti_en !== 'string' || noti_en.length > 80) {
             res.status(400);
             res.send({ msg: 'invalid noti_en' });
+            return;
         }
     }
 
@@ -115,12 +117,14 @@ export const updateNoti = async (req, res) => {
         if (typeof noti_kr !== 'string' || noti_kr.length > 40) {
             res.status(400);
             res.send({ msg: 'invalid noti_kr' });
+            return;
         }
     }
     if (noti_en) {
         if (typeof noti_en !== 'string' || noti_en.length > 80) {
             res.status(400);
             res.send({ msg: 'invalid noti_en' });
+            return;
         }
     }
 

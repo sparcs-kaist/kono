@@ -1,0 +1,75 @@
+@import 'mixins/all';
+
+@include themed() {
+    .NotiItemDesktop {
+        @include flexbox(row, $center: false);
+        align-items: center;
+        background-color: rgba(t(text-secondary), 0.5);
+        max-width: 250px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        @include wide-screen {
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+        margin-left: 7px;
+        margin-right: auto;
+        padding: 1px;
+        border-radius: 11px;
+        pointer-events: auto;
+        @include wide-screen {
+            max-width: 360px;
+            padding: 3px;
+            border-radius: 16px;
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            font-size: 24px;
+            color: t(text-primary);
+            align-self: flex-start;
+            @include flexbox(row, $center: true);
+            @include wide-screen {
+                border-radius: 15px;
+                width: 30px;
+                height: 30px;
+                font-size: 36px;
+            }
+        }
+        .text {
+            padding: 2px 0;
+            margin-left: 11px;
+            @include wide-screen {
+                margin-left: 20px;
+            }
+            @include flexbox(row, $center: true);
+            span {
+                color: t(text-primary);
+                font-size: 13px;
+                line-height: 15px;
+                @include wide-screen {
+                    font-size: 20px;
+                    line-height: 23px;
+                }
+            }
+        }
+        .right_icon {
+            align-self: flex-start;
+            margin-left: 10px;
+            margin-right: 2px;
+            @include wide-screen {
+                margin-left: 15px;
+                margin-right: 3px;
+            }
+            color: t(text-primary);
+            cursor: pointer;
+            &:hover {
+                color: t(theme-background);
+            }
+        }
+        .right_icon + .right_icon {
+            margin-left: 0;
+        }
+    }
+}

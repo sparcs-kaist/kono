@@ -66,7 +66,7 @@ export default ({ rooms, highlight }) => {
                     {
                         isHovered && <text>
                             <tspan 
-                                className={showAnimation && styles.textEffect}
+                                className={classnames([showAnimation && styles.textEffect])}
                                 x={state2path(state).pos[room_idx].x}
                                 y={(state === 0)? state2path(state).pos[room_idx].y + 20 : state2path(state).pos[room_idx].y - 5}
                                 fontSize="16"
@@ -78,7 +78,7 @@ export default ({ rooms, highlight }) => {
                                 }
                             </tspan>
                             <tspan
-                                className={showAnimation && styles.textEffect}
+                                className={classnames([showAnimation && styles.textEffect])}
                                 x={state2path(state).pos[room_idx].x}
                                 y={(state === 0)? state2path(state).pos[room_idx].y + 45 : state2path(state).pos[room_idx].y + 20}
                                 fontSize="20"

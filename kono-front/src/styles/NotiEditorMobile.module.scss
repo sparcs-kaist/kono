@@ -1,0 +1,52 @@
+@import 'mixins/all';
+
+@include themed() {
+    .NotiEditorMobile {
+        @include flexbox(column, $center: false);
+        margin: 6px 0;
+        .container {
+            background-color: t(panel-background);
+            padding: 6px;
+            border-radius: 6px;
+            overflow: hidden;
+            transition: max-width .3s ease-in-out,
+                        max-height .3s ease-in-out;
+            @include flexbox(column, $center: true);
+            align-items: stretch;
+            .button {
+                font-size: 20px;
+                color: t(text-primary);
+                cursor: pointer;
+            }
+            .button_wrapper {
+                margin-top: 12px;
+                @include flexbox(row, $center: true);
+                .button + .button {
+                    margin-left: 6px;
+                }
+            }
+            .background {
+                background-color: t(background);
+                padding: 2px 4px;
+                border-radius: 4px;
+            }
+            input + input {
+                margin-top: 6px;
+            }
+            span {
+                margin-top: 6px;
+                color: t(text-error);
+                font-size: 14px;
+                margin-left: 6px;
+            }
+        }
+        .active {
+            max-width: 100vw;
+            max-height: 130px;
+        }
+        .non_active {
+            max-width: 20px;
+            max-height: 20px;
+        }
+    }
+}

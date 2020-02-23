@@ -2,19 +2,16 @@
 
 @include themed() {
     .RoomLegendPanel {
-
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        padding: 10px;
-        margin: 5px;
+        
         @include flexbox(column, $center: true);
 
         .RoomLegendPanel__row {
             align-self: stretch;
             padding: 4px 10px;
+            margin-right: auto;
             @include flexbox(row, $center: false);
             align-items: center;
+            pointer-events: auto;
             .RoomLegendPanel__square {
                 border-radius: 10px;
                 width: 20px;

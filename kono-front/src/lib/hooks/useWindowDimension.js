@@ -8,6 +8,8 @@ function getWindowDimension() {
 export default () => {
 
     const [windowDimension, setWindowDimension] = useState(getWindowDimension());
+    const { width, height } = windowDimension;
+    const isDesktop = width >= 800;
 
     useEffect(() => {
         const handleResize = () => setWindowDimension(getWindowDimension());
@@ -17,6 +19,6 @@ export default () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    return windowDimension;
+    return { width, height, isDesktop };
 
 }
