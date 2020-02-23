@@ -22,6 +22,7 @@
                     border-radius: 15px;
                     width: 30px;
                     height: 30px;
+                    font-size: 36px;
                 }
             }
             .clickable {
@@ -32,6 +33,9 @@
             }
             .item {
                 padding-left: 9px;
+                @include wide-screen {
+                    padding-left: 13px;
+                }
                 color: t(text-primary);
             }
             .edit_wrapper {
@@ -39,6 +43,9 @@
                 align-items: stretch;
                 input + input {
                     margin-top: 4px;
+                    @include wide-screen {
+                        margin-top: 6px;
+                    }
                 }
             }
         }
@@ -48,6 +55,11 @@
             max-height: 24px;
             margin: 4px auto 4px 8px;
             padding: 0;
+            @include wide-screen {
+                max-width: 36px;
+                max-height: 36px;
+                margin: 6px auto 6px 10px;
+            }
         }
 
         .active {
@@ -56,6 +68,13 @@
             margin: 0 auto 0 4px;
             padding: 4px;
             border-radius: 14px;
+            @include wide-screen {
+                max-width: 360px;
+                max-height: 75px;
+                margin: 0 auto 0 4px;
+                padding: 6px;
+                border-radius: 21px;
+            }
             background-color: rgba(t(text-secondary), 0.5);
         }
 

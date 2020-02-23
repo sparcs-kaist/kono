@@ -9,6 +9,12 @@
             border-radius: 2px;
             font-size: 12px;
             line-height: 15px;
+            @include wide-screen {
+                padding: 3px 6px;
+                border-radius: 6px;
+                font-size: 15px;
+                line-height: 22px;
+            }
         }
         @include mobile-screen {
             padding: 3px 6px;
@@ -19,6 +25,10 @@
         color: t(text-primary);
         background-color: t(background);
         flex: 1;
+        min-width: 160px;
+        @include wide-screen {
+            min-width: 240px;
+        }
 
         border: none;
 
@@ -27,6 +37,9 @@
             color: t(text-secondary);
             @include desktop-screen {
                 font-size: 11px;
+                @include wide-screen {
+                    font-size: 17px;
+                }
             }
             @include mobile-screen {
                 font-size: 14px;

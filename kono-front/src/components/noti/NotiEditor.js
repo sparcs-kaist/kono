@@ -3,7 +3,7 @@ import { ResponsiveComponent } from 'components/layout';
 import { NotiEditorDesktop, NotiEditorMobile } from 'components/noti';
 import text from 'res/texts/NotiEditor.text.json';
 
-export default ({ initialActive = false }) => {
+export default ({ initialActive = false, refresh }) => {
 
     const [active, setActive] = useState(initialActive);
     const [notiKR, setNotiKR] = useState('');

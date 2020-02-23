@@ -10,7 +10,7 @@ export default ({ notis, refresh }) => {
         <div>
             {
                 // login && <NotiEditor />
-                <NotiEditor />
+                <NotiEditor refresh={refresh}/>
             }
             {
                 notis.map(noti => {
