@@ -5,7 +5,8 @@ import classnames from 'lib/classnames';
 
 const TRANSITION_ANIMATION_DELAY_MS = 300;
 
-export default ({ text, active, setActive, setNotiKR, setNotiEN }) => {
+export default ({ text, active, setActive, setNotiKR, setNotiEN, 
+    onSubmit, submitLoading, submitErrorMsg, setSubmitErrorKey }) => {
 
     const [activeStyle, setActiveStyle] = useState(active);
 
@@ -17,7 +18,10 @@ export default ({ text, active, setActive, setNotiKR, setNotiEN }) => {
     }
     const onClickExit = () => {
         setActiveStyle(false);
-        setTimeout(() => setActive(false), TRANSITION_ANIMATION_DELAY_MS)
+        setTimeout(() => {
+            setActive(false);
+            setSubmitErrorKey(null);
+        }, TRANSITION_ANIMATION_DELAY_MS)
     };
 
     return (

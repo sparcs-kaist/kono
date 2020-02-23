@@ -1,23 +1,31 @@
 import React, { useState } from 'react';
 import styles from 'styles/NotiEditorDesktop.module.scss';
-import { MaterialIcon, Input } from 'components/common';
+import { MaterialIcon, Input, Spinner } from 'components/common';
 import classnames from 'lib/classnames';
 
 const TRANSITION_ANIMATION_DELAY_MS = 300;
 
-export default ({ text, active, setActive, setNotiKR, setNotiEN }) => {
+export default ({ text, active, setActive, setNotiKR, setNotiEN, 
+    onSubmit, submitLoading, submitErrorMsg, setSubmitErrorKey }) => {
 
     const [activeStyle, setActiveStyle] = useState(active);
 
     const onClickIcon = () => {
-        if (!active) {
+        if (active) {
+            if (!submitLoading)
+                onSubmit();
+        }
+        else {
             setActive(true);
             setActiveStyle(true);
         }
     }
     const onClickExit = () => {
         setActiveStyle(false);
-        setTimeout(() => setActive(false), TRANSITION_ANIMATION_DELAY_MS)
+        setTimeout(() => {
+            setActive(false);
+            setSubmitErrorKey(null);
+        }, TRANSITION_ANIMATION_DELAY_MS)
     };
 
     return (
@@ -29,16 +37,20 @@ export default ({ text, active, setActive, setNotiKR, setNotiEN }) => {
             ])}>
                 <div className={classnames([
                     styles.icon,
-                    styles.clickable
+                    !submitLoading && styles.clickable
                 ])} onClick={onClickIcon}>
                     {
-                        <MaterialIcon>
-                            {
-                                active
-                                ? 'check_circle_outline'
-                                : 'add_circle_outline'
-                            }
-                        </MaterialIcon>
+                        submitLoading
+                        ? <Spinner small/>
+                        : (
+                            <MaterialIcon>
+                                {
+                                    active
+                                    ? 'check_circle_outline'
+                                    : 'add_circle_outline'
+                                }
+                            </MaterialIcon>
+                        )
                     }
                 </div>
                 {
@@ -46,6 +58,7 @@ export default ({ text, active, setActive, setNotiKR, setNotiEN }) => {
                         <div className={classnames([styles.item, styles.edit_wrapper])}>
                             <Input placeholder={text.input_placeholder_kr} setValue={setNotiKR}/>
                             <Input placeholder={text.input_placeholder_en} setValue={setNotiEN}/>
+                            { submitErrorMsg && <span>{ submitErrorMsg }</span> }
                         </div>
                     )
                 }

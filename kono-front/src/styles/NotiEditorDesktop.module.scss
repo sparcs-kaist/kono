@@ -14,7 +14,9 @@
                         max-width .3s ease-in-out,
                         max-height .3s ease-in-out;
             .icon {
-                border-radius: 10px;
+                width: 24px;
+                height: 24px;
+                border-radius: 12px;
                 font-size: 24px;
                 color: t(text-primary);
                 @include flexbox(row, $center: true);
@@ -47,6 +49,15 @@
                         margin-top: 6px;
                     }
                 }
+                span {
+                    color: t(text-error);
+                    font-size: 12px;
+                    margin-top: 4px;
+                    @include wide-screen {
+                        font-size: 15px;
+                        margin-top: 6px;
+                    }
+                }
             }
         }
 
@@ -63,14 +74,14 @@
         }
 
         .active {
-            max-width: 240px;
-            max-height: 50px;
+            max-width: 250px;
+            max-height: 70px;
             margin: 0 auto 0 4px;
             padding: 4px;
             border-radius: 14px;
             @include wide-screen {
                 max-width: 360px;
-                max-height: 75px;
+                max-height: 100px;
                 margin: 0 auto 0 4px;
                 padding: 6px;
                 border-radius: 21px;
