@@ -3,7 +3,7 @@ import { ResponsiveComponent } from 'components/layout';
 import { NotiItemDesktop, NotiItemMobile } from 'components/noti';
 import { useLanguages } from 'lib/hooks';
 
-export default ({ noti }) => {
+export default ({ noti, ...rest }) => {
 
     const { noti_kr: notiKR, noti_en: notiEN } = noti;
 
@@ -14,6 +14,7 @@ export default ({ noti }) => {
             DesktopComponent={NotiItemDesktop}
             MobileComponent={NotiItemMobile}
             noti={{ ...noti, text }}
+            {...rest}
         />
     )
 

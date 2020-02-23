@@ -2,7 +2,7 @@ import React from 'react';
 import styles from 'styles/NotiItemDesktop.module.scss';
 import { MaterialIcon } from 'components/common';
 
-export default ({ noti }) => {
+export default ({ noti, close }) => {
 
     const { sid, text } = noti;
 
@@ -14,7 +14,7 @@ export default ({ noti }) => {
             <div className={styles.text}>
                 <span>{ text }</span>
             </div>
-            <div className={styles.clear}>
+            <div className={styles.clear} onClick={close}>
                 <MaterialIcon>clear</MaterialIcon>
             </div>
         </div>
