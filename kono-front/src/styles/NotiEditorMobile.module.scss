@@ -26,16 +26,22 @@
             }
             .background {
                 background-color: t(background);
-                padding: 4px;
+                padding: 2px 4px;
                 border-radius: 4px;
             }
             input + input {
                 margin-top: 6px;
             }
+            span {
+                margin-top: 6px;
+                color: t(text-error);
+                font-size: 14px;
+                margin-left: 6px;
+            }
         }
         .active {
             max-width: 100vw;
-            max-height: 100px;
+            max-height: 130px;
         }
         .non_active {
             max-width: 20px;

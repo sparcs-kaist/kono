@@ -16,7 +16,7 @@ export default ({ initialActive = false, refresh, sid }) => {
 
     const [text] = useLanguages(Text);
 
-    const onSubmit = async () => {
+    const onSubmit = async (onSuccess, onFailure) => {
         if (notiKR.length === 0 && notiEN.length === 0) {
             setSubmitErrorKey('submit_error_empty');
             return;
@@ -31,10 +31,15 @@ export default ({ initialActive = false, refresh, sid }) => {
         await task
             .then((res) => {
                 setSubmitLoading(false);
-                refresh();
+                if (refresh)
+                    refresh();
+                if (onSuccess)
+                    onSuccess();
             })
             .catch((err) => {
                 setSubmitLoading(false);
+                if (onFailure)
+                    onFailure(err);
                 if (err.response) {
                     const { msg } = err.response.data;
                     switch (err.response.status) {

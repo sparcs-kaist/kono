@@ -91,7 +91,7 @@ export default () => {
                     <>
                         <RoomStatePanelDesktop rooms={rooms} highlight={highlight}/>
                         <div className={styles.desktop_legend}>
-                            <NotiPanel notis={notis}/>
+                            <NotiPanel notis={notis} refresh={refreshNotis} />
                             <RoomLegendPanel 
                                 isLoadingRooms={isLoadingRooms}
                                 lastUpdatedTime={lastUpdatedTime}

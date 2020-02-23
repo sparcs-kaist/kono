@@ -10,22 +10,25 @@ export default ({ text, active, setActive, setNotiKR, setNotiEN,
 
     const [activeStyle, setActiveStyle] = useState(active);
 
+    const onExit = () => {
+        setActiveStyle(false);
+        setTimeout(() => {
+            setActive(false);
+            setSubmitErrorKey(null);
+            setNotiKR('');
+            setNotiEN('');
+        }, TRANSITION_ANIMATION_DELAY_MS)
+    };
+
     const onClickIcon = () => {
         if (active) {
             if (!submitLoading)
-                onSubmit();
+                onSubmit(onExit);
         }
         else {
             setActive(true);
             setActiveStyle(true);
         }
-    }
-    const onClickExit = () => {
-        setActiveStyle(false);
-        setTimeout(() => {
-            setActive(false);
-            setSubmitErrorKey(null);
-        }, TRANSITION_ANIMATION_DELAY_MS)
     };
 
     return (
@@ -65,7 +68,7 @@ export default ({ text, active, setActive, setNotiKR, setNotiEN,
                 {
                     active && (
                         <div className={classnames([styles.item, styles.clickable])}
-                            onClick={onClickExit}>
+                            onClick={onExit}>
                             <MaterialIcon>clear</MaterialIcon>
                         </div>
                     )
